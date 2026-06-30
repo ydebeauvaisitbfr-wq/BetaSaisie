@@ -56,12 +56,12 @@
 <body class="bg-gray-100 font-sans text-gray-800 min-h-screen pb-12">
 
     <!-- ÉCRAN DE VERROUILLAGE SÉCURISÉ (LOGIN SCREEN) -->
-    <div id="lock-screen" class="fixed inset-0 bg-gray-100 z-[9999] flex flex-col justify-between p-6 select-none transition-opacity duration-300">
+    <div id="lock-screen" class="fixed inset-0 bg-gray-100 z-[9999] flex flex-col justify-between p-6 select-none transition-opacity duration-300 overflow-y-auto">
         <!-- Logo et En-tête de verrouillage -->
-        <div class="flex flex-col items-center mt-8">
-            <div class="flex items-center space-x-2 mb-2">
+        <div class="flex flex-col items-center mt-6">
+            <div class="flex items-center space-x-2.5 mb-2">
                 <!-- Betterave sucrière vectorielle -->
-                <svg class="w-14 h-14 filter drop-shadow-sm" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="w-12 h-12 filter drop-shadow-sm" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M32 24C25 16 20 12 26 6C31 1 35 10 32 24Z" fill="#22C55E"/>
                     <path d="M32 24C39 16 44 12 38 6C33 1 29 10 32 24Z" fill="#15803D"/>
                     <path d="M32 24C32 14 30 8 35 4C39 1 37 10 32 24Z" fill="#4ADE80"/>
@@ -73,7 +73,26 @@
                     <path d="M29 48C31 49 33 49 35 48" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
                     <path d="M30 54C31 56 33 56 34 54L32 60L30 54Z" fill="#78350F"/>
                 </svg>
-                <h1 class="text-4xl font-black text-agri-700 tracking-tight">BetaSaisie</h1>
+                
+                <!-- Titre de l'application -->
+                <h1 class="text-3xl font-black text-agri-700 tracking-tight">BetaSaisie</h1>
+
+                <!-- Calculette vectorielle ajoutée à droite du titre -->
+                <svg class="w-9 h-9 text-agri-600 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="4" y="2" width="16" height="20" rx="2" ry="2" fill="#F1F5F9"></rect>
+                    <rect x="7" y="5" width="10" height="4" rx="1" fill="#E2E8F0" stroke="currentColor" stroke-width="1.5"></rect>
+                    <circle cx="9" cy="12" r="1.5" fill="currentColor"></circle>
+                    <circle cx="13" cy="12" r="1.5" fill="currentColor"></circle>
+                    <circle cx="17" cy="12" r="1.5" fill="currentColor"></circle>
+                    <circle cx="9" cy="16" r="1.5" fill="currentColor"></circle>
+                    <circle cx="13" cy="16" r="1.5" fill="currentColor"></circle>
+                    <rect x="15" y="15" width="3" height="4" rx="0.5" fill="currentColor"></rect>
+                </svg>
+            </div>
+            
+            <!-- Véritable Logo ITB agrandi de manière visible -->
+            <div class="my-4 flex justify-center w-full max-w-xs">
+                <img src="Logo%20ITB%20cartouche%20rvb%20(1).png" alt="Logo ITB" class="h-24 md:h-28 w-auto filter drop-shadow-sm object-contain" onerror="showSvgLogoFallback(this)">
             </div>
             <p class="text-xs text-gray-500 font-bold tracking-wider uppercase">Accès sécurisé réservé ITB</p>
         </div>
@@ -102,6 +121,12 @@
                 </div>
             </div>
 
+            <!-- Option Mémorisation : Se souvenir de moi -->
+            <div class="flex items-center space-x-2 py-1 select-none">
+                <input type="checkbox" id="login-remember" class="w-4 h-4 rounded text-agri-600 focus:ring-agri-500 border-gray-300 cursor-pointer">
+                <label for="login-remember" class="text-xs font-semibold text-gray-600 cursor-pointer hover:text-gray-950">Mémoriser mes identifiants</label>
+            </div>
+
             <!-- Bouton de connexion -->
             <button type="button" onclick="attemptLogin()" class="w-full bg-agri-600 hover:bg-agri-700 active:scale-95 text-white font-bold py-3 rounded-xl shadow-sm transition flex items-center justify-center space-x-2">
                 <i class="fa-solid fa-right-to-bracket"></i>
@@ -110,7 +135,7 @@
         </div>
 
         <!-- Pied de page verrouillé -->
-        <div class="text-center text-xxs text-gray-400">
+        <div class="text-center text-xxs text-gray-400 mt-4">
             <p class="font-semibold text-gray-500">© YohanDebeauvais2026</p>
         </div>
     </div>
@@ -122,19 +147,15 @@
         <div class="flex items-center space-x-2 flex-1">
             <!-- Betterave sucrière (SVG gauche) -->
             <svg class="w-8 h-8 flex-shrink-0 filter drop-shadow-sm" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Feuilles vertes robustes -->
                 <path d="M32 24C25 16 20 12 26 6C31 1 35 10 32 24Z" fill="#22C55E"/>
                 <path d="M32 24C39 16 44 12 38 6C33 1 29 10 32 24Z" fill="#15803D"/>
                 <path d="M32 24C32 14 30 8 35 4C39 1 37 10 32 24Z" fill="#4ADE80"/>
                 <path d="M27 24C22 18 16 16 21 10C25 5 28 12 27 24Z" fill="#166534"/>
                 <path d="M37 24C42 18 48 16 43 10C39 5 36 12 37 24Z" fill="#15803D"/>
-                <!-- Racine de betterave sucrière -->
                 <path d="M22 24C22 24 17 33 24 45C29 54 32 60 32 60C32 60 35 54 40 45C47 33 42 24 42 24H22Z" fill="#F8FAFC" stroke="#94A3B8" stroke-width="2"/>
-                <!-- Ridules -->
                 <path d="M25 32C28 33 36 33 39 32" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
                 <path d="M26 40C29 41 35 41 38 40" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
                 <path d="M29 48C31 49 33 49 35 48" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
-                <!-- Pointe -->
                 <path d="M30 54C31 56 33 56 34 54L32 60L30 54Z" fill="#78350F"/>
             </svg>
 
@@ -326,11 +347,15 @@
                 Toutes les parcelles saisies sont récapitulées ci-dessous. Vos modifications sont conservées sur cet appareil.
             </p>
 
-            <div class="grid grid-cols-2 gap-2 mb-4">
-                <button onclick="exportToCSV()" class="bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow-sm">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4">
+                <button onclick="exportToCSV()" class="bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow-sm transition active:scale-95">
                     <i class="fa-solid fa-file-csv"></i> Exporter CSV
                 </button>
-                <button onclick="confirmResetAll()" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2">
+                <!-- Bouton Mail / Partage dynamique mobile & PC -->
+                <button onclick="shareOrEmailCSV()" class="bg-agri-600 hover:bg-agri-700 text-white text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow-sm transition active:scale-95">
+                    <i class="fa-solid fa-paper-plane"></i> Envoyer / Partager
+                </button>
+                <button onclick="confirmResetAll()" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 transition active:scale-95">
                     <i class="fa-solid fa-trash-can"></i> Réinitialiser
                 </button>
             </div>
@@ -439,6 +464,7 @@
         function attemptLogin() {
             const usernameInput = document.getElementById("login-username").value.trim().toUpperCase();
             const passwordInput = document.getElementById("login-password").value;
+            const rememberCheck = document.getElementById("login-remember").checked;
             const loginCard = document.getElementById("login-card");
 
             if (!usernameInput || !passwordInput) {
@@ -453,6 +479,17 @@
                 sessionStorage.setItem("betasaisie_authenticated", "true");
                 sessionStorage.setItem("betasaisie_user", usernameInput);
                 
+                // Mémorisation si la case est cochée
+                if (rememberCheck) {
+                    localStorage.setItem("betasaisie_remember", "true");
+                    localStorage.setItem("betasaisie_remember_username", usernameInput);
+                    localStorage.setItem("betasaisie_remember_password", passwordInput);
+                } else {
+                    localStorage.removeItem("betasaisie_remember");
+                    localStorage.removeItem("betasaisie_remember_username");
+                    localStorage.removeItem("betasaisie_remember_password");
+                }
+
                 // Adapter automatiquement le nom de l'essai à l'utilisateur
                 if (appState.trialName === "Essai Betteraves 2026") {
                     appState.trialName = `Essai Betteraves 2026 - ${usernameInput}`;
@@ -485,6 +522,14 @@
             const user = sessionStorage.getItem("betasaisie_user");
             const lockScreen = document.getElementById("lock-screen");
 
+            // Gestion de la mémorisation
+            const isRemembered = localStorage.getItem("betasaisie_remember") === "true";
+            if (isRemembered) {
+                document.getElementById("login-username").value = localStorage.getItem("betasaisie_remember_username") || "";
+                document.getElementById("login-password").value = localStorage.getItem("betasaisie_remember_password") || "";
+                document.getElementById("login-remember").checked = true;
+            }
+
             if (isAuth && user) {
                 appState.currentUser = user;
                 lockScreen.classList.add("hidden");
@@ -500,9 +545,13 @@
                 sessionStorage.removeItem("betasaisie_user");
                 appState.currentUser = "";
                 
-                // Vider les champs de connexion
-                document.getElementById("login-username").value = "";
-                document.getElementById("login-password").value = "";
+                // Vider les champs si non mémorisés
+                const isRemembered = localStorage.getItem("betasaisie_remember") === "true";
+                if (!isRemembered) {
+                    document.getElementById("login-username").value = "";
+                    document.getElementById("login-password").value = "";
+                    document.getElementById("login-remember").checked = false;
+                }
                 
                 // Afficher à nouveau l'écran de verrouillage
                 const lockScreen = document.getElementById("lock-screen");
@@ -541,8 +590,9 @@
 
         // Fonction de secours dessinant le logo de l'ITB en SVG vectoriel autonome
         function showSvgLogoFallback(imgElement) {
+            const classes = imgElement.className || "h-9 w-auto";
             const svgHTML = `
-                <svg class="h-9 w-auto" viewBox="0 0 250 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="${classes}" viewBox="0 0 250 110" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M35,32 L12,18 L21,9 Z" fill="#00823F" />
                     <path d="M35,32 L25,7 L37,5 Z" fill="#00823F" />
                     <path d="M35,32 L39,5 L51,7 Z" fill="#00823F" />
@@ -1017,6 +1067,7 @@
             });
         }
 
+        // MAJ de la valeur à la volée avec les boutons +/-
         function changeNumValue(varId, delta) {
             const input = document.getElementById(`input-${varId}`);
             if (!input) return;
@@ -1175,13 +1226,11 @@
             return dateStr;
         }
 
-        function exportToCSV() {
-            if (appState.plots.length === 0) return;
-
+        // GÉNÉRER LA CHAÎNE DE TEXTE CSV BRUTE
+        function generateCSVString() {
             const activeConfig = getActiveVariablesConfig();
-            let csvContent = "\uFEFF"; 
+            let csvContent = "\uFEFF"; // BOM UTF-8 pour Excel
             
-            // Ajout de la colonne Date dans l'en-tête
             let headers = ["Essai", "Date", "Parcelle", "Bloc", "Modalite", "Observation"];
             appState.selectedVars.forEach(vId => {
                 const conf = activeConfig.find(item => item.id === vId);
@@ -1203,7 +1252,17 @@
                 });
                 csvContent += row.map(val => `"${String(val).replace(/"/g, '""')}"`).join(";") + "\n";
             });
+            return csvContent;
+        }
 
+        // EXPORTER DIRECTEMENT LE FICHIER CSV EN LOCAL
+        function exportToCSV() {
+            if (appState.plots.length === 0) {
+                showToast("Aucune donnée à exporter.", true);
+                return;
+            }
+
+            const csvContent = generateCSVString();
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
@@ -1213,8 +1272,68 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+            showToast("CSV téléchargé !");
         }
 
+        // FONCTION DE PARTAGE INTELLIGENTE ET SÉCURISÉE (WEB SHARE API + repli MAILTO)
+        function shareOrEmailCSV() {
+            if (appState.plots.length === 0) {
+                showToast("Aucune donnée à partager.", true);
+                return;
+            }
+
+            const csvContent = generateCSVString();
+            const cleanName = appState.trialName.toLowerCase().replace(/[^a-z0-9]/g, "_");
+            const filename = `notation_agri_${cleanName}.csv`;
+
+            // Tentative d'utilisation de l'API de partage native du smartphone (iOS / Android)
+            try {
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const file = new File([blob], filename, { type: 'text/csv' });
+
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    navigator.share({
+                        files: [file],
+                        title: `Extraction BetaSaisie - ${appState.trialName}`,
+                        text: `Bonjour, voici l'extraction CSV de mes notations de betteraves du ${formatDateFR(appState.trialDate)}.`
+                    }).then(() => {
+                        showToast("Fichier partagé avec succès !");
+                    }).catch((err) => {
+                        if (err.name !== 'AbortError') {
+                            fallbackToMailto(csvContent);
+                        }
+                    });
+                    return;
+                }
+            } catch (e) {
+                console.log("Le partage de fichier natif n'est pas supporté, redirection vers email...");
+            }
+
+            // Option de repli si le partage natif de fichier n'est pas supporté (ex : PC de bureau)
+            fallbackToMailto(csvContent);
+        }
+
+        // REPLI AUTOMATIQUE PAR MAIL (MAILTO:)
+        function fallbackToMailto(csvContent) {
+            const subject = encodeURIComponent(`Extraction BetaSaisie - ${appState.trialName}`);
+            let bodyText = `Bonjour,\n\nVoici les données de notation collectées avec l'application BetaSaisie pour l'essai "${appState.trialName}".\n\n`;
+            
+            // Si le CSV n'est pas trop volumineux, on l'écrit directement dans le corps du mail pour un copier-coller rapide
+            if (csvContent.length < 2000) {
+                bodyText += `--- DONNÉES CSV ---\n${csvContent}\n-------------------\n`;
+            } else {
+                bodyText += `Les données de cet essai étant volumineuses, veuillez privilégier le téléchargement en cliquant sur le bouton "Exporter CSV" directement depuis l'application dans votre navigateur.\n`;
+            }
+            
+            bodyText += `\nEnvoyé depuis l'application de terrain BetaSaisie.`;
+            const mailtoUrl = `mailto:?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
+            
+            // Ouvrir l'application mail installée sur l'appareil
+            window.location.href = mailtoUrl;
+            showToast("Ouverture de votre messagerie...");
+        }
+
+        // SAUVEGARDE ET CHARGEMENT LOCALE DANS LE TÉLÉPHONE
         function saveStateToLocalStorage() {
             localStorage.setItem("agro_saisie_state", JSON.stringify(appState));
         }
