@@ -90,7 +90,7 @@
                 </svg>
             </div>
             
-            <!-- Véritable Logo ITB agrandi de manière visible -->
+            <!-- Logo ITB -->
             <div class="my-4 flex justify-center w-full max-w-xs">
                 <img src="Logo%20ITB%20cartouche%20rvb%20(1).png" alt="Logo ITB" class="h-24 md:h-28 w-auto filter drop-shadow-sm object-contain" onerror="showSvgLogoFallback(this)">
             </div>
@@ -121,7 +121,7 @@
                 </div>
             </div>
 
-            <!-- Option Mémorisation : Se souvenir de moi -->
+            <!-- Option Mémorisation -->
             <div class="flex items-center space-x-2 py-1 select-none">
                 <input type="checkbox" id="login-remember" class="w-4 h-4 rounded text-agri-600 focus:ring-agri-500 border-gray-300 cursor-pointer">
                 <label for="login-remember" class="text-xs font-semibold text-gray-600 cursor-pointer hover:text-gray-950">Mémoriser mes identifiants</label>
@@ -145,7 +145,7 @@
         
         <!-- GAUCHE : BetaSaisie entourée de la betterave et de la calculette -->
         <div class="flex items-center space-x-2 flex-1">
-            <!-- Betterave sucrière (SVG gauche) -->
+            <!-- Betterave sucrière -->
             <svg class="w-8 h-8 flex-shrink-0 filter drop-shadow-sm" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M32 24C25 16 20 12 26 6C31 1 35 10 32 24Z" fill="#22C55E"/>
                 <path d="M32 24C39 16 44 12 38 6C33 1 29 10 32 24Z" fill="#15803D"/>
@@ -159,10 +159,10 @@
                 <path d="M30 54C31 56 33 56 34 54L32 60L30 54Z" fill="#78350F"/>
             </svg>
 
-            <!-- Titre de l'application -->
+            <!-- Titre -->
             <h1 class="text-base font-extrabold text-agri-700 tracking-tight leading-none">BetaSaisie</h1>
 
-            <!-- Calculette (SVG droite) -->
+            <!-- Calculette -->
             <svg class="w-6 h-6 flex-shrink-0 text-agri-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="4" y="2" width="16" height="20" rx="2" ry="2" fill="#F1F5F9"></rect>
                 <rect x="7" y="5" width="10" height="4" rx="1" fill="#E2E8F0" stroke="currentColor" stroke-width="1.5"></rect>
@@ -175,7 +175,7 @@
             </svg>
         </div>
 
-        <!-- DROITE : Vrai Logo ITB & Dispositif de déconnexion -->
+        <!-- DROITE : Logo ITB et Déconnexion -->
         <div class="flex items-center justify-end flex-shrink-0 space-x-2">
             <span id="header-user-badge" class="hidden md:inline-flex bg-agri-100 text-agri-800 text-xxs font-bold px-2 py-1 rounded-lg border border-agri-200">
                 <i class="fa-solid fa-user-check mr-1 flex items-center"></i>
@@ -244,6 +244,11 @@
                     </div>
                 </div>
 
+                <!-- SENS DE PARCOURS PAR BLOC DYNAMIQUE -->
+                <div id="block-directions-container" class="space-y-2.5 mt-2 bg-gray-50/50 p-3.5 rounded-xl border border-gray-200">
+                    <!-- Injecté en JS -->
+                </div>
+
                 <!-- GESTION DYNAMIQUE DES ADVENTICES -->
                 <div class="bg-gray-50 border border-gray-200 rounded-xl p-3.5 space-y-2">
                     <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 select-none">Adventices à cibler (Efficacité)</label>
@@ -254,9 +259,8 @@
                             <i class="fa-solid fa-plus mr-1"></i> Ajouter
                         </button>
                     </div>
-                    <!-- Liste des badges adventices -->
                     <div id="adventices-badges" class="flex flex-wrap gap-1.5 pt-1">
-                        <!-- Les badges seront injectés ici -->
+                        <!-- Injecté en JS -->
                     </div>
                 </div>
 
@@ -272,7 +276,7 @@
                     </div>
                     
                     <div class="bg-gray-50 border border-gray-200 rounded-xl p-3 max-h-60 overflow-y-auto space-y-2 text-sm" id="variables-container">
-                        <!-- Généré dynamiquement en JS -->
+                        <!-- Généré en JS -->
                     </div>
                 </div>
 
@@ -283,7 +287,7 @@
             </div>
         </section>
 
-        <!-- ÉTAPE 2 : INTERFACE DE SAISIE TACTILE ET CLAVIER -->
+        <!-- ÉTAPE 2 : INTERFACE DE SAISIE TACTILE -->
         <section id="step-entry" class="hidden bg-white rounded-2xl p-4 shadow-sm border border-gray-200">
             <div class="flex items-center justify-between border-b pb-3 mb-3 select-none">
                 <div class="flex items-center space-x-2">
@@ -303,7 +307,7 @@
                 <div class="text-center flex-1">
                     <div class="text-xs uppercase font-semibold text-gray-400">Parcelle en cours</div>
                     <select id="plot-selector" onchange="onPlotSelectChange()" class="text-xl font-bold text-agri-700 bg-transparent border-none focus:outline-none text-center py-1 cursor-pointer">
-                        <!-- Options générées dynamiquement -->
+                        <!-- Généré dynamiquement -->
                     </select>
                     <div id="plot-sub-info" class="text-xxs text-gray-500 font-medium">Bloc 1 | Mod 1</div>
                 </div>
@@ -312,9 +316,9 @@
                 </button>
             </div>
 
-            <!-- SÉLECTEUR D'OBSERVATION RAPIDE (S'affiche si nbObs > 1) -->
+            <!-- SÉLECTEUR D'OBSERVATION RAPIDE -->
             <div id="obs-selector-container" class="mb-4 bg-gray-50 p-2.5 rounded-xl border border-gray-200 hidden select-none">
-                <!-- Les boutons d'observations Obs 1, Obs 2 seront injectés ici -->
+                <!-- Injecté en JS -->
             </div>
 
             <!-- Indicateur de progression globale -->
@@ -324,7 +328,7 @@
 
             <!-- FORMULAIRE DYNAMIQUE DE SAISIE HYBRIDE -->
             <div id="dynamic-inputs" class="space-y-4">
-                <!-- Les entrées clavier/tactiles s'affichent ici selon les choix de l'utilisateur -->
+                <!-- Les entrées clavier/tactiles s'affichent ici -->
             </div>
 
             <!-- Bouton Validation Express -->
@@ -351,7 +355,6 @@
                 <button onclick="exportToCSV()" class="bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow-sm transition active:scale-95">
                     <i class="fa-solid fa-file-csv"></i> Exporter CSV
                 </button>
-                <!-- Bouton Mail / Partage dynamique mobile & PC -->
                 <button onclick="shareOrEmailCSV()" class="bg-agri-600 hover:bg-agri-700 text-white text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow-sm transition active:scale-95">
                     <i class="fa-solid fa-paper-plane"></i> Envoyer / Partager
                 </button>
@@ -360,7 +363,7 @@
                 </button>
             </div>
 
-            <!-- Tableau récapitulatif (scroll horizontal sur mobile) -->
+            <!-- Tableau récapitulatif -->
             <div class="overflow-x-auto border border-gray-200 rounded-xl">
                 <table class="min-w-full divide-y divide-gray-200 text-xs text-left" id="summary-table">
                     <!-- Tête et corps générés dynamiquement -->
@@ -369,6 +372,71 @@
         </section>
 
     </main>
+
+    <!-- PAVÉ NUMÉRIQUE TACTILE VIRTUEL (VIRTUAL KEYPAD MODAL) -->
+    <div id="keypad-modal" onclick="if(event.target === this) closeKeypad()" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 z-[99999] hidden opacity-0 transition-opacity duration-200 select-none">
+        <div class="bg-white rounded-t-3xl sm:rounded-2xl p-5 w-full max-w-sm shadow-2xl transform translate-y-full sm:translate-y-0 sm:scale-95 transition-all duration-200">
+            <!-- En-tête du pavé numérique réorganisé avec Badge Parcelle -->
+            <div class="flex justify-between items-start mb-4 border-b pb-3">
+                <div class="flex-1 min-w-0 pr-2">
+                    <span id="keypad-var-category" class="text-xxs font-bold uppercase tracking-wider text-agri-600">Catégorie</span>
+                    <h3 id="keypad-var-label" class="text-sm font-bold text-gray-800 truncate">Variable en cours</h3>
+                </div>
+                <div class="flex items-center space-x-2 flex-shrink-0">
+                    <!-- Badge contenant le Numéro de Parcelle dynamique -->
+                    <span id="keypad-plot-badge" class="bg-agri-600 text-white px-2.5 py-1.5 rounded-lg text-xs font-black tracking-wider shadow-sm">Parcelle --</span>
+                    <button onclick="closeKeypad()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 font-bold transition">&times;</button>
+                </div>
+            </div>
+            
+            <!-- Zone d'affichage de la valeur -->
+            <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 mb-4 text-center shadow-inner relative">
+                <span id="keypad-display" class="text-4xl font-black text-gray-900 tracking-wider">0</span>
+                <span id="keypad-display-suffix" class="text-xs text-gray-400 font-bold ml-1"></span>
+            </div>
+
+            <!-- Raccourcis de valeurs rapides -->
+            <div class="grid grid-cols-4 gap-2 mb-3">
+                <button type="button" onclick="keypadSetSpecial(-99)" class="py-2.5 bg-red-50 hover:bg-red-100 text-red-600 font-extrabold text-xs rounded-xl border border-red-100 active:scale-95 transition shadow-sm">-99</button>
+                <button type="button" onclick="keypadSetSpecial(0)" class="py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-extrabold text-xs rounded-xl border border-gray-200 active:scale-95 transition shadow-sm">0</button>
+                <button type="button" onclick="keypadAddValue(10)" class="py-2.5 bg-agri-50 hover:bg-agri-100 text-agri-700 font-extrabold text-xs rounded-xl border border-agri-200 active:scale-95 transition shadow-sm">+10</button>
+                <button type="button" onclick="keypadAddValue(50)" class="py-2.5 bg-agri-50 hover:bg-agri-100 text-agri-700 font-extrabold text-xs rounded-xl border border-agri-200 active:scale-95 transition shadow-sm">+50</button>
+            </div>
+
+            <!-- Touches de saisie principales -->
+            <div class="grid grid-cols-4 gap-2">
+                <!-- Chiffres 1 à 9 et 0 -->
+                <div class="col-span-3 grid grid-cols-3 gap-2">
+                    <button type="button" onclick="keypadPress('1')" class="h-14 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 text-gray-800 text-xl font-bold rounded-xl flex items-center justify-center border border-gray-200 shadow-sm transition">1</button>
+                    <button type="button" onclick="keypadPress('2')" class="h-14 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 text-gray-800 text-xl font-bold rounded-xl flex items-center justify-center border border-gray-200 shadow-sm transition">2</button>
+                    <button type="button" onclick="keypadPress('3')" class="h-14 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 text-gray-800 text-xl font-bold rounded-xl flex items-center justify-center border border-gray-200 shadow-sm transition">3</button>
+                    
+                    <button type="button" onclick="keypadPress('4')" class="h-14 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 text-gray-800 text-xl font-bold rounded-xl flex items-center justify-center border border-gray-200 shadow-sm transition">4</button>
+                    <button type="button" onclick="keypadPress('5')" class="h-14 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 text-gray-800 text-xl font-bold rounded-xl flex items-center justify-center border border-gray-200 shadow-sm transition">5</button>
+                    <button type="button" onclick="keypadPress('6')" class="h-14 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 text-gray-800 text-xl font-bold rounded-xl flex items-center justify-center border border-gray-200 shadow-sm transition">6</button>
+                    
+                    <button type="button" onclick="keypadPress('7')" class="h-14 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 text-gray-800 text-xl font-bold rounded-xl flex items-center justify-center border border-gray-200 shadow-sm transition">7</button>
+                    <button type="button" onclick="keypadPress('8')" class="h-14 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 text-gray-800 text-xl font-bold rounded-xl flex items-center justify-center border border-gray-200 shadow-sm transition">8</button>
+                    <button type="button" onclick="keypadPress('9')" class="h-14 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 text-gray-800 text-xl font-bold rounded-xl flex items-center justify-center border border-gray-200 shadow-sm transition">9</button>
+                    
+                    <button type="button" id="keypad-dot-btn" onclick="keypadPress('.')" class="h-14 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 text-gray-800 text-xl font-bold rounded-xl flex items-center justify-center border border-gray-200 shadow-sm transition">.</button>
+                    <button type="button" onclick="keypadPress('0')" class="h-14 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 text-gray-800 text-xl font-bold rounded-xl flex items-center justify-center border border-gray-200 shadow-sm transition">0</button>
+                    <button type="button" onclick="keypadBackspace()" class="h-14 bg-gray-100 hover:bg-gray-200 text-gray-600 text-xl rounded-xl flex items-center justify-center border border-gray-200 shadow-sm transition">
+                        <i class="fa-solid fa-delete-left"></i>
+                    </button>
+                </div>
+                
+                <!-- Touches d'actions à droite -->
+                <div class="col-span-1 flex flex-col gap-2">
+                    <button type="button" onclick="keypadClear()" class="flex-1 bg-red-50 hover:bg-red-100 text-red-700 font-bold text-xs rounded-xl py-3 border border-red-200 active:scale-95 transition shadow-sm">Corriger</button>
+                    <button type="button" onclick="keypadValidate()" class="flex-[2] bg-agri-600 hover:bg-agri-700 text-white font-black text-sm rounded-xl py-4 active:scale-95 flex flex-col items-center justify-center shadow-md transition">
+                        <i class="fa-solid fa-check text-xl mb-1"></i>
+                        <span>VALIDER</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- PIED DE PAGE PERSONNALISÉ -->
     <footer class="text-center py-6 text-xs text-gray-400 select-none border-t border-gray-200 mt-12 bg-white">
@@ -408,7 +476,7 @@
             "ITBGRIFFON": "Griffon022026!"
         };
 
-        // FONCTION DE NETTOYAGE GLOBALE POUR LES IDENTIFIANTS COMPATIBLES
+        // FONCTION DE NETTOYAGE GLOBALE
         function cleanString(str) {
             if (!str) return "";
             return str.toLowerCase()
@@ -418,14 +486,21 @@
                 .trim();
         }
 
-        // LISTE COMPLÈTE DES VARIABLES STATIQUES DE L'UTILISATEUR AVEC VALEURS PAR DÉFAUT -99 (Sauf Pucerons à 0 et Auxiliaires à 0)
+        // LISTE COMPLÈTE DES VARIABLES STATIQUES
         const STATIC_VARIABLES = [
-            { id: "puc_apt_vert", label: "Pucerons aptères verts / pl", category: "Pucerons", type: "number", step: 0.1, default: 0 },
-            { id: "puc_ail_vert", label: "Pucerons ailés verts / pl", category: "Pucerons", type: "number", step: 0.1, default: 0 },
+            // CATEGORIE : BETTERAVE
+            { id: "bet_nb_plante", label: "Nombre de plantes", category: "Betterave", type: "number", step: 1, default: -99 },
+            { id: "bet_nb_plante_saine", label: "Nombre de plantes saines", category: "Betterave", type: "number", step: 1, default: -99 },
+            { id: "bet_vigueur", label: "Vigueur (10 à 0)", category: "Betterave", type: "range", min: 0, max: 10, default: -99 },
+            { id: "bet_aspect_visuel", label: "Aspect visuel (10 à 0)", category: "Betterave", type: "range", min: 0, max: 10, default: -99 },
+
+            // CATEGORIE : PUCERONS
+            { id: "puc_apt_vert", label: "Pucerons aptères verts / pl", category: "Pucerons", type: "number", step: 1, default: 0 },
+            { id: "puc_ail_vert", label: "Pucerons ailés verts / pl", category: "Pucerons", type: "number", step: 1, default: 0 },
             { id: "puc_apt_noir", label: "Pucerons aptères noirs / pl", category: "Pucerons", type: "number", step: 1, default: 0 },
             { id: "puc_ail_noir", label: "Pucerons ailés noirs / pl", category: "Pucerons", type: "number", step: 1, default: 0 },
             
-            // AUXILIAIRES (Valeur par défaut à 0)
+            // CATEGORIE : AUXILIAIRES
             { id: "aux_larve_chrysope", label: "Larve de chrysope / pl", category: "Auxiliaires", type: "number", step: 1, default: 0 },
             { id: "aux_oeuf_chrysope", label: "Oeuf de chrysope / pl", category: "Auxiliaires", type: "number", step: 1, default: 0 },
             { id: "aux_larve_syrphe", label: "Larve de syrphe / pl", category: "Auxiliaires", type: "number", step: 1, default: 0 },
@@ -433,16 +508,23 @@
             { id: "aux_coccinelle_adulte", label: "Coccinelle adulte / pl", category: "Auxiliaires", type: "number", step: 1, default: 0 },
             { id: "aux_oeuf_coccinelle", label: "Oeufs de coccinelle / pl", category: "Auxiliaires", type: "number", step: 1, default: 0 },
 
+            // CATEGORIE : EFFICACITE
             { id: "selectivite", label: "Sélectivité (0 à 10)", category: "Efficacité", type: "range", min: 0, max: 10, default: -99 },
             { id: "efficacite", label: "Efficacité Globale (0 à 10)", category: "Efficacité", type: "range", min: 0, max: 10, default: -99 },
+            
+            // CATEGORIE : MALADIES
             { id: "grav_cerco", label: "Gravité Cercosporiose (0-10)", category: "Maladies", type: "range", min: 0, max: 10, default: -99 },
             { id: "grav_oidium", label: "Gravité Oïdium (0-10)", category: "Maladies", type: "range", min: 0, max: 10, default: -99 },
             { id: "grav_rouille", label: "Gravité Rouille (0-10)", category: "Maladies", type: "range", min: 0, max: 10, default: -99 },
             { id: "grav_ramu", label: "Gravité Ramulariose (0-10)", category: "Maladies", type: "range", min: 0, max: 10, default: -99 },
+            
+            // CATEGORIE : JAUNISSE
             { id: "pct_jaunisse", label: "% Jaunisse", category: "Jaunisse", type: "range", min: 0, max: 100, default: -99 },
             { id: "grav_jaunisse", label: "Gravité Jaunisse (0-10)", category: "Jaunisse", type: "range", min: 0, max: 10, default: -99 },
-            { id: "nb_montee", label: "Nombre de montées", category: "Divers", type: "number", step: 1, default: -99 },
-            { id: "nb_mildiou", label: "Nombre de mildiou", category: "Divers", type: "number", step: 1, default: -99 }
+            
+            // CATEGORIE : DIVERS (Modifié par défaut à 0 au lieu de -99)
+            { id: "nb_montee", label: "Nombre de montées", category: "Divers", type: "number", step: 1, default: 0 },
+            { id: "nb_mildiou", label: "Nombre de mildiou", category: "Divers", type: "number", step: 1, default: 0 }
         ];
 
         // ÉTAT DE L'APPLICATION
@@ -457,8 +539,13 @@
             plots: [], 
             currentPlotIndex: 0, 
             activeObs: 1,
-            currentUser: ""
+            currentUser: "",
+            blockDirections: [] // Sens de parcours par bloc ('asc' ou 'desc')
         };
+
+        // VARIABLES DU PAVÉ NUMÉRIQUE VIRTUEL
+        let activeKeypadVarId = "";
+        let keypadValueString = "";
 
         // ACCÈS ET AUTHENTIFICATION
         function attemptLogin() {
@@ -472,14 +559,11 @@
                 return;
             }
 
-            // Vérification de l'identifiant dans la base de données ITB
             if (USERS_DB.hasOwnProperty(usernameInput) && USERS_DB[usernameInput] === passwordInput) {
-                // Connexion réussie
                 appState.currentUser = usernameInput;
                 sessionStorage.setItem("betasaisie_authenticated", "true");
                 sessionStorage.setItem("betasaisie_user", usernameInput);
                 
-                // Mémorisation si la case est cochée
                 if (rememberCheck) {
                     localStorage.setItem("betasaisie_remember", "true");
                     localStorage.setItem("betasaisie_remember_username", usernameInput);
@@ -490,7 +574,6 @@
                     localStorage.removeItem("betasaisie_remember_password");
                 }
 
-                // Adapter automatiquement le nom de l'essai à l'utilisateur
                 if (appState.trialName === "Essai Betteraves 2026") {
                     appState.trialName = `Essai Betteraves 2026 - ${usernameInput}`;
                     document.getElementById("trial-name").value = appState.trialName;
@@ -499,7 +582,6 @@
                 saveStateToLocalStorage();
                 updateUserUI();
 
-                // Transition visuelle de déverrouillage
                 const lockScreen = document.getElementById("lock-screen");
                 lockScreen.classList.add("opacity-0");
                 setTimeout(() => {
@@ -508,7 +590,6 @@
 
                 showToast(`Bienvenue, équipe ${usernameInput} !`);
             } else {
-                // Connexion échouée : Effet de secousse
                 loginCard.classList.add("shake");
                 showToast("Identifiant ou mot de passe incorrect.", true);
                 setTimeout(() => {
@@ -522,7 +603,6 @@
             const user = sessionStorage.getItem("betasaisie_user");
             const lockScreen = document.getElementById("lock-screen");
 
-            // Gestion de la mémorisation
             const isRemembered = localStorage.getItem("betasaisie_remember") === "true";
             if (isRemembered) {
                 document.getElementById("login-username").value = localStorage.getItem("betasaisie_remember_username") || "";
@@ -545,7 +625,6 @@
                 sessionStorage.removeItem("betasaisie_user");
                 appState.currentUser = "";
                 
-                // Vider les champs si non mémorisés
                 const isRemembered = localStorage.getItem("betasaisie_remember") === "true";
                 if (!isRemembered) {
                     document.getElementById("login-username").value = "";
@@ -553,7 +632,6 @@
                     document.getElementById("login-remember").checked = false;
                 }
                 
-                // Afficher à nouveau l'écran de verrouillage
                 const lockScreen = document.getElementById("lock-screen");
                 lockScreen.classList.remove("hidden", "opacity-0");
                 
@@ -588,7 +666,6 @@
             }
         }
 
-        // Fonction de secours dessinant le logo de l'ITB en SVG vectoriel autonome
         function showSvgLogoFallback(imgElement) {
             const classes = imgElement.className || "h-9 w-auto";
             const svgHTML = `
@@ -606,7 +683,6 @@
             imgElement.outerHTML = svgHTML;
         }
 
-        // Génère une icône d'application mobile autonome
         function setupMobilePwaIcon() {
             const svgIcon = `
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
@@ -616,23 +692,10 @@
                         <path d="M32 24C39 16 44 12 38 6C33 1 29 10 32 24Z" fill="#15803D"/>
                         <path d="M27 24C22 18 16 16 21 10C25 5 28 12 27 24Z" fill="#166534"/>
                         <path d="M22 24C22 24 17 33 24 45C29 54 32 60 32 60C32 60 35 54 40 45C47 33 42 24 42 24H22Z" fill="#F8FAFC" stroke="#94A3B8" stroke-width="2"/>
-                        <path d="M25 32C28 33 36 33 39 32" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
-                        <path d="M26 40C29 41 35 41 38 40" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
-                    </g>
-                    <g transform="translate(110, 45) scale(1.4)">
-                        <rect x="0" y="0" width="22" height="30" rx="3" fill="#F1F5F9" stroke="#94A3B8" stroke-width="1.5"></rect>
-                        <rect x="3" y="3" width="16" height="6" rx="1" fill="#E2E8F0"></rect>
-                        <circle cx="6" cy="14" r="1.5" fill="#1E7E34"></circle>
-                        <circle cx="11" cy="14" r="1.5" fill="#1E7E34"></circle>
-                        <circle cx="16" cy="14" r="1.5" fill="#1E7E34"></circle>
-                        <circle cx="6" cy="20" r="1.5" fill="#1E7E34"></circle>
-                        <circle cx="11" cy="20" r="1.5" fill="#1E7E34"></circle>
-                        <rect x="15" y="19" width="3" height="5" rx="0.5" fill="#15803D"></rect>
                     </g>
                     <text x="96" y="162" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="20" fill="#F8FAFC" text-anchor="middle" letter-spacing="0.5">BetaSaisie</text>
                 </svg>
             `;
-
             const base64Svg = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgIcon)));
 
             let favicon = document.querySelector("link[rel='icon']");
@@ -642,43 +705,6 @@
                 document.head.appendChild(favicon);
             }
             favicon.href = base64Svg;
-
-            let appleIcon = document.querySelector("link[rel='apple-touch-icon']");
-            if (!appleIcon) {
-                appleIcon = document.createElement("link");
-                appleIcon.rel = "apple-touch-icon";
-                document.head.appendChild(appleIcon);
-            }
-            appleIcon.href = base64Svg;
-
-            const manifest = {
-                "name": "BetaSaisie - Notation Betteraves",
-                "short_name": "BetaSaisie",
-                "description": "Saisie de notation agricole ITB",
-                "start_url": window.location.href,
-                "display": "standalone",
-                "orientation": "portrait-primary",
-                "background_color": "#145323",
-                "theme_color": "#145323",
-                "icons": [
-                    {
-                        "src": base64Svg,
-                        "sizes": "192x192",
-                        "type": "image/svg+xml"
-                    }
-                ]
-            };
-
-            const blob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
-            const manifestURL = URL.createObjectURL(blob);
-
-            let manifestLink = document.querySelector("link[rel='manifest']");
-            if (!manifestLink) {
-                manifestLink = document.createElement("link");
-                manifestLink.rel = "manifest";
-                document.head.appendChild(manifestLink);
-            }
-            manifestLink.href = manifestURL;
         }
 
         function getActiveVariablesConfig() {
@@ -696,23 +722,81 @@
             return [...STATIC_VARIABLES, ...dynamicVars];
         }
 
-        // CHARGEMENT INITIAL
         window.onload = function() {
             setupMobilePwaIcon();
             loadStateFromLocalStorage();
-            
-            // Sécurité d'accès au démarrage
             checkAuthOnLoad();
             
-            // Initialisation de la date d'aujourd'hui par défaut si vide
             if (!appState.trialDate) {
                 appState.trialDate = new Date().toISOString().split('T')[0];
             }
 
+            document.getElementById("nb-blocks").addEventListener("input", updateBlockDirectionsUI);
+            document.getElementById("nb-modalities").addEventListener("input", updateBlockDirectionsUI);
+
             initVariablesList();
             renderAdventicesBadges();
+            updateBlockDirectionsUI();
             updateUI();
         };
+
+        // GESTION DU SENS DE PARCOURS PAR BLOC
+        function updateBlockDirectionsUI() {
+            const nbBlocks = parseInt(document.getElementById("nb-blocks").value) || 1;
+            const nbModalities = parseInt(document.getElementById("nb-modalities").value) || 18;
+            const container = document.getElementById("block-directions-container");
+            if (!container) return;
+
+            container.innerHTML = `
+                <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1 select-none">Sens de parcours de notation</label>
+                <p class="text-[10px] text-gray-400 select-none mb-3">Configurez le sens de votre marche sur le terrain pour chaque bloc (serpentine).</p>
+            `;
+
+            if (!appState.blockDirections) {
+                appState.blockDirections = [];
+            }
+
+            while (appState.blockDirections.length < nbBlocks) {
+                const defaultDir = (appState.blockDirections.length % 2 === 0) ? 'asc' : 'desc';
+                appState.blockDirections.push(defaultDir);
+            }
+            if (appState.blockDirections.length > nbBlocks) {
+                appState.blockDirections = appState.blockDirections.slice(0, nbBlocks);
+            }
+
+            for (let b = 1; b <= nbBlocks; b++) {
+                const currentDir = appState.blockDirections[b - 1];
+                const row = document.createElement("div");
+                row.className = "flex items-center justify-between bg-white p-2.5 rounded-xl border border-gray-200 select-none text-xs shadow-sm mb-1.5";
+                
+                row.innerHTML = `
+                    <span class="font-bold text-gray-700">Bloc ${b}</span>
+                    <div class="inline-flex rounded-lg shadow-sm">
+                        <button type="button" onclick="setBlockDirection(${b - 1}, 'asc')" class="px-3 py-1.5 text-xxs font-extrabold rounded-l-lg border transition ${
+                            currentDir === 'asc' 
+                            ? 'bg-agri-600 text-white border-agri-600' 
+                            : 'bg-white text-gray-600 border-gray-200 active:bg-gray-100'
+                        }">
+                            Croissant (1 ➔ ${nbModalities})
+                        </button>
+                        <button type="button" onclick="setBlockDirection(${b - 1}, 'desc')" class="px-3 py-1.5 text-xxs font-extrabold rounded-r-lg border-t border-b border-r border-gray-200 transition ${
+                            currentDir === 'desc' 
+                            ? 'bg-agri-600 text-white border-agri-600' 
+                            : 'bg-white text-gray-600 border-gray-200 active:bg-gray-100'
+                        }">
+                            Décroissant (${nbModalities} ➔ 1)
+                        </button>
+                    </div>
+                `;
+                container.appendChild(row);
+            }
+            saveStateToLocalStorage();
+        }
+
+        function setBlockDirection(index, direction) {
+            appState.blockDirections[index] = direction;
+            updateBlockDirectionsUI();
+        }
 
         function initVariablesList() {
             const container = document.getElementById("variables-container");
@@ -845,7 +929,20 @@
 
             appState.plots = [];
             for (let b = 1; b <= appState.nbBlocks; b++) {
-                for (let m = 1; m <= appState.nbModalities; m++) {
+                const blockDir = (appState.blockDirections && appState.blockDirections[b - 1]) ? appState.blockDirections[b - 1] : 'asc';
+                
+                const modOrder = [];
+                if (blockDir === 'asc') {
+                    for (let m = 1; m <= appState.nbModalities; m++) {
+                        modOrder.push(m);
+                    }
+                } else {
+                    for (let m = appState.nbModalities; m >= 1; m--) {
+                        modOrder.push(m);
+                    }
+                }
+
+                for (const m of modOrder) {
                     for (let o = 1; o <= appState.nbObs; o++) {
                         const plotNum = (b * 100) + m;
                         const plotId = appState.nbObs > 1 ? `${plotNum} - O${o}` : `${plotNum}`;
@@ -907,9 +1004,15 @@
 
             const selector = document.getElementById("plot-selector");
             selector.innerHTML = "";
-            const uniquePlotNums = [...new Set(appState.plots.map(p => p.plotNum))];
+            
+            const uniquePlotNumsInSequence = [];
+            appState.plots.forEach(p => {
+                if (!uniquePlotNumsInSequence.includes(p.plotNum)) {
+                    uniquePlotNumsInSequence.push(p.plotNum);
+                }
+            });
 
-            uniquePlotNums.forEach(plotNum => {
+            uniquePlotNumsInSequence.forEach(plotNum => {
                 const obsOfPlot = appState.plots.filter(p => p.plotNum === plotNum);
                 const allDone = obsOfPlot.every(p => p.isCompleted);
                 const countDone = obsOfPlot.filter(p => p.isCompleted).length;
@@ -926,7 +1029,7 @@
                 appState.activeObs = currentPlot.obs;
             }
 
-            renderObservationTabs(currentPlot ? currentPlot.plotNum : uniquePlotNums[0]);
+            renderObservationTabs(currentPlot ? currentPlot.plotNum : uniquePlotNumsInSequence[0]);
             loadPlotData(appState.currentPlotIndex);
             
             const completedCount = appState.plots.filter(p => p.isCompleted).length;
@@ -1011,7 +1114,14 @@
                     inputGroup.innerHTML += `
                         <div class="flex items-center space-x-2">
                             <button type="button" onclick="changeNumValue('${vId}', -${inc})" class="w-12 h-12 bg-white active:bg-gray-200 border border-gray-300 rounded-xl text-lg font-bold flex items-center justify-center shadow-sm select-none">-</button>
-                            <input type="number" id="input-${vId}" step="${conf.step}" value="${value}" onchange="updateValueFromInput('${vId}')" class="flex-1 h-12 text-center text-lg font-bold border border-gray-300 rounded-xl focus:ring-2 focus:ring-agri-500 focus:outline-none focus:bg-white text-gray-900">
+                            
+                            <div class="relative flex-1">
+                                <input type="number" id="input-${vId}" step="${conf.step}" value="${value}" onchange="updateValueFromInput('${vId}')" class="w-full h-12 text-center text-lg font-bold border border-gray-300 rounded-xl focus:ring-2 focus:ring-agri-500 focus:outline-none focus:bg-white text-gray-900 pr-10">
+                                <button type="button" onclick="openKeypad('${vId}')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-agri-600 hover:text-agri-800 transition active:scale-110" title="Saisie tactile assistée">
+                                    <i class="fa-solid fa-calculator text-lg"></i>
+                                </button>
+                            </div>
+                            
                             <button type="button" onclick="changeNumValue('${vId}', ${inc})" class="w-12 h-12 bg-white active:bg-gray-200 border border-gray-300 rounded-xl text-lg font-bold flex items-center justify-center shadow-sm select-none">+</button>
                         </div>
                     `;
@@ -1067,7 +1177,6 @@
             });
         }
 
-        // MAJ de la valeur à la volée avec les boutons +/-
         function changeNumValue(varId, delta) {
             const input = document.getElementById(`input-${varId}`);
             if (!input) return;
@@ -1113,16 +1222,191 @@
             saveStateToLocalStorage();
         }
 
+        // --- FONCTIONS DU PAVÉ NUMÉRIQUE VIRTUEL (KEYPAD) ---
+        function openKeypad(varId) {
+            const conf = getActiveVariablesConfig().find(item => item.id === varId);
+            if (!conf) return;
+
+            activeKeypadVarId = varId;
+            
+            // Récupérer la parcelle active
+            const currentPlot = appState.plots[appState.currentPlotIndex];
+            const currentVal = currentPlot.values[varId];
+            keypadValueString = (currentVal !== undefined && currentVal !== null) ? String(currentVal) : "";
+
+            // Mettre à jour l'en-tête du pavé avec catégorie et libellé
+            document.getElementById("keypad-var-category").innerText = conf.category;
+            document.getElementById("keypad-var-label").innerText = conf.label;
+            
+            // Nouveau : Mettre à jour le badge de numéro de parcelle de la calculette
+            const labelSuffix = appState.nbObs > 1 ? ` (Obs ${currentPlot.obs})` : "";
+            document.getElementById("keypad-plot-badge").innerText = `P. ${currentPlot.plotNum}${labelSuffix}`;
+
+            // Suffixe d'unité
+            let suffix = "";
+            if (varId.includes("plante")) suffix = "pl";
+            else if (varId.includes("puc") || varId.includes("aux")) suffix = "/ pl";
+            document.getElementById("keypad-display-suffix").innerText = suffix;
+
+            // Activer ou griser la touche "."
+            const dotBtn = document.getElementById("keypad-dot-btn");
+            if (conf.step < 1) {
+                dotBtn.removeAttribute("disabled");
+                dotBtn.classList.remove("opacity-40", "pointer-events-none");
+            } else {
+                dotBtn.setAttribute("disabled", "true");
+                dotBtn.classList.add("opacity-40", "pointer-events-none");
+            }
+
+            updateKeypadDisplay();
+
+            // Ouvrir modal
+            const modal = document.getElementById("keypad-modal");
+            modal.classList.remove("hidden");
+            setTimeout(() => {
+                modal.classList.remove("opacity-0");
+                modal.firstElementChild.classList.remove("translate-y-full", "sm:scale-95");
+            }, 10);
+        }
+
+        function closeKeypad() {
+            const modal = document.getElementById("keypad-modal");
+            modal.classList.add("opacity-0");
+            modal.firstElementChild.classList.add("translate-y-full", "sm:scale-95");
+            setTimeout(() => {
+                modal.classList.add("hidden");
+            }, 200);
+        }
+
+        function updateKeypadDisplay() {
+            const display = document.getElementById("keypad-display");
+            if (keypadValueString === "" || keypadValueString === undefined) {
+                display.innerText = "-";
+                display.className = "text-4xl font-black text-gray-300 tracking-wider";
+            } else {
+                display.innerText = keypadValueString;
+                if (keypadValueString === "-99") {
+                    display.className = "text-4xl font-black text-red-600 tracking-wider animate-pulse";
+                } else {
+                    display.className = "text-4xl font-black text-gray-900 tracking-wider";
+                }
+            }
+        }
+
+        function keypadPress(char) {
+            if (keypadValueString === "-99" || keypadValueString === "0") {
+                if (char === ".") {
+                    keypadValueString = "0.";
+                } else {
+                    keypadValueString = char;
+                }
+            } else {
+                if (char === "." && keypadValueString.includes(".")) {
+                    return;
+                }
+                keypadValueString += char;
+            }
+            
+            if (keypadValueString.length > 7) {
+                keypadValueString = keypadValueString.slice(0, 7);
+            }
+            
+            updateKeypadDisplay();
+        }
+
+        function keypadBackspace() {
+            if (keypadValueString === "-99") {
+                keypadValueString = "";
+            } else if (keypadValueString.length > 0) {
+                keypadValueString = keypadValueString.slice(0, -1);
+            }
+            updateKeypadDisplay();
+        }
+
+        function keypadClear() {
+            keypadValueString = "";
+            updateKeypadDisplay();
+        }
+
+        function keypadSetSpecial(val) {
+            keypadValueString = String(val);
+            updateKeypadDisplay();
+        }
+
+        function keypadAddValue(offset) {
+            let val = parseFloat(keypadValueString);
+            if (isNaN(val) || val === -99) {
+                val = 0;
+            }
+            val += offset;
+            keypadValueString = String(val);
+            updateKeypadDisplay();
+        }
+
+        // NOUVEAU : Sauvegarde de la valeur et saut de parcelle automatique sans fermer la calculette !
+        function keypadValidate() {
+            if (keypadValueString === "") {
+                showToast("Saisie vide, valeur par défaut configurée à -99.", true);
+                keypadValueString = "-99";
+            }
+
+            // 1. Sauvegarder dans l'état de l'application
+            const currentPlot = appState.plots[appState.currentPlotIndex];
+            currentPlot.values[activeKeypadVarId] = keypadValueString;
+            currentPlot.isCompleted = true;
+
+            // 2. Mémoriser localement
+            saveStateToLocalStorage();
+
+            // 3. Vérifier s'il y a une parcelle suivante dans l'essai
+            if (appState.currentPlotIndex < appState.plots.length - 1) {
+                const completedPlotNum = currentPlot.plotNum;
+                
+                // Incrémenter l'index vers la parcelle suivante
+                appState.currentPlotIndex++;
+                appState.activeObs = appState.plots[appState.currentPlotIndex].obs;
+                
+                // Mettre à jour l'interface principale (grille, progression, sélecteurs)
+                updateUI();
+                
+                // Charger la valeur de la variable pour cette nouvelle parcelle
+                const nextPlot = appState.plots[appState.currentPlotIndex];
+                const nextVal = nextPlot.values[activeKeypadVarId];
+                keypadValueString = (nextVal !== undefined && nextVal !== null) ? String(nextVal) : "";
+
+                // Mettre à jour le badge de parcelle de la calculette
+                const labelSuffix = appState.nbObs > 1 ? ` (Obs ${nextPlot.obs})` : "";
+                document.getElementById("keypad-plot-badge").innerText = `P. ${nextPlot.plotNum}${labelSuffix}`;
+
+                // Rafraîchir l'affichage de l'écran de la calculette
+                updateKeypadDisplay();
+
+                showToast(`Parcelle ${completedPlotNum} validée. Suivant : ${nextPlot.plotNum} !`);
+            } else {
+                // S'il n'y a plus de parcelle (fin de l'essai)
+                updateUI();
+                closeKeypad();
+                showToast("🎉 Félicitations ! Toutes les parcelles ont été complétées !", false);
+            }
+        }
+
+        // --- AUTRES NAVIGATIONS DE L'APPLICATION ---
         function navigatePlotGroup(direction) {
-            const uniquePlotNums = [...new Set(appState.plots.map(p => p.plotNum))];
+            const uniquePlotNumsInSequence = [];
+            appState.plots.forEach(p => {
+                if (!uniquePlotNumsInSequence.includes(p.plotNum)) {
+                    uniquePlotNumsInSequence.push(p.plotNum);
+                }
+            });
+
             const currentPlot = appState.plots[appState.currentPlotIndex];
             if (!currentPlot) return;
 
-            const currentGroupIdx = uniquePlotNums.indexOf(currentPlot.plotNum);
+            const currentGroupIdx = uniquePlotNumsInSequence.indexOf(currentPlot.plotNum);
             let nextGroupIdx = currentGroupIdx + direction;
 
-            if (nextGroupIdx >= 0 && nextGroupIdx < uniquePlotNums.length) {
-                const targetPlotNum = uniquePlotNums[nextGroupIdx];
+            if (nextGroupIdx >= 0 && nextGroupIdx < uniquePlotNumsInSequence.length) {
+                const targetPlotNum = uniquePlotNumsInSequence[nextGroupIdx];
                 const targetIdx = appState.plots.findIndex(p => p.plotNum === targetPlotNum && p.obs === 1);
                 if (targetIdx !== -1) {
                     appState.currentPlotIndex = targetIdx;
@@ -1216,7 +1500,6 @@
             window.scrollTo({ top: 180, behavior: 'smooth' });
         }
 
-        // Formater la date YYYY-MM-DD en français DD/MM/YYYY
         function formatDateFR(dateStr) {
             if (!dateStr) return "";
             const parts = dateStr.split('-');
@@ -1226,10 +1509,9 @@
             return dateStr;
         }
 
-        // GÉNÉRER LA CHAÎNE DE TEXTE CSV BRUTE
         function generateCSVString() {
             const activeConfig = getActiveVariablesConfig();
-            let csvContent = "\uFEFF"; // BOM UTF-8 pour Excel
+            let csvContent = "\uFEFF"; // BOM UTF-8
             
             let headers = ["Essai", "Date", "Parcelle", "Bloc", "Modalite", "Observation"];
             appState.selectedVars.forEach(vId => {
@@ -1275,7 +1557,6 @@
             showToast("CSV téléchargé !");
         }
 
-        // FONCTION DE PARTAGE INTELLIGENTE ET SÉCURISÉE (WEB SHARE API + repli MAILTO)
         function shareOrEmailCSV() {
             if (appState.plots.length === 0) {
                 showToast("Aucune donnée à partager.", true);
@@ -1286,7 +1567,6 @@
             const cleanName = appState.trialName.toLowerCase().replace(/[^a-z0-9]/g, "_");
             const filename = `notation_agri_${cleanName}.csv`;
 
-            // Tentative d'utilisation de l'API de partage native du smartphone (iOS / Android)
             try {
                 const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
                 const file = new File([blob], filename, { type: 'text/csv' });
@@ -1306,19 +1586,16 @@
                     return;
                 }
             } catch (e) {
-                console.log("Le partage de fichier natif n'est pas supporté, redirection vers email...");
+                console.log("Le partage natif n'est pas supporté, redirection vers email...");
             }
 
-            // Option de repli si le partage natif de fichier n'est pas supporté (ex : PC de bureau)
             fallbackToMailto(csvContent);
         }
 
-        // REPLI AUTOMATIQUE PAR MAIL (MAILTO:)
         function fallbackToMailto(csvContent) {
             const subject = encodeURIComponent(`Extraction BetaSaisie - ${appState.trialName}`);
             let bodyText = `Bonjour,\n\nVoici les données de notation collectées avec l'application BetaSaisie pour l'essai "${appState.trialName}".\n\n`;
             
-            // Si le CSV n'est pas trop volumineux, on l'écrit directement dans le corps du mail pour un copier-coller rapide
             if (csvContent.length < 2000) {
                 bodyText += `--- DONNÉES CSV ---\n${csvContent}\n-------------------\n`;
             } else {
@@ -1328,12 +1605,10 @@
             bodyText += `\nEnvoyé depuis l'application de terrain BetaSaisie.`;
             const mailtoUrl = `mailto:?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
             
-            // Ouvrir l'application mail installée sur l'appareil
             window.location.href = mailtoUrl;
             showToast("Ouverture de votre messagerie...");
         }
 
-        // SAUVEGARDE ET CHARGEMENT LOCALE DANS LE TÉLÉPHONE
         function saveStateToLocalStorage() {
             localStorage.setItem("agro_saisie_state", JSON.stringify(appState));
         }
@@ -1345,6 +1620,9 @@
                     const parsed = JSON.parse(saved);
                     if (!parsed.customAdventices) {
                         parsed.customAdventices = [];
+                    }
+                    if (!parsed.blockDirections) {
+                        parsed.blockDirections = [];
                     }
                     if (parsed.selectedVars) {
                         parsed.selectedVars = parsed.selectedVars.filter(v => v !== "type_adventice");
@@ -1364,12 +1642,12 @@
                     localStorage.removeItem("agro_saisie_state");
                     appState.plots = [];
                     appState.customAdventices = ["Chénopode", "Matricaire"];
-                    appState.selectedVars = []; // Tout décoché par défaut !
+                    appState.selectedVars = [];
                     appState.trialDate = new Date().toISOString().split('T')[0];
                     appState.currentPlotIndex = 0;
                     appState.activeObs = 1;
+                    appState.blockDirections = [];
                     
-                    // Remise à plat des valeurs par défaut dans les éléments HTML
                     document.getElementById("nb-modalities").value = 18;
                     document.getElementById("nb-blocks").value = 4;
                     document.getElementById("nb-obs").value = 1;
@@ -1377,7 +1655,6 @@
                     appState.nbBlocks = 4;
                     appState.nbObs = 1;
                     
-                    // Restaurer le nom de l'essai par défaut lié à l'utilisateur actif
                     if (appState.currentUser) {
                         appState.trialName = `Essai Betteraves 2026 - ${appState.currentUser}`;
                     } else {
@@ -1386,6 +1663,7 @@
                     
                     initVariablesList();
                     renderAdventicesBadges();
+                    updateBlockDirectionsUI();
                     showConfig();
                     updateUI();
                     showToast("Application réinitialisée.");
