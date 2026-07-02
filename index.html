@@ -7,9 +7,9 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="BetaSaisie">
     <title>BetaSaisie - Notation Betteraves</title>
-    <!-- Tailwind CSS pour un design moderne et responsive -->
+    <!-- Tailwind CSS pour un design moderne et tactile -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome pour les icônes tactiles -->
+    <!-- FontAwesome pour les icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
@@ -30,11 +30,12 @@
         }
     </script>
     <style>
-        /* Optimisation pour les écrans tactiles de smartphones */
+        /* Optimisations tactiles pour smartphones de terrain */
         body {
             -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
-        /* Masquer la scrollbar par défaut pour les défilements horizontaux */
+        /* Masquer la scrollbar par défaut */
         .scrollbar-none::-webkit-scrollbar {
             display: none;
         }
@@ -42,7 +43,6 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
-        /* Effet de secousse pour mot de passe erroné */
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-8px); }
@@ -55,9 +55,8 @@
 </head>
 <body class="bg-gray-100 font-sans text-gray-800 min-h-screen pb-12">
 
-    <!-- ÉCRAN DE VERROUILLAGE SÉCURISÉ (LOGIN SCREEN) -->
+    <!-- ÉCRAN DE VERROUILLAGE SÉCURISÉ (LOGIN) -->
     <div id="lock-screen" class="fixed inset-0 bg-gray-100 z-[9999] flex flex-col justify-between p-6 select-none transition-opacity duration-300 overflow-y-auto">
-        <!-- Logo et En-tête de verrouillage -->
         <div class="flex flex-col items-center mt-6">
             <div class="flex items-center space-x-2.5 mb-2">
                 <!-- Betterave sucrière vectorielle -->
@@ -73,109 +72,73 @@
                     <path d="M29 48C31 49 33 49 35 48" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
                     <path d="M30 54C31 56 33 56 34 54L32 60L30 54Z" fill="#78350F"/>
                 </svg>
-                
-                <!-- Titre de l'application -->
-                <h1 class="text-3xl font-black text-agri-700 tracking-tight">BetaSaisie</h1>
-
-                <!-- Calculette vectorielle ajoutée à droite du titre -->
-                <svg class="w-9 h-9 text-agri-600 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="4" y="2" width="16" height="20" rx="2" ry="2" fill="#F1F5F9"></rect>
-                    <rect x="7" y="5" width="10" height="4" rx="1" fill="#E2E8F0" stroke="currentColor" stroke-width="1.5"></rect>
-                    <circle cx="9" cy="12" r="1.5" fill="currentColor"></circle>
-                    <circle cx="13" cy="12" r="1.5" fill="currentColor"></circle>
-                    <circle cx="17" cy="12" r="1.5" fill="currentColor"></circle>
-                    <circle cx="9" cy="16" r="1.5" fill="currentColor"></circle>
-                    <circle cx="13" cy="16" r="1.5" fill="currentColor"></circle>
-                    <rect x="15" y="15" width="3" height="4" rx="0.5" fill="currentColor"></rect>
-                </svg>
+                <div class="flex items-center space-x-2">
+                    <h1 class="text-3xl font-black text-agri-700 tracking-tight">BetaSaisie</h1>
+                    <i class="fa-solid fa-calculator text-blue-600 text-2xl"></i>
+                </div>
             </div>
             
-            <!-- Logo ITB -->
             <div class="my-4 flex justify-center w-full max-w-xs">
                 <img src="Logo%20ITB%20cartouche%20rvb%20(1).png" alt="Logo ITB" class="h-24 md:h-28 w-auto filter drop-shadow-sm object-contain" onerror="showSvgLogoFallback(this)">
             </div>
             <p class="text-xs text-gray-500 font-bold tracking-wider uppercase">Accès sécurisé réservé ITB</p>
         </div>
 
-        <!-- Formulaire de Connexion -->
-        <div id="login-card" class="w-full max-w-sm mx-auto bg-white rounded-2xl p-6 shadow-md border border-gray-200 my-auto space-y-4">
+        <!-- Formulaire de Connexion Natif -->
+        <form id="login-form" onsubmit="event.preventDefault(); attemptLogin();" class="w-full max-w-sm mx-auto bg-white rounded-2xl p-6 shadow-md border border-gray-200 my-auto space-y-4">
             <div class="text-center">
                 <i class="fa-solid fa-user-shield text-2xl text-agri-600 mb-1"></i>
                 <h2 class="text-sm font-bold text-gray-700 uppercase tracking-wide">Authentification de terrain</h2>
             </div>
 
-            <!-- Identifiant -->
             <div>
                 <label for="login-username" class="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Identifiant</label>
-                <input type="text" id="login-username" placeholder="Ex: ITB45" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-agri-500 focus:outline-none focus:bg-white text-gray-900 font-medium uppercase">
+                <input type="text" id="login-username" placeholder="Ex: ITB45" autocomplete="username" required class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-agri-500 focus:outline-none focus:bg-white text-gray-900 font-medium uppercase">
             </div>
 
-            <!-- Mot de passe -->
             <div>
                 <label for="login-password" class="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Mot de passe</label>
                 <div class="relative">
-                    <input type="password" id="login-password" placeholder="••••••••" class="w-full bg-gray-50 border border-gray-300 rounded-lg pl-3 pr-10 py-2 text-sm focus:ring-2 focus:ring-agri-500 focus:outline-none focus:bg-white text-gray-900 font-medium">
+                    <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" required class="w-full bg-gray-50 border border-gray-300 rounded-lg pl-3 pr-10 py-2 text-sm focus:ring-2 focus:ring-agri-500 focus:outline-none focus:bg-white text-gray-900 font-medium">
                     <button type="button" onclick="togglePasswordVisibility('login-password')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
                         <i id="eye-icon-login-password" class="fa-solid fa-eye text-sm"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Option Mémorisation -->
             <div class="flex items-center space-x-2 py-1 select-none">
                 <input type="checkbox" id="login-remember" class="w-4 h-4 rounded text-agri-600 focus:ring-agri-500 border-gray-300 cursor-pointer">
                 <label for="login-remember" class="text-xs font-semibold text-gray-600 cursor-pointer hover:text-gray-950">Mémoriser mes identifiants</label>
             </div>
 
-            <!-- Bouton de connexion -->
-            <button type="button" onclick="attemptLogin()" class="w-full bg-agri-600 hover:bg-agri-700 active:scale-95 text-white font-bold py-3 rounded-xl shadow-sm transition flex items-center justify-center space-x-2">
+            <button type="submit" class="w-full bg-agri-600 hover:bg-agri-700 active:scale-95 text-white font-bold py-3 rounded-xl shadow-sm transition flex items-center justify-center space-x-2">
                 <i class="fa-solid fa-right-to-bracket"></i>
                 <span>Se connecter</span>
             </button>
-        </div>
+        </form>
 
-        <!-- Pied de page verrouillé -->
-        <div class="text-center text-xxs text-gray-400 mt-4">
+        <div class="text-center text-[10px] text-gray-400 mt-4">
             <p class="font-semibold text-gray-500">© YohanDebeauvais2026</p>
         </div>
     </div>
 
-    <!-- HEADER DE L'APPLICATION RESTRUCTURÉ -->
+    <!-- HEADER DE L'APPLICATION -->
     <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50 px-3 py-2 flex justify-between items-center select-none">
-        
-        <!-- GAUCHE : BetaSaisie entourée de la betterave et de la calculette -->
         <div class="flex items-center space-x-2 flex-1">
-            <!-- Betterave sucrière -->
             <svg class="w-8 h-8 flex-shrink-0 filter drop-shadow-sm" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M32 24C25 16 20 12 26 6C31 1 35 10 32 24Z" fill="#22C55E"/>
                 <path d="M32 24C39 16 44 12 38 6C33 1 29 10 32 24Z" fill="#15803D"/>
-                <path d="M32 24C32 14 30 8 35 4C39 1 37 10 32 24Z" fill="#4ADE80"/>
-                <path d="M27 24C22 18 16 16 21 10C25 5 28 12 27 24Z" fill="#166534"/>
-                <path d="M37 24C42 18 48 16 43 10C39 5 36 12 37 24Z" fill="#15803D"/>
                 <path d="M22 24C22 24 17 33 24 45C29 54 32 60 32 60C32 60 35 54 40 45C47 33 42 24 42 24H22Z" fill="#F8FAFC" stroke="#94A3B8" stroke-width="2"/>
-                <path d="M25 32C28 33 36 33 39 32" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M26 40C29 41 35 41 38 40" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M29 48C31 49 33 49 35 48" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M30 54C31 56 33 56 34 54L32 60L30 54Z" fill="#78350F"/>
             </svg>
-
-            <!-- Titre -->
-            <h1 class="text-base font-extrabold text-agri-700 tracking-tight leading-none">BetaSaisie</h1>
-
-            <!-- Calculette -->
-            <svg class="w-6 h-6 flex-shrink-0 text-agri-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="4" y="2" width="16" height="20" rx="2" ry="2" fill="#F1F5F9"></rect>
-                <rect x="7" y="5" width="10" height="4" rx="1" fill="#E2E8F0" stroke="currentColor" stroke-width="1.5"></rect>
-                <circle cx="9" cy="12" r="1" fill="currentColor"></circle>
-                <circle cx="13" cy="12" r="1" fill="currentColor"></circle>
-                <circle cx="17" cy="12" r="1" fill="currentColor"></circle>
-                <circle cx="9" cy="16" r="1" fill="currentColor"></circle>
-                <circle cx="13" cy="16" r="1" fill="currentColor"></circle>
-                <rect x="16" y="15" width="2" height="3" rx="0.5" fill="currentColor"></rect>
-            </svg>
+            <div>
+                <div class="flex items-center space-x-1.5">
+                    <h1 class="text-sm font-black text-agri-700 tracking-tight leading-none">BetaSaisie</h1>
+                    <i class="fa-solid fa-calculator text-blue-600 text-[11px] mb-0.5 animate-pulse"></i>
+                </div>
+                <p class="text-[9px] font-bold text-agri-600 uppercase tracking-widest mt-0.5">ITB Betteraves</p>
+            </div>
         </div>
 
-        <!-- DROITE : Logo ITB et Déconnexion -->
         <div class="flex items-center justify-end flex-shrink-0 space-x-2">
             <span id="header-user-badge" class="hidden md:inline-flex bg-agri-100 text-agri-800 text-xxs font-bold px-2 py-1 rounded-lg border border-agri-200">
                 <i class="fa-solid fa-user-check mr-1 flex items-center"></i>
@@ -189,101 +152,289 @@
     </header>
 
     <!-- SOUS-BARRE D'INFORMATION HORS-LIGNE -->
-    <div class="bg-agri-50 text-agri-700 text-center py-1.5 text-xxs font-semibold border-b border-agri-100 flex items-center justify-center gap-1.5 select-none">
+    <div class="bg-agri-50 text-agri-700 text-center py-1 text-[10px] font-bold border-b border-agri-100 flex items-center justify-center gap-1.5 select-none">
         <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-        <span>Mode PWA Installable — Sauvegarde locale automatique</span>
+        <span>Sauvegarde automatique locale active en temps réel</span>
     </div>
 
     <main class="max-w-md mx-auto px-3 py-4 space-y-4">
 
-        <!-- ÉTAPE 1 : CONFIGURATION DE L'ESSAI -->
-        <section id="step-config" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-200">
-            <div class="flex items-center space-x-2 mb-4 border-b pb-2 select-none">
-                <span class="bg-agri-100 text-agri-700 w-8 h-8 rounded-full flex items-center justify-center font-bold">1</span>
-                <h2 class="text-base font-bold text-gray-900">Configuration de l'essai</h2>
+        <!-- CONFIGURATION DE L'ESSAI (CONTAINER PRINCIPAL) -->
+        <section id="step-config" class="space-y-4">
+            
+            <!-- ÉTATEUR DE COMPTE ACTIF -->
+            <div class="text-right text-[10px] font-extrabold text-gray-500 px-2 select-none">
+                <i class="fa-solid fa-circle-user text-agri-600 mr-1"></i>
+                <span id="config-user-label">Compte : Non connecté</span>
             </div>
-
-            <div class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1 select-none">Nom de l'essai</label>
-                        <input type="text" id="trial-name" value="Essai Betteraves 2026" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-agri-500 focus:outline-none focus:bg-white text-gray-900 font-medium">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1 select-none">Date de notation</label>
-                        <input type="date" id="trial-date" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-agri-500 focus:outline-none focus:bg-white text-gray-900 font-medium">
-                    </div>
-                </div>
-
-                <!-- Indicateur de compte actif -->
-                <div class="bg-agri-50 border border-agri-100 rounded-xl p-3 flex justify-between items-center text-xs select-none">
-                    <div class="flex items-center space-x-2">
-                        <i class="fa-solid fa-circle-user text-agri-600 text-lg"></i>
-                        <div>
-                            <p class="font-bold text-gray-700">Utilisateur connecté</p>
-                            <p class="text-xxs text-gray-500" id="config-user-label">Compte : Non connecté</p>
-                        </div>
-                    </div>
-                    <button onclick="logout()" class="text-xxs bg-white hover:bg-red-50 text-red-600 border border-red-200 px-2.5 py-1.5 rounded-lg font-bold flex items-center gap-1 shadow-sm">
-                        <i class="fa-solid fa-sign-out-alt"></i> Quitter
+            
+            <!-- SÉLECTEUR DE MODE PREMIUM SEGMENTÉ -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-200 select-none text-center">
+                <label class="block text-xs font-black uppercase tracking-wider text-gray-400 mb-2.5">Type d'évaluation</label>
+                <div class="grid grid-cols-3 gap-1 p-1 bg-gray-100 rounded-xl">
+                    <button type="button" id="btn-mode-notation" onclick="setSaisieMode('notation')" class="py-2.5 text-xs font-black rounded-lg transition-all flex items-center justify-center gap-1 bg-white text-agri-700 shadow-sm border border-gray-200/50 flex-1">
+                        <i class="fa-solid fa-list-check"></i> Notation
+                    </button>
+                    <button type="button" id="btn-mode-ipm" onclick="setSaisieMode('ipm')" class="py-2.5 text-xs font-black rounded-lg transition-all flex items-center justify-center gap-1 text-gray-500 hover:text-gray-800 flex-1">
+                        <i class="fa-solid fa-leaf"></i> IPM
+                    </button>
+                    <button type="button" id="btn-mode-adventices" onclick="setSaisieMode('adventices')" class="py-2.5 text-xs font-black rounded-lg transition-all flex items-center justify-center gap-1 text-gray-500 hover:text-gray-800 flex-1">
+                        <i class="fa-solid fa-seedling"></i> Adventices
                     </button>
                 </div>
-
-                <div class="grid grid-cols-3 gap-2">
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1 select-none">Modalités</label>
-                        <input type="number" id="nb-modalities" value="18" min="1" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-agri-500 text-center text-gray-900 font-medium focus:bg-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1 select-none">Blocs</label>
-                        <input type="number" id="nb-blocks" value="4" min="1" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-agri-500 text-center text-gray-900 font-medium focus:bg-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1 select-none">Obs. / mod.</label>
-                        <input type="number" id="nb-obs" value="1" min="1" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-agri-500 text-center text-gray-900 font-medium focus:bg-white">
-                    </div>
+            </div>
+            
+            <!-- BLOC 1 : CONFIGURATION NOTATION ESSAI (Affiché seulement en mode 'notation') -->
+            <div id="card-notation-config" class="bg-white rounded-2xl p-5 shadow-sm border border-gray-200 space-y-4">
+                <div class="flex items-center space-x-2 border-b pb-2 select-none">
+                    <span class="bg-agri-100 text-agri-700 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">1</span>
+                    <h2 class="text-base font-bold text-gray-900">Configuration notation essai</h2>
                 </div>
 
-                <!-- SENS DE PARCOURS PAR BLOC DYNAMIQUE -->
-                <div id="block-directions-container" class="space-y-2.5 mt-2 bg-gray-50/50 p-3.5 rounded-xl border border-gray-200">
-                    <!-- Injecté en JS -->
-                </div>
-
-                <!-- GESTION DYNAMIQUE DES ADVENTICES -->
-                <div class="bg-gray-50 border border-gray-200 rounded-xl p-3.5 space-y-2">
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 select-none">Adventices à cibler (Efficacité)</label>
-                    <p class="text-xxs text-gray-400 select-none">Saisissez les adventices présentes dans votre essai pour créer une évaluation d'efficacité dédiée à chacune.</p>
-                    <div class="flex space-x-2">
-                        <input type="text" id="new-adventice" placeholder="Ex: Chénopode, Matricaire..." onkeydown="if(event.key === 'Enter') { event.preventDefault(); addAdventice(); }" class="flex-1 bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-agri-500 focus:outline-none focus:bg-white text-gray-900 font-medium">
-                        <button type="button" onclick="addAdventice()" class="bg-agri-600 hover:bg-agri-700 active:bg-agri-800 text-white font-bold px-3 py-2 rounded-lg text-xs transition-colors flex items-center justify-center select-none">
-                            <i class="fa-solid fa-plus mr-1"></i> Ajouter
-                        </button>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1 select-none">Nom de l'essai / Parcelle</label>
+                        <input type="text" id="trial-name" value="Essai Betteraves 2026" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-agri-500 focus:outline-none focus:bg-white text-gray-900 font-bold">
                     </div>
-                    <div id="adventices-badges" class="flex flex-wrap gap-1.5 pt-1">
-                        <!-- Injecté en JS -->
-                    </div>
-                </div>
 
-                <!-- CHOIX DES VARIABLES -->
-                <div>
-                    <div class="flex justify-between items-center mb-2 select-none">
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500">Variables à saisir</label>
-                        <div class="space-x-2">
-                            <button onclick="toggleAllVars(true)" class="text-xs text-agri-600 font-bold hover:underline">Tout cocher</button>
-                            <span class="text-gray-300">|</span>
-                            <button onclick="toggleAllVars(false)" class="text-xs text-gray-500 hover:underline">Effacer</button>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1 select-none">Modalités</label>
+                            <input type="number" id="nb-modalities" value="18" min="1" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-agri-500 text-center text-gray-900 font-bold focus:bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1 select-none">Nombre Blocs</label>
+                            <input type="number" id="nb-blocks" value="4" min="1" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-agri-500 text-center text-gray-900 font-bold focus:bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1 select-none">Obs. / mod.</label>
+                            <input type="number" id="nb-obs" value="1" min="1" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-agri-500 text-center text-gray-900 font-bold focus:bg-white">
                         </div>
                     </div>
-                    
-                    <div class="bg-gray-50 border border-gray-200 rounded-xl p-3 max-h-60 overflow-y-auto space-y-2 text-sm" id="variables-container">
-                        <!-- Généré en JS -->
+
+                    <!-- SENS DE PARCOURS PAR BLOC DYNAMIQUE -->
+                    <div id="block-directions-container" class="space-y-2 bg-gray-50/50 p-3 rounded-xl border border-gray-200">
+                        <!-- Injecté en JS -->
                     </div>
+
+                    <!-- CHOIX DES VARIABLES CLASSIQUES -->
+                    <div id="classic-vars-block" class="space-y-4 pt-2">
+                        <!-- GESTION DYNAMIQUE DES ADVENTICES -->
+                        <div class="bg-gray-50 border border-gray-200 rounded-xl p-3.5 space-y-2">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 select-none">Adventices à cibler (Efficacité)</label>
+                            <p class="text-xxs text-gray-400 select-none">Saisissez les adventices présentes dans votre essai pour créer une évaluation d'efficacité dédiée à chacune.</p>
+                            <div class="flex space-x-2">
+                                <input type="text" id="new-adventice" placeholder="Ex: Chénopode, Matricaire..." onkeydown="if(event.key === 'Enter') { event.preventDefault(); addAdventice(); }" class="flex-1 bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-agri-500 focus:outline-none focus:bg-white text-gray-900 font-medium">
+                                <button type="button" onclick="addAdventice()" class="bg-agri-600 hover:bg-agri-700 active:bg-agri-800 text-white font-bold px-3 py-2 rounded-lg text-xs transition-colors flex items-center justify-center select-none">
+                                    <i class="fa-solid fa-plus mr-1"></i> Ajouter
+                                </button>
+                            </div>
+                            <div id="adventices-badges" class="flex flex-wrap gap-1.5 pt-1">
+                                <!-- Injecté en JS -->
+                            </div>
+                        </div>
+
+                        <!-- LISTE DES VARIABLES CLASSIQUES -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2 select-none">
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500">Variables classiques à saisir</label>
+                                <div class="space-x-2">
+                                    <button onclick="toggleAllVars(true)" class="text-xs text-agri-600 font-bold hover:underline">Tout cocher</button>
+                                    <span class="text-gray-300">|</span>
+                                    <button onclick="toggleAllVars(false)" class="text-xs text-gray-500 hover:underline">Effacer</button>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-3 max-h-60 overflow-y-auto space-y-2 text-sm" id="variables-container">
+                                <!-- Généré en JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="startClassicSaisieDirectly()" class="w-full bg-agri-600 hover:bg-agri-700 text-white font-black py-4 rounded-xl shadow transition flex items-center justify-center space-x-2 select-none mt-4 text-sm">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span>Générer le plan & Débuter la saisie</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- BLOC 2 : CONFIGURATION SAISIE IPM (Affiché seulement en mode 'ipm') -->
+            <div id="card-ipm-config" class="bg-white rounded-2xl p-5 shadow-sm border border-gray-200 space-y-4 hidden">
+                <div class="flex items-center space-x-2 border-b pb-2 select-none">
+                    <span class="bg-blue-100 text-blue-800 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">2</span>
+                    <h2 class="text-base font-bold text-gray-900">Configuration saisie IPM</h2>
                 </div>
 
-                <button onclick="generateTrialPlan()" class="w-full bg-agri-600 hover:bg-agri-700 text-white font-bold py-3 px-4 rounded-xl shadow-sm transition flex items-center justify-center space-x-2 select-none">
-                    <i class="fa-solid fa-calculator"></i>
-                    <span>Générer le plan de parcelles</span>
-                </button>
+                <div class="space-y-4">
+                    <div id="ipm-config-block" class="bg-blue-50/40 border border-blue-100 rounded-xl p-3.5 space-y-3">
+                        <div class="text-xs font-bold uppercase tracking-wider text-blue-900 select-none flex items-center gap-1.5 mb-1">
+                            <i class="fa-solid fa-leaf"></i> Paramètres IPM
+                        </div>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xxs font-bold uppercase tracking-wider text-gray-500 mb-1 select-none">Nom de l'essai / Parcelle</label>
+                                <input type="text" id="trial-name-ipm" value="Saisie IPM Betteraves" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-900 font-bold">
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xxs font-bold uppercase tracking-wider text-gray-500 mb-1 select-none">Variété de betterave</label>
+                                    <input type="text" id="trial-variety" value="Standard ITB" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-900 font-bold">
+                                </div>
+                                <div>
+                                    <label class="block text-xxs font-bold uppercase tracking-wider text-gray-500 mb-1 select-none">Nombre de feuilles (Cible)</label>
+                                    <input type="number" id="ipm-target" value="100" min="10" max="500" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-center font-black text-blue-950 focus:ring-2 focus:ring-blue-500">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xxs font-bold uppercase tracking-wider text-gray-500 mb-1 select-none">Date de notation</label>
+                                <input type="date" id="trial-date" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-900 font-medium">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="startIpmSaisieDirectly()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-xl shadow transition flex items-center justify-center space-x-2 select-none text-sm">
+                        <i class="fa-solid fa-play"></i>
+                        <span>Débuter la saisie</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- BLOC 3 : CONFIGURATION COMPTAGE ADVENTICES (Affiché seulement en mode 'adventices') -->
+            <div id="card-adventices-config" class="bg-white rounded-2xl p-5 shadow-sm border border-gray-200 space-y-4 hidden">
+                <div class="flex items-center space-x-2 border-b pb-2 select-none">
+                    <span class="bg-emerald-100 text-emerald-800 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">3</span>
+                    <h2 class="text-base font-bold text-gray-900">Configuration notation adventices</h2>
+                </div>
+
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1 select-none">Nom de l'essai / Parcelle</label>
+                        <input type="text" id="trial-name-adv" value="Comptage Adventices Betteraves" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none focus:bg-white text-gray-900 font-bold">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1 select-none">Nombre Blocs</label>
+                            <input type="number" id="nb-blocks-adv" value="4" min="1" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 text-center text-gray-900 font-bold focus:bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1 select-none">Nombre de Cadres / Bloc</label>
+                            <input type="number" id="nb-cadres-adv" value="5" min="1" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 text-center text-gray-900 font-bold focus:bg-white">
+                        </div>
+                    </div>
+
+                    <!-- GESTION DYNAMIQUE DES ADVENTICES POUR LE COMPTAGE -->
+                    <div class="bg-gray-50 border border-gray-200 rounded-xl p-3.5 space-y-2">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 select-none">Adventices à dénombrer</label>
+                        <p class="text-xxs text-gray-400 select-none">Saisissez le nom des adventices pour les suivre par cadre d'évaluation.</p>
+                        <div class="flex space-x-2">
+                            <input type="text" id="new-adventice-adv" placeholder="Ex: Ray-grass, Sanve..." onkeydown="if(event.key === 'Enter') { event.preventDefault(); addAdventiceAdv(); }" class="flex-1 bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none focus:bg-white text-gray-900 font-medium">
+                            <button type="button" onclick="addAdventiceAdv()" class="bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold px-3 py-2 rounded-lg text-xs transition-colors flex items-center justify-center select-none">
+                                <i class="fa-solid fa-plus mr-1"></i> Ajouter
+                            </button>
+                        </div>
+                        <div id="adventices-badges-adv" class="flex flex-wrap gap-1.5 pt-1">
+                            <!-- Injecté en JS -->
+                        </div>
+                    </div>
+
+                    <!-- BLOC SPÉCIFIQUE DES CARACTÉRISTIQUES DES ADVENTICES (MULTIPLE STADES) -->
+                    <div id="adventices-details-container" class="bg-gray-50 border border-gray-200 rounded-xl p-3.5 space-y-2 hidden">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 select-none">Stades & Proportions par adventice</label>
+                        <p class="text-xxs text-gray-400 select-none mb-2">Configurez un ou plusieurs stades de développement observés ainsi que leur proportion (%) pour chaque adventice.</p>
+                        <div id="adventices-details-list" class="space-y-3">
+                            <!-- Injecté en JS -->
+                        </div>
+                    </div>
+
+                    <button onclick="startAdventicesSaisieDirectly()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 rounded-xl shadow transition flex items-center justify-center space-x-2 select-none mt-2 text-sm">
+                        <i class="fa-solid fa-play"></i>
+                        <span>Débuter le comptage</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- SECTEUR REPLIABLE : CONDITIONS DE TRAITEMENT (PARTAGÉ POUR IPM & ADVENTICES) -->
+            <div id="card-treatment-conditions" class="bg-white rounded-2xl p-5 shadow-sm border border-gray-200 space-y-4 hidden select-none">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-900 flex items-center gap-1.5" id="treatment-title-badge">
+                        <i class="fa-solid fa-cloud-sun-rain text-lg text-blue-600"></i> Conditions de traitement / relevé
+                    </span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="toggle-treatment-conditions" class="sr-only peer" onchange="toggleTreatmentConditionsUI(this.checked)">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                </div>
+
+                <div id="treatment-conditions-form" class="hidden space-y-3 pt-2 border-t border-blue-100/60">
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-xxs font-bold uppercase tracking-wider text-gray-500 mb-1">Date relevé</label>
+                            <input type="date" id="adv-treatment-date" onchange="updateTreatmentField('treatmentDate', this.value)" class="w-full bg-white border border-gray-300 rounded-lg px-2.5 py-1.5 text-xs text-gray-900 focus:ring-1 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xxs font-bold uppercase tracking-wider text-gray-500 mb-1">Heure relevé</label>
+                            <input type="time" id="adv-treatment-time" onchange="updateTreatmentField('treatmentTime', this.value)" class="w-full bg-white border border-gray-300 rounded-lg px-2.5 py-1.5 text-xs text-gray-900 focus:ring-1 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-xxs font-bold uppercase tracking-wider text-gray-500 mb-1">Nébulosité</label>
+                            <select id="adv-treatment-nebulosity" onchange="updateTreatmentField('treatmentNebulosity', this.value)" class="w-full bg-white border border-gray-300 rounded-lg px-2 py-1.5 text-xs text-gray-900 focus:ring-1 focus:ring-blue-500">
+                                <option value="">Sélectionner...</option>
+                                <option value="0/8 - Clair">0/8 - Clair</option>
+                                <option value="1-2/8 - Peu nuageux">1-2/8 - Peu nuageux</option>
+                                <option value="3-4/8 - Partiellement nuageux">3-4/8 - Partiellement nuageux</option>
+                                <option value="5-6/8 - Nuageux">5-6/8 - Nuageux</option>
+                                <option value="7-8/8 - Couvert">7-8/8 - Couvert</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xxs font-bold uppercase tracking-wider text-gray-500 mb-1">Vent (Beaufort)</label>
+                            <select id="adv-treatment-beaufort" onchange="updateTreatmentField('treatmentBeaufort', this.value)" class="w-full bg-white border border-gray-300 rounded-lg px-2 py-1.5 text-xs text-gray-900 focus:ring-1 focus:ring-blue-500">
+                                <option value="">Sélectionner...</option>
+                                <option value="Force 0 (Calme : < 1 km/h)">F0 (Calme : < 1 km/h)</option>
+                                <option value="Force 1 (Très légère : 1-5 km/h)">F1 (Très légère : 1-5 km/h)</option>
+                                <option value="Force 2 (Légère brise : 6-11 km/h)">F2 (Légère : 6-11 km/h)</option>
+                                <option value="Force 3 (Petite brise : 12-19 km/h)">F3 (Petite : 12-19 km/h)</option>
+                                <option value="Force 4 (Jolie brise : 20-28 km/h)">F4 (Jolie : 20-28 km/h)</option>
+                                <option value="Force 5 (Bonne brise : 29-38 km/h)">F5 (Bonne : 29-38 km/h)</option>
+                                <option value="Force 6 (Vent frais : 39-49 km/h)">F6 (Vent frais : 39-49 km/h)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-xxs font-bold uppercase tracking-wider text-gray-500 mb-1">Hygrométrie (%)</label>
+                            <input type="number" id="adv-treatment-hygrometry" min="0" max="100" placeholder="Ex: 65" onchange="updateTreatmentField('treatmentHygrometry', this.value)" class="w-full bg-white border border-gray-300 rounded-lg px-2.5 py-1.5 text-xs text-gray-900 focus:ring-1 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xxs font-bold uppercase tracking-wider text-gray-500 mb-1">Humidité du sol</label>
+                            <select id="adv-treatment-soil" onchange="updateTreatmentField('treatmentSoilMoisture', this.value)" class="w-full bg-white border border-gray-300 rounded-lg px-2 py-1.5 text-xs text-gray-900 focus:ring-1 focus:ring-blue-500">
+                                <option value="">Sélectionner...</option>
+                                <option value="Sec">Sec</option>
+                                <option value="Frais">Frais</option>
+                                <option value="Humide">Humide</option>
+                                <option value="Détrempé">Détrempé</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xxs font-bold uppercase tracking-wider text-gray-500 mb-1">Stade des Betteraves</label>
+                        <select id="adv-treatment-beet-stage" onchange="updateTreatmentField('treatmentBeetStage', this.value)" class="w-full bg-white border border-gray-300 rounded-lg px-2 py-1.5 text-xs text-gray-900 focus:ring-1 focus:ring-blue-500">
+                            <option value="">Sélectionner...</option>
+                            <option value="Levée / Cotylédons">Levée / Cotylédons</option>
+                            <option value="2 feuilles vraies">2 feuilles vraies</option>
+                            <option value="4 feuilles vraies">4 feuilles vraies</option>
+                            <option value="6 feuilles vraies">6 feuilles vraies</option>
+                            <option value="8 feuilles vraies et +">8 feuilles vraies et +</option>
+                            <option value="Couverture du sol">Couverture du sol</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -292,26 +443,39 @@
             <div class="flex items-center justify-between border-b pb-3 mb-3 select-none">
                 <div class="flex items-center space-x-2">
                     <span class="bg-agri-100 text-agri-700 w-8 h-8 rounded-full flex items-center justify-center font-bold">2</span>
-                    <h2 class="text-base font-bold text-gray-900">Saisie au champ</h2>
+                    <h2 class="text-base font-bold text-gray-900" id="entry-step-title">Saisie au champ</h2>
                 </div>
-                <button onclick="showConfig()" class="text-xs text-gray-500 border border-gray-300 rounded-lg px-2.5 py-1 flex items-center gap-1 active:bg-gray-100">
-                    <i class="fa-solid fa-cog"></i> Config
-                </button>
+                <div class="flex gap-1.5">
+                    <button onclick="exportToCSV()" class="text-xs text-green-700 bg-green-50 border border-green-200 rounded-lg px-2.5 py-1.5 flex items-center gap-1 active:bg-green-100 font-bold">
+                        <i class="fa-solid fa-file-csv"></i> Copie CSV
+                    </button>
+                    <button onclick="showConfig()" class="text-xs text-gray-500 border border-gray-300 rounded-lg px-2.5 py-1.5 flex items-center gap-1 active:bg-gray-100 font-bold">
+                        <i class="fa-solid fa-cog"></i> Config
+                    </button>
+                </div>
+            </div>
+
+            <!-- EN-TÊTE D'INFORMATION DYNAMIQUE -->
+            <div class="mb-3 px-3 py-2 bg-agri-50 border border-agri-100 rounded-xl flex flex-col gap-0.5 text-xs font-semibold text-agri-950 select-none">
+                <div class="flex justify-between">
+                    <span>Essai : <span id="entry-header-trial-name" class="font-black text-gray-900">--</span></span>
+                    <span id="entry-header-variety-container">Variété : <span id="entry-header-variety" class="font-black text-gray-900">--</span></span>
+                </div>
             </div>
 
             <!-- SÉLECTEUR DE PARCELLE UNIQUE -->
             <div class="flex items-center justify-between bg-gray-50 rounded-xl p-2 border border-gray-200 mb-3 select-none">
-                <button onclick="navigatePlotGroup(-1)" class="w-12 h-12 bg-white active:bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow-sm flex items-center justify-center">
+                <button onclick="navigatePlotGroup(-1)" class="w-12 h-12 bg-white active:bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow flex items-center justify-center">
                     <i class="fa-solid fa-chevron-left text-lg"></i>
                 </button>
                 <div class="text-center flex-1">
-                    <div class="text-xs uppercase font-semibold text-gray-400">Parcelle en cours</div>
-                    <select id="plot-selector" onchange="onPlotSelectChange()" class="text-xl font-bold text-agri-700 bg-transparent border-none focus:outline-none text-center py-1 cursor-pointer">
-                        <!-- Généré dynamiquement -->
+                    <div class="text-[9px] uppercase font-black tracking-wider text-gray-400" id="plot-indicator-label">Parcelle active</div>
+                    <select id="plot-selector" onchange="onPlotSelectChange()" class="text-xl font-black text-agri-700 bg-transparent border-none focus:outline-none text-center py-1 cursor-pointer">
+                        <!-- Généré en JS -->
                     </select>
-                    <div id="plot-sub-info" class="text-xxs text-gray-500 font-medium">Bloc 1 | Mod 1</div>
+                    <div id="plot-sub-info" class="text-[10px] text-gray-500 font-bold">Bloc 1 | Mod 1</div>
                 </div>
-                <button onclick="navigatePlotGroup(1)" class="w-12 h-12 bg-white active:bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow-sm flex items-center justify-center">
+                <button onclick="navigatePlotGroup(1)" class="w-12 h-12 bg-white active:bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow flex items-center justify-center">
                     <i class="fa-solid fa-chevron-right text-lg"></i>
                 </button>
             </div>
@@ -321,26 +485,26 @@
                 <!-- Injecté en JS -->
             </div>
 
-            <!-- Indicateur de progression globale -->
+            <!-- Progression globale de l'essai -->
             <div class="w-full bg-gray-100 rounded-full h-1.5 mb-4 select-none">
-                <div id="progress-bar" class="bg-agri-500 h-1.5 rounded-full" style="width: 0%"></div>
+                <div id="progress-bar" class="bg-agri-500 h-1.5 rounded-full transition-all duration-200" style="width: 0%"></div>
             </div>
 
-            <!-- FORMULAIRE DYNAMIQUE DE SAISIE HYBRIDE -->
+            <!-- CONTENEUR DE SAISIE PRINCIPAL -->
             <div id="dynamic-inputs" class="space-y-4">
-                <!-- Les entrées clavier/tactiles s'affichent ici -->
+                <!-- Grille de saisie générée dynamiquement en JS -->
             </div>
 
             <!-- Bouton Validation Express -->
             <div class="mt-6 pt-4 border-t border-gray-100 select-none">
-                <button onclick="saveCurrentPlotAndNext()" class="w-full bg-agri-600 hover:bg-agri-700 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition">
-                    <i class="fa-solid fa-floppy-disk"></i>
-                    <span>Sauvegarder & Suivant</span>
+                <button onclick="saveCurrentPlotAndNext()" class="w-full bg-agri-600 hover:bg-agri-700 text-white font-black py-4 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition shadow">
+                    <i class="fa-solid fa-circle-check text-lg"></i>
+                    <span>Valider & Suivant</span>
                 </button>
             </div>
         </section>
 
-        <!-- ÉTAPE 3 : EXPORT DES DONNÉES -->
+        <!-- ÉTAPE 3 : DONNÉES & EXPORT -->
         <section id="step-export" class="hidden bg-white rounded-2xl p-4 shadow-sm border border-gray-200 select-none">
             <div class="flex items-center space-x-2 mb-4 border-b pb-2">
                 <span class="bg-agri-100 text-agri-700 w-8 h-8 rounded-full flex items-center justify-center font-bold">3</span>
@@ -348,18 +512,18 @@
             </div>
             
             <p class="text-xs text-gray-500 mb-4">
-                Toutes les parcelles saisies sont récapitulées ci-dessous. Vos modifications sont conservées sur cet appareil.
+                Retrouvez le récapitulatif complet des observations saisies.
             </p>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4">
-                <button onclick="exportToCSV()" class="bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow-sm transition active:scale-95">
-                    <i class="fa-solid fa-file-csv"></i> Exporter CSV
+                <button onclick="exportToCSV()" class="bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow transition active:scale-95">
+                    <i class="fa-solid fa-file-csv"></i> Télécharger CSV
                 </button>
-                <button onclick="shareOrEmailCSV()" class="bg-agri-600 hover:bg-agri-700 text-white text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow-sm transition active:scale-95">
-                    <i class="fa-solid fa-paper-plane"></i> Envoyer / Partager
+                <button onclick="shareOrEmailCSV()" class="bg-agri-600 hover:bg-agri-700 text-white text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow transition active:scale-95">
+                    <i class="fa-solid fa-paper-plane"></i> Partager par mail / SMS
                 </button>
                 <button onclick="confirmResetAll()" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 transition active:scale-95">
-                    <i class="fa-solid fa-trash-can"></i> Réinitialiser
+                    <i class="fa-solid fa-trash-can"></i> Réinitialiser l'essai
                 </button>
             </div>
 
@@ -373,29 +537,25 @@
 
     </main>
 
-    <!-- PAVÉ NUMÉRIQUE TACTILE VIRTUEL (VIRTUAL KEYPAD MODAL) -->
+    <!-- PAVÉ NUMÉRIQUE TACTILE VIRTUEL -->
     <div id="keypad-modal" onclick="if(event.target === this) closeKeypad()" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 z-[99999] hidden opacity-0 transition-opacity duration-200 select-none">
         <div class="bg-white rounded-t-3xl sm:rounded-2xl p-5 w-full max-w-sm shadow-2xl transform translate-y-full sm:translate-y-0 sm:scale-95 transition-all duration-200">
-            <!-- En-tête du pavé numérique réorganisé avec Badge Parcelle -->
             <div class="flex justify-between items-start mb-4 border-b pb-3">
                 <div class="flex-1 min-w-0 pr-2">
                     <span id="keypad-var-category" class="text-xxs font-bold uppercase tracking-wider text-agri-600">Catégorie</span>
                     <h3 id="keypad-var-label" class="text-sm font-bold text-gray-800 truncate">Variable en cours</h3>
                 </div>
                 <div class="flex items-center space-x-2 flex-shrink-0">
-                    <!-- Badge contenant le Numéro de Parcelle dynamique -->
                     <span id="keypad-plot-badge" class="bg-agri-600 text-white px-2.5 py-1.5 rounded-lg text-xs font-black tracking-wider shadow-sm">Parcelle --</span>
                     <button onclick="closeKeypad()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 font-bold transition">&times;</button>
                 </div>
             </div>
             
-            <!-- Zone d'affichage de la valeur -->
             <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 mb-4 text-center shadow-inner relative">
                 <span id="keypad-display" class="text-4xl font-black text-gray-900 tracking-wider">0</span>
                 <span id="keypad-display-suffix" class="text-xs text-gray-400 font-bold ml-1"></span>
             </div>
 
-            <!-- Raccourcis de valeurs rapides -->
             <div class="grid grid-cols-4 gap-2 mb-3">
                 <button type="button" onclick="keypadSetSpecial(-99)" class="py-2.5 bg-red-50 hover:bg-red-100 text-red-600 font-extrabold text-xs rounded-xl border border-red-100 active:scale-95 transition shadow-sm">-99</button>
                 <button type="button" onclick="keypadSetSpecial(0)" class="py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-extrabold text-xs rounded-xl border border-gray-200 active:scale-95 transition shadow-sm">0</button>
@@ -403,9 +563,7 @@
                 <button type="button" onclick="keypadAddValue(50)" class="py-2.5 bg-agri-50 hover:bg-agri-100 text-agri-700 font-extrabold text-xs rounded-xl border border-agri-200 active:scale-95 transition shadow-sm">+50</button>
             </div>
 
-            <!-- Touches de saisie principales -->
             <div class="grid grid-cols-4 gap-2">
-                <!-- Chiffres 1 à 9 et 0 -->
                 <div class="col-span-3 grid grid-cols-3 gap-2">
                     <button type="button" onclick="keypadPress('1')" class="h-14 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 text-gray-800 text-xl font-bold rounded-xl flex items-center justify-center border border-gray-200 shadow-sm transition">1</button>
                     <button type="button" onclick="keypadPress('2')" class="h-14 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 text-gray-800 text-xl font-bold rounded-xl flex items-center justify-center border border-gray-200 shadow-sm transition">2</button>
@@ -426,7 +584,6 @@
                     </button>
                 </div>
                 
-                <!-- Touches d'actions à droite -->
                 <div class="col-span-1 flex flex-col gap-2">
                     <button type="button" onclick="keypadClear()" class="flex-1 bg-red-50 hover:bg-red-100 text-red-700 font-bold text-xs rounded-xl py-3 border border-red-200 active:scale-95 transition shadow-sm">Corriger</button>
                     <button type="button" onclick="keypadValidate()" class="flex-[2] bg-agri-600 hover:bg-agri-700 text-white font-black text-sm rounded-xl py-4 active:scale-95 flex flex-col items-center justify-center shadow-md transition">
@@ -436,18 +593,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- PIED DE PAGE PERSONNALISÉ -->
-    <footer class="text-center py-6 text-xs text-gray-400 select-none border-t border-gray-200 mt-12 bg-white">
-        <p class="font-semibold text-gray-500">© YohanDebeauvais2026</p>
-        <p class="text-[10px] mt-1 text-gray-300">BetaSaisie — Outil d'aide à la notation au champ en collaboration avec l'ITB</p>
-    </footer>
-
-    <!-- TOAST ET ALERTE MODERNE -->
-    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 opacity-0 pointer-events-none transition-all duration-300 z-[10000] max-w-xs w-11/12 justify-center select-none">
-        <i id="toast-icon" class="fa-solid fa-circle-check text-green-400"></i>
-        <span id="toast-message" class="font-medium text-center">Données enregistrées</span>
     </div>
 
     <!-- MODAL DE CONFIRMATION PERSONNALISÉ -->
@@ -465,8 +610,14 @@
         </div>
     </div>
 
+    <!-- TOAST ET ALERTE MODERNE -->
+    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 opacity-0 pointer-events-none transition-all duration-300 z-[10000] max-w-xs w-11/12 justify-center select-none">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-green-400"></i>
+        <span id="toast-message" class="font-medium text-center">Données enregistrées</span>
+    </div>
+
     <script>
-        // BASE DE DONNÉES DES UTILISATEURS DU TERRAIN (IMAGE_81D6F6.PNG)
+        // COMPTES DE TERRAIN AUTHENTIFIÉS
         const USERS_DB = {
             "ITB45": "Betteraves452026!",
             "ITB02": "Betteraves022026!",
@@ -476,7 +627,6 @@
             "ITBGRIFFON": "Griffon022026!"
         };
 
-        // FONCTION DE NETTOYAGE GLOBALE
         function cleanString(str) {
             if (!str) return "";
             return str.toLowerCase()
@@ -486,43 +636,30 @@
                 .trim();
         }
 
-        // LISTE COMPLÈTE DES VARIABLES STATIQUES
+        // BASE DE VARIABLES STATIQUES
         const STATIC_VARIABLES = [
-            // CATEGORIE : BETTERAVE
             { id: "bet_nb_plante", label: "Nombre de plantes", category: "Betterave", type: "number", step: 1, default: -99 },
             { id: "bet_nb_plante_saine", label: "Nombre de plantes saines", category: "Betterave", type: "number", step: 1, default: -99 },
             { id: "bet_vigueur", label: "Vigueur (10 à 0)", category: "Betterave", type: "range", min: 0, max: 10, default: -99 },
             { id: "bet_aspect_visuel", label: "Aspect visuel (10 à 0)", category: "Betterave", type: "range", min: 0, max: 10, default: -99 },
-
-            // CATEGORIE : PUCERONS
             { id: "puc_apt_vert", label: "Pucerons aptères verts / pl", category: "Pucerons", type: "number", step: 1, default: 0 },
             { id: "puc_ail_vert", label: "Pucerons ailés verts / pl", category: "Pucerons", type: "number", step: 1, default: 0 },
             { id: "puc_apt_noir", label: "Pucerons aptères noirs / pl", category: "Pucerons", type: "number", step: 1, default: 0 },
             { id: "puc_ail_noir", label: "Pucerons ailés noirs / pl", category: "Pucerons", type: "number", step: 1, default: 0 },
-            
-            // CATEGORIE : AUXILIAIRES
             { id: "aux_larve_chrysope", label: "Larve de chrysope / pl", category: "Auxiliaires", type: "number", step: 1, default: 0 },
             { id: "aux_oeuf_chrysope", label: "Oeuf de chrysope / pl", category: "Auxiliaires", type: "number", step: 1, default: 0 },
             { id: "aux_larve_syrphe", label: "Larve de syrphe / pl", category: "Auxiliaires", type: "number", step: 1, default: 0 },
             { id: "aux_larve_coccinelle", label: "Larve de coccinelle / pl", category: "Auxiliaires", type: "number", step: 1, default: 0 },
             { id: "aux_coccinelle_adulte", label: "Coccinelle adulte / pl", category: "Auxiliaires", type: "number", step: 1, default: 0 },
             { id: "aux_oeuf_coccinelle", label: "Oeufs de coccinelle / pl", category: "Auxiliaires", type: "number", step: 1, default: 0 },
-
-            // CATEGORIE : EFFICACITE
             { id: "selectivite", label: "Sélectivité (0 à 10)", category: "Efficacité", type: "range", min: 0, max: 10, default: -99 },
             { id: "efficacite", label: "Efficacité Globale (0 à 10)", category: "Efficacité", type: "range", min: 0, max: 10, default: -99 },
-            
-            // CATEGORIE : MALADIES
             { id: "grav_cerco", label: "Gravité Cercosporiose (0-10)", category: "Maladies", type: "range", min: 0, max: 10, default: -99 },
             { id: "grav_oidium", label: "Gravité Oïdium (0-10)", category: "Maladies", type: "range", min: 0, max: 10, default: -99 },
             { id: "grav_rouille", label: "Gravité Rouille (0-10)", category: "Maladies", type: "range", min: 0, max: 10, default: -99 },
             { id: "grav_ramu", label: "Gravité Ramulariose (0-10)", category: "Maladies", type: "range", min: 0, max: 10, default: -99 },
-            
-            // CATEGORIE : JAUNISSE
             { id: "pct_jaunisse", label: "% Jaunisse", category: "Jaunisse", type: "range", min: 0, max: 100, default: -99 },
             { id: "grav_jaunisse", label: "Gravité Jaunisse (0-10)", category: "Jaunisse", type: "range", min: 0, max: 10, default: -99 },
-            
-            // CATEGORIE : DIVERS (Modifié par défaut à 0 au lieu de -99)
             { id: "nb_montee", label: "Nombre de montées", category: "Divers", type: "number", step: 1, default: 0 },
             { id: "nb_mildiou", label: "Nombre de mildiou", category: "Divers", type: "number", step: 1, default: 0 }
         ];
@@ -530,29 +667,49 @@
         // ÉTAT DE L'APPLICATION
         let appState = {
             trialName: "Essai Betteraves 2026",
-            trialDate: "", // Date au format YYYY-MM-DD
+            trialNameIpm: "Saisie IPM Betteraves",
+            trialNameAdv: "Comptage Adventices Betteraves",
+            trialVariety: "Standard ITB",
+            trialDate: "",
             nbModalities: 18,
             nbBlocks: 4,
+            nbBlocksAdv: 4,
+            nbCadres: 5,
             nbObs: 1,
             customAdventices: ["Chénopode", "Matricaire"],
+            customAdventicesAdv: ["Ray-grass", "Chénopode", "Sanve"],
             selectedVars: [], 
             plots: [], 
             currentPlotIndex: 0, 
             activeObs: 1,
             currentUser: "",
-            blockDirections: [] // Sens de parcours par bloc ('asc' ou 'desc')
+            blockDirections: [],
+            saisieMode: "notation",
+            ipmTargetLeaves: 100,
+            currentView: "config", // Suit la vue active ('config' ou 'entry')
+            
+            // OPTIONS DE RELEVÉ CLIMATIQUE & TRAITEMENT
+            treatmentConditionsEnabled: false,
+            treatmentDate: "",
+            treatmentTime: "",
+            treatmentNebulosity: "",
+            treatmentBeaufort: "",
+            treatmentHygrometry: "",
+            treatmentSoilMoisture: "",
+            treatmentBeetStage: "",
+            adventicesDetails: {} // Enregistre { "ray_grass": [ { stage: "Cotylédons", proportion: 20 }, ... ] }
         };
 
-        // VARIABLES DU PAVÉ NUMÉRIQUE VIRTUEL
         let activeKeypadVarId = "";
         let keypadValueString = "";
 
-        // ACCÈS ET AUTHENTIFICATION
+        // Gestion améliorée de l'authentification et de la robustesse mobile
         function attemptLogin() {
-            const usernameInput = document.getElementById("login-username").value.trim().toUpperCase();
+            // Normalisation pour éviter les erreurs de saisie des slashs pour ITB80/60
+            const usernameInput = document.getElementById("login-username").value.trim().toUpperCase().replace('\\', '/');
             const passwordInput = document.getElementById("login-password").value;
             const rememberCheck = document.getElementById("login-remember").checked;
-            const loginCard = document.getElementById("login-card");
+            const loginForm = document.getElementById("login-form");
 
             if (!usernameInput || !passwordInput) {
                 showToast("Veuillez renseigner les deux champs.", true);
@@ -563,7 +720,8 @@
                 appState.currentUser = usernameInput;
                 sessionStorage.setItem("betasaisie_authenticated", "true");
                 sessionStorage.setItem("betasaisie_user", usernameInput);
-                
+                sessionStorage.removeItem("betasaisie_logged_out"); // Nettoyage du flag de déconnexion manuelle
+
                 if (rememberCheck) {
                     localStorage.setItem("betasaisie_remember", "true");
                     localStorage.setItem("betasaisie_remember_username", usernameInput);
@@ -574,9 +732,18 @@
                     localStorage.removeItem("betasaisie_remember_password");
                 }
 
+                // Initialisation et mise à jour dynamique des noms d'essais
                 if (appState.trialName === "Essai Betteraves 2026") {
                     appState.trialName = `Essai Betteraves 2026 - ${usernameInput}`;
                     document.getElementById("trial-name").value = appState.trialName;
+                }
+                if (appState.trialNameIpm === "Saisie IPM Betteraves") {
+                    appState.trialNameIpm = `Saisie IPM Betteraves - ${usernameInput}`;
+                    document.getElementById("trial-name-ipm").value = appState.trialNameIpm;
+                }
+                if (appState.trialNameAdv === "Comptage Adventices Betteraves") {
+                    appState.trialNameAdv = `Comptage Adventices Betteraves - ${usernameInput}`;
+                    document.getElementById("trial-name-adv").value = appState.trialNameAdv;
                 }
 
                 saveStateToLocalStorage();
@@ -590,24 +757,38 @@
 
                 showToast(`Bienvenue, équipe ${usernameInput} !`);
             } else {
-                loginCard.classList.add("shake");
+                loginForm.classList.add("shake");
                 showToast("Identifiant ou mot de passe incorrect.", true);
                 setTimeout(() => {
-                    loginCard.classList.remove("shake");
+                    loginForm.classList.remove("shake");
                 }, 500);
             }
         }
 
+        // Auto-connexion sécurisée si "Mémoriser mes identifiants" est actif
         function checkAuthOnLoad() {
             const isAuth = sessionStorage.getItem("betasaisie_authenticated") === "true";
             const user = sessionStorage.getItem("betasaisie_user");
             const lockScreen = document.getElementById("lock-screen");
-
             const isRemembered = localStorage.getItem("betasaisie_remember") === "true";
+            const wasManualLogout = sessionStorage.getItem("betasaisie_logged_out") === "true";
+
             if (isRemembered) {
-                document.getElementById("login-username").value = localStorage.getItem("betasaisie_remember_username") || "";
-                document.getElementById("login-password").value = localStorage.getItem("betasaisie_remember_password") || "";
+                const storedUser = localStorage.getItem("betasaisie_remember_username") || "";
+                const storedPass = localStorage.getItem("betasaisie_remember_password") || "";
+                document.getElementById("login-username").value = storedUser;
+                document.getElementById("login-password").value = storedPass;
                 document.getElementById("login-remember").checked = true;
+
+                // Auto-authentification transparente si non déconnecté volontairement
+                if (storedUser && storedPass && USERS_DB[storedUser] === storedPass && !wasManualLogout) {
+                    appState.currentUser = storedUser;
+                    sessionStorage.setItem("betasaisie_authenticated", "true");
+                    sessionStorage.setItem("betasaisie_user", storedUser);
+                    lockScreen.classList.add("hidden");
+                    updateUserUI();
+                    return;
+                }
             }
 
             if (isAuth && user) {
@@ -619,8 +800,10 @@
             }
         }
 
+        // Transition fluide de retour à l'authentification et gestion du flag de logout
         function logout() {
             showCustomConfirm("Déconnexion", "Voulez-vous vraiment fermer votre session ITB active ?", function() {
+                sessionStorage.setItem("betasaisie_logged_out", "true"); // Prévient la boucle de reconnexion auto
                 sessionStorage.removeItem("betasaisie_authenticated");
                 sessionStorage.removeItem("betasaisie_user");
                 appState.currentUser = "";
@@ -633,9 +816,13 @@
                 }
                 
                 const lockScreen = document.getElementById("lock-screen");
-                lockScreen.classList.remove("hidden", "opacity-0");
+                lockScreen.classList.remove("hidden");
+                setTimeout(() => {
+                    lockScreen.classList.remove("opacity-0");
+                }, 10);
                 
                 showToast("Session fermée.");
+                updateUserUI();
             });
         }
 
@@ -657,12 +844,12 @@
             const configLabel = document.getElementById("config-user-label");
 
             if (appState.currentUser) {
-                badge.classList.remove("hidden");
-                usernameSpan.innerText = appState.currentUser;
-                configLabel.innerText = `Compte connecté : ${appState.currentUser}`;
+                if (badge) badge.classList.remove("hidden");
+                if (usernameSpan) usernameSpan.innerText = appState.currentUser;
+                if (configLabel) configLabel.innerText = `Compte connecté : ${appState.currentUser}`;
             } else {
-                badge.classList.add("hidden");
-                configLabel.innerText = "Compte : Non connecté";
+                if (badge) badge.classList.add("hidden");
+                if (configLabel) configLabel.innerText = "Compte : Non connecté";
             }
         }
 
@@ -690,7 +877,6 @@
                     <g transform="translate(15, 20) scale(1.1)">
                         <path d="M32 24C25 16 20 12 26 6C31 1 35 10 32 24Z" fill="#22C55E"/>
                         <path d="M32 24C39 16 44 12 38 6C33 1 29 10 32 24Z" fill="#15803D"/>
-                        <path d="M27 24C22 18 16 16 21 10C25 5 28 12 27 24Z" fill="#166534"/>
                         <path d="M22 24C22 24 17 33 24 45C29 54 32 60 32 60C32 60 35 54 40 45C47 33 42 24 42 24H22Z" fill="#F8FAFC" stroke="#94A3B8" stroke-width="2"/>
                     </g>
                     <text x="96" y="162" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="20" fill="#F8FAFC" text-anchor="middle" letter-spacing="0.5">BetaSaisie</text>
@@ -708,6 +894,19 @@
         }
 
         function getActiveVariablesConfig() {
+            if (appState.saisieMode === "adventices") {
+                return (appState.customAdventicesAdv || []).map(adv => ({
+                    id: `cnt_adv_${cleanString(adv)}`,
+                    label: `${adv} (nb)`,
+                    category: "Dénombrement Adventices",
+                    type: "number",
+                    step: 1,
+                    default: 0,
+                    isDynamic: true,
+                    originalName: adv
+                }));
+            }
+            
             const dynamicVars = (appState.customAdventices || []).map(adv => ({
                 id: `eff_adv_${cleanString(adv)}`,
                 label: `Efficacité - ${adv} (0 à 10)`,
@@ -722,25 +921,62 @@
             return [...STATIC_VARIABLES, ...dynamicVars];
         }
 
-        window.onload = function() {
-            setupMobilePwaIcon();
-            loadStateFromLocalStorage();
-            checkAuthOnLoad();
+        function setSaisieMode(mode) {
+            appState.saisieMode = mode;
             
-            if (!appState.trialDate) {
-                appState.trialDate = new Date().toISOString().split('T')[0];
+            const btnNotation = document.getElementById("btn-mode-notation");
+            const btnIpm = document.getElementById("btn-mode-ipm");
+            const btnAdvs = document.getElementById("btn-mode-adventices");
+            
+            const cardNotation = document.getElementById("card-notation-config");
+            const cardIpm = document.getElementById("card-ipm-config");
+            const cardAdv = document.getElementById("card-adventices-config");
+            const cardTreatmentShared = document.getElementById("card-treatment-conditions");
+            const treatmentBadge = document.getElementById("treatment-title-badge");
+
+            [btnNotation, btnIpm, btnAdvs].forEach(btn => {
+                if (btn) {
+                    btn.className = "py-2.5 text-xs font-black rounded-lg transition-all flex items-center justify-center gap-1.5 text-gray-500 hover:text-gray-800 flex-1";
+                }
+            });
+
+            cardNotation.classList.add("hidden");
+            cardIpm.classList.add("hidden");
+            cardAdv.classList.add("hidden");
+            cardTreatmentShared.classList.add("hidden");
+
+            if (mode === "notation") {
+                btnNotation.className = "py-2.5 text-xs font-black rounded-lg transition-all flex items-center justify-center gap-1.5 bg-white text-agri-700 shadow-sm border border-gray-200/50 flex-1";
+                cardNotation.classList.remove("hidden");
+            } else if (mode === "ipm") {
+                btnIpm.className = "py-2.5 text-xs font-black rounded-lg transition-all flex items-center justify-center gap-1.5 bg-white text-blue-850 shadow-sm border border-blue-200/50 flex-1";
+                cardIpm.classList.remove("hidden");
+                cardTreatmentShared.classList.remove("hidden");
+                treatmentBadge.className = "text-xs font-bold uppercase tracking-wider text-blue-900 flex items-center gap-1.5";
+            } else if (mode === "adventices") {
+                btnAdvs.className = "py-2.5 text-xs font-black rounded-lg transition-all flex items-center justify-center gap-1.5 bg-white text-emerald-850 shadow-sm border border-emerald-200/50 flex-1";
+                cardAdv.classList.remove("hidden");
+                cardTreatmentShared.classList.remove("hidden");
+                treatmentBadge.className = "text-xs font-bold uppercase tracking-wider text-emerald-900 flex items-center gap-1.5";
             }
+            saveStateToLocalStorage();
+        }
 
-            document.getElementById("nb-blocks").addEventListener("input", updateBlockDirectionsUI);
-            document.getElementById("nb-modalities").addEventListener("input", updateBlockDirectionsUI);
+        function toggleTreatmentConditionsUI(checked) {
+            appState.treatmentConditionsEnabled = checked;
+            const form = document.getElementById("treatment-conditions-form");
+            if (form) {
+                if (checked) form.classList.remove("hidden");
+                else form.classList.add("hidden");
+            }
+            saveStateToLocalStorage();
+        }
 
-            initVariablesList();
-            renderAdventicesBadges();
-            updateBlockDirectionsUI();
-            updateUI();
-        };
+        function updateTreatmentField(field, value) {
+            appState[field] = value;
+            saveStateToLocalStorage();
+        }
 
-        // GESTION DU SENS DE PARCOURS PAR BLOC
         function updateBlockDirectionsUI() {
             const nbBlocks = parseInt(document.getElementById("nb-blocks").value) || 1;
             const nbModalities = parseInt(document.getElementById("nb-modalities").value) || 18;
@@ -800,6 +1036,7 @@
 
         function initVariablesList() {
             const container = document.getElementById("variables-container");
+            if (!container) return;
             container.innerHTML = "";
             
             let lastCat = "";
@@ -886,6 +1123,7 @@
 
         function renderAdventicesBadges() {
             const container = document.getElementById("adventices-badges");
+            if (!container) return;
             container.innerHTML = "";
             
             if (appState.customAdventices.length === 0) {
@@ -904,92 +1142,376 @@
             });
         }
 
-        function showConfig() {
-            document.getElementById("step-config").classList.remove("hidden");
-            document.getElementById("step-entry").classList.add("hidden");
-            document.getElementById("step-export").classList.add("hidden");
-        }
+        function addAdventiceAdv() {
+            const input = document.getElementById("new-adventice-adv");
+            const name = input.value.trim();
+            if (!name) return;
 
-        function generateTrialPlan() {
-            appState.trialName = document.getElementById("trial-name").value;
-            appState.trialDate = document.getElementById("trial-date").value || new Date().toISOString().split('T')[0];
-            appState.nbModalities = parseInt(document.getElementById("nb-modalities").value) || 1;
-            appState.nbBlocks = parseInt(document.getElementById("nb-blocks").value) || 1;
-            appState.nbObs = parseInt(document.getElementById("nb-obs").value) || 1;
+            const clean = cleanString(name);
+            if (!clean) return;
 
-            appState.selectedVars = [];
-            document.querySelectorAll(".var-checkbox:checked").forEach(cb => {
-                appState.selectedVars.push(cb.value);
-            });
-
-            if (appState.selectedVars.length === 0) {
-                showToast("Sélectionnez au moins une variable à noter !", true);
+            if (appState.customAdventicesAdv.some(adv => cleanString(adv) === clean)) {
+                showToast("Cette adventice existe déjà !", true);
                 return;
             }
 
-            appState.plots = [];
-            for (let b = 1; b <= appState.nbBlocks; b++) {
-                const blockDir = (appState.blockDirections && appState.blockDirections[b - 1]) ? appState.blockDirections[b - 1] : 'asc';
-                
-                const modOrder = [];
-                if (blockDir === 'asc') {
-                    for (let m = 1; m <= appState.nbModalities; m++) {
-                        modOrder.push(m);
-                    }
-                } else {
-                    for (let m = appState.nbModalities; m >= 1; m--) {
-                        modOrder.push(m);
+            appState.customAdventicesAdv.push(name);
+            input.value = "";
+
+            if (!appState.adventicesDetails) appState.adventicesDetails = {};
+            appState.adventicesDetails[clean] = [{ stage: "", proportion: "" }];
+
+            saveStateToLocalStorage();
+            renderAdventicesBadgesAdv();
+            renderAdventicesDetailsInputs();
+            showToast(`Adventice "${name}" ajoutée au comptage !`);
+        }
+
+        function removeAdventiceAdv(name) {
+            const clean = cleanString(name);
+            appState.customAdventicesAdv = appState.customAdventicesAdv.filter(adv => cleanString(adv) !== clean);
+
+            if (appState.adventicesDetails && appState.adventicesDetails[clean]) {
+                delete appState.adventicesDetails[clean];
+            }
+
+            saveStateToLocalStorage();
+            renderAdventicesBadgesAdv();
+            renderAdventicesDetailsInputs();
+            showToast(`Adventice "${name}" retirée.`);
+        }
+
+        function renderAdventicesBadgesAdv() {
+            const container = document.getElementById("adventices-badges-adv");
+            if (!container) return;
+            container.innerHTML = "";
+            
+            if (!appState.customAdventicesAdv || appState.customAdventicesAdv.length === 0) {
+                container.innerHTML = `<span class="text-xxs text-gray-400 italic py-1">Aucune adventice à dénombrer</span>`;
+                return;
+            }
+
+            appState.customAdventicesAdv.forEach(adv => {
+                const badge = document.createElement("span");
+                badge.className = "inline-flex items-center bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-1 rounded-full border border-emerald-200 select-none";
+                badge.innerHTML = `
+                    <span class="mr-1.5">${adv}</span>
+                    <button type="button" onclick="removeAdventiceAdv('${adv.replace(/'/g, "\\'")}')" class="text-emerald-600 hover:text-emerald-900 focus:outline-none font-bold text-sm leading-none">&times;</button>
+                `;
+                container.appendChild(badge);
+            });
+        }
+
+        function addAdventiceStageRow(key) {
+            if (!appState.adventicesDetails) appState.adventicesDetails = {};
+            if (!appState.adventicesDetails[key] || !Array.isArray(appState.adventicesDetails[key])) {
+                appState.adventicesDetails[key] = [];
+            }
+            appState.adventicesDetails[key].push({ stage: "", proportion: "" });
+            saveStateToLocalStorage();
+            renderAdventicesDetailsInputs();
+        }
+
+        function removeAdventiceStageRow(key, index) {
+            if (appState.adventicesDetails && appState.adventicesDetails[key]) {
+                appState.adventicesDetails[key].splice(index, 1);
+                saveStateToLocalStorage();
+                renderAdventicesDetailsInputs();
+            }
+        }
+
+        function updateAdventiceStageRow(key, index, field, value) {
+            if (appState.adventicesDetails && appState.adventicesDetails[key] && appState.adventicesDetails[key][index]) {
+                appState.adventicesDetails[key][index][field] = value;
+                saveStateToLocalStorage();
+            }
+        }
+
+        function renderAdventicesDetailsInputs() {
+            const container = document.getElementById("adventices-details-container");
+            const list = document.getElementById("adventices-details-list");
+            if (!container || !list) return;
+
+            if (!appState.customAdventicesAdv || appState.customAdventicesAdv.length === 0) {
+                container.classList.add("hidden");
+                return;
+            }
+
+            container.classList.remove("hidden");
+            list.innerHTML = "";
+
+            if (!appState.adventicesDetails) {
+                appState.adventicesDetails = {};
+            }
+
+            appState.customAdventicesAdv.forEach(adv => {
+                const key = cleanString(adv);
+                if (!appState.adventicesDetails[key] || !Array.isArray(appState.adventicesDetails[key])) {
+                    const old = appState.adventicesDetails[key];
+                    if (old && (old.stage || old.proportion)) {
+                        appState.adventicesDetails[key] = [{ stage: old.stage || "", proportion: old.proportion || "" }];
+                    } else {
+                        appState.adventicesDetails[key] = [{ stage: "", proportion: "" }];
                     }
                 }
 
-                for (const m of modOrder) {
-                    for (let o = 1; o <= appState.nbObs; o++) {
-                        const plotNum = (b * 100) + m;
-                        const plotId = appState.nbObs > 1 ? `${plotNum} - O${o}` : `${plotNum}`;
+                const rows = appState.adventicesDetails[key];
+                const div = document.createElement("div");
+                div.className = "bg-white p-3.5 rounded-xl border border-gray-200 shadow-sm space-y-2 mb-3";
+                
+                let rowsHTML = "";
+                rows.forEach((row, index) => {
+                    rowsHTML += `
+                        <div class="flex items-center space-x-2 bg-gray-50 p-2 rounded-lg border border-gray-100 relative">
+                            <div class="flex-1">
+                                <label class="block text-[8px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Stade</label>
+                                <select onchange="updateAdventiceStageRow('${key}', ${index}, 'stage', this.value)" class="w-full bg-white border border-gray-300 rounded-md px-1.5 py-1 text-xxs text-gray-900 focus:ring-1 focus:ring-emerald-500">
+                                    <option value="">Choisir...</option>
+                                    <option value="Cotylédons" ${row.stage === 'Cotylédons' ? 'selected' : ''}>Cotylédons</option>
+                                    <option value="1 à 2 feuilles" ${row.stage === '1 à 2 feuilles' ? 'selected' : ''}>1 à 2 feuilles</option>
+                                    <option value="2 à 4 feuilles" ${row.stage === '2 à 4 feuilles' ? 'selected' : ''}>2 à 4 feuilles</option>
+                                    <option value="Au-delà de 4 feuilles" ${row.stage === 'Au-delà de 4 feuilles' ? 'selected' : ''}>Développé (> 4 f.)</option>
+                                </select>
+                            </div>
+                            <div class="w-20">
+                                <label class="block text-[8px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Prop %</label>
+                                <input type="number" min="0" max="100" placeholder="Ex: 15" value="${row.proportion}" onchange="updateAdventiceStageRow('${key}', ${index}, 'proportion', this.value)" class="w-full bg-white border border-gray-300 rounded-md px-1.5 py-1 text-xxs text-gray-900 focus:ring-1 focus:ring-emerald-500 text-center font-bold">
+                            </div>
+                            <div class="pt-3">
+                                <button type="button" onclick="removeAdventiceStageRow('${key}', ${index})" class="w-7 h-7 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg flex items-center justify-center border border-red-100 transition active:scale-90">
+                                    <i class="fa-solid fa-trash-can text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                div.innerHTML = `
+                    <div class="flex justify-between items-center border-b pb-1.5 select-none">
+                        <span class="text-xs font-bold text-emerald-800 flex items-center gap-1">
+                            <i class="fa-solid fa-seedling"></i> ${adv}
+                        </span>
+                        <button type="button" onclick="addAdventiceStageRow('${key}')" class="text-[10px] bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 px-2 py-1 rounded-md font-bold transition flex items-center gap-1">
+                            <i class="fa-solid fa-plus text-[8px]"></i> Ajouter un stade
+                        </button>
+                    </div>
+                    <div class="space-y-1.5 mt-2">
+                        ${rowsHTML || '<p class="text-[10px] text-gray-400 italic text-center py-2 select-none">Aucun stade défini pour cette adventice</p>'}
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function showConfig() {
+            appState.currentView = "config";
+            saveStateToLocalStorage();
+            updateUI();
+        }
+
+        function generateTrialPlan(silent = false) {
+            appState.saisieMode = appState.saisieMode || "notation";
+
+            if (appState.saisieMode === "adventices") {
+                appState.trialNameAdv = document.getElementById("trial-name-adv").value;
+                appState.nbBlocksAdv = parseInt(document.getElementById("nb-blocks-adv").value) || 4;
+                appState.nbCadres = parseInt(document.getElementById("nb-cadres-adv").value) || 5;
+                appState.nbObs = 1;
+                
+                appState.selectedVars = (appState.customAdventicesAdv || []).map(adv => `cnt_adv_${cleanString(adv)}`);
+
+                if (appState.selectedVars.length === 0) {
+                    showToast("Veuillez configurer au moins une adventice à dénombrer !", true);
+                    return false;
+                }
+
+                appState.plots = [];
+                for (let b = 1; b <= appState.nbBlocksAdv; b++) {
+                    for (let c = 1; c <= appState.nbCadres; c++) {
+                        const plotNum = (b * 100) + c;
+                        const plotId = `Bloc ${b} - Cadre ${c}`;
                         
                         const values = {};
                         appState.selectedVars.forEach(vId => {
-                            const conf = getActiveVariablesConfig().find(item => item.id === vId);
-                            values[vId] = conf ? conf.default : "";
+                            values[vId] = 0;
                         });
 
                         appState.plots.push({
                             id: plotId,
                             plotNum: plotNum,
                             bloc: b,
-                            mod: m,
-                            obs: o,
+                            mod: c,
+                            obs: 1,
                             values: values,
+                            ipm: { total: 0, cerco: 0, oidium: 0, rouille: 0, ramu: 0, history: [] },
                             isCompleted: false,
-                            date: appState.trialDate
+                            date: appState.trialDate || new Date().toISOString().split('T')[0],
+                            variety: "N/A"
                         });
+                    }
+                }
+
+            } else {
+                appState.trialName = appState.saisieMode === "notation" ? document.getElementById("trial-name").value : document.getElementById("trial-name-ipm").value;
+                appState.nbModalities = parseInt(document.getElementById("nb-modalities").value) || 18;
+                appState.nbBlocks = parseInt(document.getElementById("nb-blocks").value) || 4;
+                appState.nbObs = parseInt(document.getElementById("nb-obs").value) || 1;
+
+                appState.selectedVars = [];
+                if (appState.saisieMode === "notation") {
+                    document.querySelectorAll(".var-checkbox:checked").forEach(cb => {
+                        appState.selectedVars.push(cb.value);
+                    });
+                }
+
+                if (appState.saisieMode === "notation" && appState.selectedVars.length === 0) {
+                    showToast("Sélectionnez au moins une variable classique à noter !", true);
+                    return false;
+                }
+
+                appState.plots = [];
+                for (let b = 1; b <= appState.nbBlocks; b++) {
+                    const blockDir = (appState.blockDirections && appState.blockDirections[b - 1]) ? appState.blockDirections[b - 1] : 'asc';
+                    
+                    const modOrder = [];
+                    if (blockDir === 'asc') {
+                        for (let m = 1; m <= appState.nbModalities; m++) {
+                            modOrder.push(m);
+                        }
+                    } else {
+                        for (let m = appState.nbModalities; m >= 1; m--) {
+                            modOrder.push(m);
+                        }
+                    }
+
+                    for (const m of modOrder) {
+                        for (let o = 1; o <= appState.nbObs; o++) {
+                            const plotNum = (b * 100) + m;
+                            const plotId = appState.nbObs > 1 ? `${plotNum} - O${o}` : `${plotNum}`;
+                            
+                            const values = {};
+                            appState.selectedVars.forEach(vId => {
+                                const conf = getActiveVariablesConfig().find(item => item.id === vId);
+                                values[vId] = conf ? conf.default : "";
+                            });
+
+                            appState.plots.push({
+                                id: plotId,
+                                plotNum: plotNum,
+                                bloc: b,
+                                mod: m,
+                                obs: o,
+                                values: values,
+                                ipm: { total: 0, cerco: 0, oidium: 0, rouille: 0, ramu: 0, history: [] },
+                                isCompleted: false,
+                                date: appState.trialDate || new Date().toISOString().split('T')[0],
+                                variety: appState.trialVariety || "Standard ITB"
+                            });
+                        }
                     }
                 }
             }
 
             appState.currentPlotIndex = 0;
             appState.activeObs = 1;
+
             saveStateToLocalStorage();
             updateUI();
             
-            document.getElementById("step-config").classList.add("hidden");
-            document.getElementById("step-entry").classList.remove("hidden");
-            document.getElementById("step-export").classList.remove("hidden");
+            if (!silent) {
+                showToast("Plan d'essai généré avec succès !");
+            }
+            return true;
+        }
 
-            showToast("Plan généré ! " + appState.plots.length + " observations prêtes.");
+        function startClassicSaisieDirectly() {
+            const success = generateTrialPlan(true);
+            if (!success) return;
+            startSaisieSession("Notation Classique");
+        }
+
+        function startIpmSaisieDirectly() {
+            appState.trialNameIpm = document.getElementById("trial-name-ipm").value;
+            appState.trialVariety = document.getElementById("trial-variety").value;
+            appState.trialDate = document.getElementById("trial-date").value || new Date().toISOString().split('T')[0];
+            appState.ipmTargetLeaves = parseInt(document.getElementById("ipm-target").value) || 100;
+
+            generateTrialPlan(true);
+
+            appState.plots.forEach(p => {
+                p.variety = appState.trialVariety;
+                p.date = appState.trialDate;
+            });
+
+            startSaisieSession("Saisie IPM");
+        }
+
+        function startAdventicesSaisieDirectly() {
+            appState.trialNameAdv = document.getElementById("trial-name-adv").value;
+            appState.nbBlocksAdv = parseInt(document.getElementById("nb-blocks-adv").value) || 4;
+            appState.nbCadres = parseInt(document.getElementById("nb-cadres-adv").value) || 5;
+
+            const success = generateTrialPlan(true);
+            if (!success) return;
+
+            startSaisieSession("Dénombrement Adventices");
+        }
+
+        function startSaisieSession(typeTitle) {
+            appState.currentView = "entry";
+            saveStateToLocalStorage();
+            updateUI();
+
+            document.getElementById("entry-step-title").innerText = `Saisie : ${typeTitle}`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            showToast("Début de la saisie ! Relevé actif au champ.");
         }
 
         function updateUI() {
             if (appState.plots.length === 0) {
+                document.getElementById("step-config").classList.remove("hidden");
                 document.getElementById("step-entry").classList.add("hidden");
                 document.getElementById("step-export").classList.add("hidden");
                 return;
             }
 
-            const trialNameInput = document.getElementById("trial-name");
-            if (trialNameInput && trialNameInput.value !== appState.trialName) {
-                trialNameInput.value = appState.trialName;
+            if (appState.currentView === "config") {
+                document.getElementById("step-config").classList.remove("hidden");
+                document.getElementById("step-entry").classList.add("hidden");
+                document.getElementById("step-export").classList.add("hidden");
+            } else {
+                document.getElementById("step-config").classList.add("hidden");
+                document.getElementById("step-entry").classList.remove("hidden");
+                document.getElementById("step-export").classList.remove("hidden");
             }
+
+            let currentTitle = appState.trialName;
+            if (appState.saisieMode === "ipm") currentTitle = appState.trialNameIpm || "Saisie IPM Betteraves";
+            else if (appState.saisieMode === "adventices") currentTitle = appState.trialNameAdv || "Comptage Adventices Betteraves";
+
+            document.getElementById("entry-header-trial-name").innerText = currentTitle;
+            
+            const varietyContainer = document.getElementById("entry-header-variety-container");
+            if (appState.saisieMode === "adventices") {
+                varietyContainer.classList.add("hidden");
+            } else {
+                varietyContainer.classList.remove("hidden");
+                document.getElementById("entry-header-variety").innerText = appState.trialVariety;
+            }
+
+            const plotIndicatorLabel = document.getElementById("plot-indicator-label");
+            if (appState.saisieMode === "adventices") {
+                plotIndicatorLabel.innerText = "Cadre d'évaluation actif";
+            } else {
+                plotIndicatorLabel.innerText = "Parcelle active";
+            }
+
+            if (document.getElementById("trial-name")) document.getElementById("trial-name").value = appState.trialName || "Essai Betteraves 2026";
+            if (document.getElementById("trial-name-ipm")) document.getElementById("trial-name-ipm").value = appState.trialNameIpm || "Saisie IPM Betteraves";
+            if (document.getElementById("trial-name-adv")) document.getElementById("trial-name-adv").value = appState.trialNameAdv || "Comptage Adventices Betteraves";
+            if (document.getElementById("trial-variety")) document.getElementById("trial-variety").value = appState.trialVariety || "Standard ITB";
+            if (document.getElementById("nb-blocks-adv")) document.getElementById("nb-blocks-adv").value = appState.nbBlocksAdv || 4;
+            if (document.getElementById("nb-cadres-adv")) document.getElementById("nb-cadres-adv").value = appState.nbCadres || 5;
 
             const trialDateInput = document.getElementById("trial-date");
             if (trialDateInput) {
@@ -998,9 +1520,6 @@
                 }
                 trialDateInput.value = appState.trialDate;
             }
-
-            document.getElementById("step-entry").classList.remove("hidden");
-            document.getElementById("step-export").classList.remove("hidden");
 
             const selector = document.getElementById("plot-selector");
             selector.innerHTML = "";
@@ -1019,7 +1538,13 @@
 
                 const opt = document.createElement("option");
                 opt.value = plotNum;
-                opt.innerText = `Parcelle ${plotNum} ${allDone ? '✅' : `(${countDone}/${appState.nbObs})`}`;
+                
+                if (appState.saisieMode === "adventices") {
+                    const firstPlot = obsOfPlot[0];
+                    opt.innerText = `Bloc ${firstPlot.bloc} - Cadre ${firstPlot.mod} ${allDone ? '✅' : ''}`;
+                } else {
+                    opt.innerText = `Parcelle ${plotNum} ${allDone ? '✅' : `(${countDone}/${appState.nbObs})`}`;
+                }
                 selector.appendChild(opt);
             });
 
@@ -1041,7 +1566,7 @@
 
         function renderObservationTabs(plotNum) {
             const container = document.getElementById("obs-selector-container");
-            if (appState.nbObs > 1) {
+            if (appState.nbObs > 1 && appState.saisieMode !== "adventices") {
                 container.classList.remove("hidden");
                 container.innerHTML = `<div class="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wide">Plante / Observation à saisir</div>`;
                 
@@ -1062,7 +1587,7 @@
                         ? 'bg-agri-600 text-white shadow-md scale-105' 
                         : isDone 
                             ? 'bg-green-100 text-green-800 border border-green-300' 
-                            : 'bg-white text-gray-600 border border-gray-300'
+                            : 'bg-white text-gray-600 border-gray-300'
                     }`;
                     btn.innerText = `Obs ${p.obs} ${isDone ? '✓' : ''}`;
                     grid.appendChild(btn);
@@ -1088,16 +1613,189 @@
             const plot = appState.plots[idx];
             if (!plot) return;
 
-            document.getElementById("plot-sub-info").innerText = `Bloc ${plot.bloc} | Modalité ${plot.mod} ${appState.nbObs > 1 ? '| Obs ' + plot.obs + ' / ' + appState.nbObs : ''}`;
+            if (appState.saisieMode === "adventices") {
+                document.getElementById("plot-sub-info").innerText = `Bloc ${plot.bloc} | Cadre ${plot.mod}`;
+            } else {
+                document.getElementById("plot-sub-info").innerText = `Bloc ${plot.bloc} | Mod. ${plot.mod} | Var. ${plot.variety || appState.trialVariety}`;
+            }
 
             const container = document.getElementById("dynamic-inputs");
             container.innerHTML = "";
+
+            if (appState.saisieMode === "ipm") {
+                renderIpmDashboard(plot, container);
+            } else {
+                renderClassicInputs(plot, container);
+            }
+        }
+
+        function ensureIpmVarsInPlot(plot) {
+            if (!plot.ipm) {
+                plot.ipm = { total: 0, cerco: 0, oidium: 0, rouille: 0, ramu: 0, history: [] };
+            }
+        }
+
+        function renderIpmDashboard(plot, container) {
+            ensureIpmVarsInPlot(plot);
+
+            const total = plot.ipm.total || 0;
+            const cerco = plot.ipm.cerco || 0;
+            const oidium = plot.ipm.oidium || 0;
+            const rouille = plot.ipm.rouille || 0;
+            const ramu = plot.ipm.ramu || 0;
+            const saine = total - (cerco + oidium + rouille + ramu);
+            const target = appState.ipmTargetLeaves || 100;
+
+            const freqCerco = total > 0 ? Math.round((cerco / total) * 100) : 0;
+            const freqOidium = total > 0 ? Math.round((oidium / total) * 100) : 0;
+            const freqRouille = total > 0 ? Math.round((rouille / total) * 100) : 0;
+            const freqRamu = total > 0 ? Math.round((ramu / total) * 100) : 0;
+
+            const ipmDiv = document.createElement("div");
+            ipmDiv.className = "space-y-4 select-none";
+            
+            ipmDiv.innerHTML = `
+                <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm text-center space-y-2">
+                    <span class="text-xxs font-bold uppercase tracking-wider text-gray-400 block">Progression Feuilles (Cible : ${target})</span>
+                    <div class="flex items-center justify-center gap-2">
+                        <span class="text-4xl font-black ${total >= target ? 'text-green-600 animate-bounce' : 'text-gray-800'}">${total}</span>
+                        <span class="text-xl text-gray-400 font-bold">/ ${target}</span>
+                    </div>
+                    
+                    <div class="w-full bg-gray-100 rounded-full h-3">
+                        <div class="bg-blue-600 h-3 rounded-full transition-all duration-300" style="width: ${Math.min((total / target) * 100, 100)}%"></div>
+                    </div>
+                    ${total >= target ? `<span class="text-xs text-green-600 font-extrabold block">🎉 Objectif de ${target} feuilles complété !</span>` : ''}
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <button type="button" onclick="tapIpmAction('cerco')" ${total >= target ? 'disabled' : ''} class="bg-purple-600 hover:bg-purple-700 active:scale-95 disabled:opacity-50 disabled:pointer-events-none text-white rounded-xl p-3 shadow-sm flex flex-col justify-between items-center h-28 transition-all">
+                        <span class="text-xxs font-extrabold tracking-wider uppercase">Cercosporiose</span>
+                        <i class="fa-solid fa-virus text-2xl my-1"></i>
+                        <div class="text-xs font-bold bg-white/20 px-2 py-0.5 rounded-full w-full text-center">
+                            ${cerco} f. (${freqCerco}%)
+                        </div>
+                    </button>
+
+                    <button type="button" onclick="tapIpmAction('oidium')" ${total >= target ? 'disabled' : ''} class="bg-slate-600 hover:bg-slate-700 active:scale-95 disabled:opacity-50 disabled:pointer-events-none text-white rounded-xl p-3 shadow-sm flex flex-col justify-between items-center h-28 transition-all">
+                        <span class="text-xxs font-extrabold tracking-wider uppercase">Oïdium</span>
+                        <i class="fa-solid fa-snowflake text-2xl my-1"></i>
+                        <div class="text-xs font-bold bg-white/20 px-2 py-0.5 rounded-full w-full text-center">
+                            ${oidium} f. (${freqOidium}%)
+                        </div>
+                    </button>
+
+                    <button type="button" onclick="tapIpmAction('rouille')" ${total >= target ? 'disabled' : ''} class="bg-amber-600 hover:bg-amber-700 active:scale-95 disabled:opacity-50 disabled:pointer-events-none text-white rounded-xl p-3 shadow-sm flex flex-col justify-between items-center h-28 transition-all">
+                        <span class="text-xxs font-extrabold tracking-wider uppercase">Rouille</span>
+                        <i class="fa-solid fa-certificate text-2xl my-1"></i>
+                        <div class="text-xs font-bold bg-white/20 px-2 py-0.5 rounded-full w-full text-center">
+                            ${rouille} f. (${freqRouille}%)
+                        </div>
+                    </button>
+
+                    <button type="button" onclick="tapIpmAction('ramu')" ${total >= target ? 'disabled' : ''} class="bg-teal-600 hover:bg-teal-700 active:scale-95 disabled:opacity-50 disabled:pointer-events-none text-white rounded-xl p-3 shadow-sm flex flex-col justify-between items-center h-28 transition-all">
+                        <span class="text-xxs font-extrabold tracking-wider uppercase">Ramulariose</span>
+                        <i class="fa-solid fa-bacteria text-2xl my-1"></i>
+                        <div class="text-xs font-bold bg-white/20 px-2 py-0.5 rounded-full w-full text-center">
+                            ${ramu} f. (${freqRamu}%)
+                        </div>
+                    </button>
+                </div>
+
+                <button type="button" onclick="tapIpmAction('saine')" ${total >= target ? 'disabled' : ''} class="w-full bg-green-600 hover:bg-green-700 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none text-white font-black py-5 rounded-xl shadow transition flex flex-col items-center justify-center gap-1">
+                    <div class="flex items-center gap-2 text-sm uppercase tracking-wide">
+                        <i class="fa-solid fa-leaf text-lg"></i>
+                        <span>🍃 Feuille Saine (+1)</span>
+                    </div>
+                    <span class="text-xs font-normal opacity-85">Cumul feuilles saines : ${saine} f.</span>
+                </button>
+
+                <div class="flex gap-2 pt-2">
+                    <button type="button" onclick="undoLastIpmAction()" class="flex-1 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-700 font-bold py-3 px-4 rounded-xl border border-gray-300 text-xs flex items-center justify-center gap-2 transition shadow-sm">
+                        <i class="fa-solid fa-rotate-left"></i> Annuler dernier clic
+                    </button>
+                    <button type="button" onclick="resetIpmCounters()" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition shadow-sm">
+                        <i class="fa-solid fa-trash-can"></i> Remettre à zéro
+                    </button>
+                </div>
+            `;
+            container.appendChild(ipmDiv);
+        }
+
+        function tapIpmAction(type) {
+            const currentPlot = appState.plots[appState.currentPlotIndex];
+            if (!currentPlot) return;
+
+            ensureIpmVarsInPlot(currentPlot);
+            const target = appState.ipmTargetLeaves || 100;
+
+            if (currentPlot.ipm.total >= target) {
+                showToast(`Objectif de ${target} feuilles déjà atteint !`, true);
+                return;
+            }
+
+            currentPlot.ipm.total++;
+            currentPlot.ipm.history.push(type);
+            
+            if (type !== 'saine') {
+                currentPlot.ipm[type]++;
+            }
+
+            currentPlot.isCompleted = true;
+            saveStateToLocalStorage();
+            updateUI();
+
+            if (currentPlot.ipm.total === target) {
+                showToast(`🎯 Objectif de ${target} feuilles atteint pour cette parcelle !`);
+            }
+        }
+
+        function undoLastIpmAction() {
+            const currentPlot = appState.plots[appState.currentPlotIndex];
+            if (!currentPlot || !currentPlot.ipm || currentPlot.ipm.history.length === 0) {
+                showToast("Aucune action à annuler.", true);
+                return;
+            }
+
+            const lastType = currentPlot.ipm.history.pop();
+            currentPlot.ipm.total--;
+
+            if (lastType !== 'saine') {
+                currentPlot.ipm[lastType]--;
+            }
+
+            saveStateToLocalStorage();
+            updateUI();
+            showToast("Dernier clic annulé !");
+        }
+
+        function resetIpmCounters() {
+            showCustomConfirm("Réinitialiser l'IPM", "Remettre à zéro tous les compteurs IPM de cette parcelle ?", function() {
+                const currentPlot = appState.plots[appState.currentPlotIndex];
+                if (!currentPlot) return;
+
+                currentPlot.ipm = { total: 0, cerco: 0, oidium: 0, rouille: 0, ramu: 0, history: [] };
+                saveStateToLocalStorage();
+                updateUI();
+                showToast("Compteurs réinitialisés.");
+            });
+        }
+
+        function renderClassicInputs(plot, container) {
+            if (appState.selectedVars.length === 0) {
+                container.innerHTML += `
+                    <div class="p-6 text-center text-gray-400 italic text-xs">
+                        Aucune variable configurée pour la saisie.
+                    </div>
+                `;
+                return;
+            }
 
             appState.selectedVars.forEach(vId => {
                 const conf = getActiveVariablesConfig().find(item => item.id === vId);
                 if (!conf) return;
 
-                const value = plot.values[vId];
+                const value = plot.values[vId] !== undefined ? plot.values[vId] : "";
                 const inputGroup = document.createElement("div");
                 inputGroup.className = "bg-gray-50 p-3.5 rounded-xl border border-gray-200 shadow-sm";
 
@@ -1222,33 +1920,29 @@
             saveStateToLocalStorage();
         }
 
-        // --- FONCTIONS DU PAVÉ NUMÉRIQUE VIRTUEL (KEYPAD) ---
         function openKeypad(varId) {
             const conf = getActiveVariablesConfig().find(item => item.id === varId);
             if (!conf) return;
 
             activeKeypadVarId = varId;
             
-            // Récupérer la parcelle active
             const currentPlot = appState.plots[appState.currentPlotIndex];
             const currentVal = currentPlot.values[varId];
             keypadValueString = (currentVal !== undefined && currentVal !== null) ? String(currentVal) : "";
 
-            // Mettre à jour l'en-tête du pavé avec catégorie et libellé
             document.getElementById("keypad-var-category").innerText = conf.category;
             document.getElementById("keypad-var-label").innerText = conf.label;
             
-            // Nouveau : Mettre à jour le badge de numéro de parcelle de la calculette
-            const labelSuffix = appState.nbObs > 1 ? ` (Obs ${currentPlot.obs})` : "";
-            document.getElementById("keypad-plot-badge").innerText = `P. ${currentPlot.plotNum}${labelSuffix}`;
+            const labelSuffix = (appState.nbObs > 1 && appState.saisieMode !== "adventices") ? ` (Obs ${currentPlot.obs})` : "";
+            const plotLabel = appState.saisieMode === "adventices" ? `B.${currentPlot.bloc} C.${currentPlot.mod}` : `P. ${currentPlot.plotNum}`;
+            document.getElementById("keypad-plot-badge").innerText = `${plotLabel}${labelSuffix}`;
 
-            // Suffixe d'unité
             let suffix = "";
             if (varId.includes("plante")) suffix = "pl";
             else if (varId.includes("puc") || varId.includes("aux")) suffix = "/ pl";
+            else if (varId.includes("cnt_adv_")) suffix = "adventices";
             document.getElementById("keypad-display-suffix").innerText = suffix;
 
-            // Activer ou griser la touche "."
             const dotBtn = document.getElementById("keypad-dot-btn");
             if (conf.step < 1) {
                 dotBtn.removeAttribute("disabled");
@@ -1260,7 +1954,6 @@
 
             updateKeypadDisplay();
 
-            // Ouvrir modal
             const modal = document.getElementById("keypad-modal");
             modal.classList.remove("hidden");
             setTimeout(() => {
@@ -1306,11 +1999,7 @@
                 }
                 keypadValueString += char;
             }
-            
-            if (keypadValueString.length > 7) {
-                keypadValueString = keypadValueString.slice(0, 7);
-            }
-            
+            if (keypadValueString.length > 7) keypadValueString = keypadValueString.slice(0, 7);
             updateKeypadDisplay();
         }
 
@@ -1343,54 +2032,44 @@
             updateKeypadDisplay();
         }
 
-        // NOUVEAU : Sauvegarde de la valeur et saut de parcelle automatique sans fermer la calculette !
         function keypadValidate() {
             if (keypadValueString === "") {
-                showToast("Saisie vide, valeur par défaut configurée à -99.", true);
+                showToast("Saisie vide, valeur -99 appliquée.", true);
                 keypadValueString = "-99";
             }
 
-            // 1. Sauvegarder dans l'état de l'application
             const currentPlot = appState.plots[appState.currentPlotIndex];
             currentPlot.values[activeKeypadVarId] = keypadValueString;
             currentPlot.isCompleted = true;
 
-            // 2. Mémoriser localement
             saveStateToLocalStorage();
 
-            // 3. Vérifier s'il y a une parcelle suivante dans l'essai
             if (appState.currentPlotIndex < appState.plots.length - 1) {
                 const completedPlotNum = currentPlot.plotNum;
-                
-                // Incrémenter l'index vers la parcelle suivante
                 appState.currentPlotIndex++;
                 appState.activeObs = appState.plots[appState.currentPlotIndex].obs;
                 
-                // Mettre à jour l'interface principale (grille, progression, sélecteurs)
                 updateUI();
                 
-                // Charger la valeur de la variable pour cette nouvelle parcelle
                 const nextPlot = appState.plots[appState.currentPlotIndex];
                 const nextVal = nextPlot.values[activeKeypadVarId];
                 keypadValueString = (nextVal !== undefined && nextVal !== null) ? String(nextVal) : "";
 
-                // Mettre à jour le badge de parcelle de la calculette
-                const labelSuffix = appState.nbObs > 1 ? ` (Obs ${nextPlot.obs})` : "";
-                document.getElementById("keypad-plot-badge").innerText = `P. ${nextPlot.plotNum}${labelSuffix}`;
+                const labelSuffix = (appState.nbObs > 1 && appState.saisieMode !== "adventices") ? ` (Obs ${nextPlot.obs})` : "";
+                const nextPlotLabel = appState.saisieMode === "adventices" ? `B.${nextPlot.bloc} C.${nextPlot.mod}` : `P. ${nextPlot.plotNum}`;
+                document.getElementById("keypad-plot-badge").innerText = `${nextPlotLabel}${labelSuffix}`;
 
-                // Rafraîchir l'affichage de l'écran de la calculette
                 updateKeypadDisplay();
-
-                showToast(`Parcelle ${completedPlotNum} validée. Suivant : ${nextPlot.plotNum} !`);
+                
+                const completedLabel = appState.saisieMode === "adventices" ? `Bloc ${currentPlot.bloc} Cadre ${currentPlot.mod}` : `Parcelle ${completedPlotNum}`;
+                showToast(`${completedLabel} validée. Suivant : ${appState.saisieMode === "adventices" ? `Bloc ${nextPlot.bloc} Cadre ${nextPlot.mod}` : nextPlot.plotNum}`);
             } else {
-                // S'il n'y a plus de parcelle (fin de l'essai)
                 updateUI();
                 closeKeypad();
-                showToast("🎉 Félicitations ! Toutes les parcelles ont été complétées !", false);
+                showToast("🎉 Notation de l'essai terminée !");
             }
         }
 
-        // --- AUTRES NAVIGATIONS DE L'APPLICATION ---
         function navigatePlotGroup(direction) {
             const uniquePlotNumsInSequence = [];
             appState.plots.forEach(p => {
@@ -1430,8 +2109,11 @@
         }
 
         function saveCurrentPlotAndNext() {
-            appState.plots[appState.currentPlotIndex].isCompleted = true;
-            showToast(`Obs. ${appState.activeObs} de la parcelle ${appState.plots[appState.currentPlotIndex].plotNum} validée !`);
+            const currentPlot = appState.plots[appState.currentPlotIndex];
+            currentPlot.isCompleted = true;
+            
+            const currentLabel = appState.saisieMode === "adventices" ? `Bloc ${currentPlot.bloc} Cadre ${currentPlot.mod}` : `Parcelle ${currentPlot.plotNum}`;
+            showToast(`Saisie ${currentLabel} validée.`);
 
             if (appState.currentPlotIndex < appState.plots.length - 1) {
                 appState.currentPlotIndex++;
@@ -1439,12 +2121,13 @@
                 updateUI();
             } else {
                 updateUI();
-                showToast("🎉 Toutes les parcelles ont été complétées !", false);
+                showToast("🎉 Félicitations ! Notation complétée !");
             }
         }
 
         function renderSummaryTable() {
             const table = document.getElementById("summary-table");
+            if (!table) return;
             table.innerHTML = "";
 
             const activeConfig = getActiveVariablesConfig();
@@ -1452,18 +2135,40 @@
             const thead = document.createElement("thead");
             thead.className = "bg-gray-50 border-b border-gray-200";
             
+            const mainHeaderLabel = appState.saisieMode === "adventices" ? 'Cadre d\'éval.' : 'Parcelle';
+            const varietyHeaderLabel = appState.saisieMode === "adventices" ? 'Nom Essai' : 'Variété';
+            const modHeaderLabel = appState.saisieMode === "adventices" ? 'N° Cadre' : 'Mod';
+
             let headersHTML = `
                 <tr>
-                    <th class="px-3 py-2 font-semibold text-gray-700">Parcelle</th>
-                    <th class="px-2 py-2 font-semibold text-gray-700">Bloc</th>
-                    <th class="px-2 py-2 font-semibold text-gray-700">Mod</th>
-                    <th class="px-2 py-2 font-semibold text-gray-700">Obs</th>
+                    <th class="px-3 py-2 font-bold text-gray-700">${mainHeaderLabel}</th>
+                    <th class="px-2 py-2 font-bold text-gray-700">${varietyHeaderLabel}</th>
+                    <th class="px-2 py-2 font-bold text-gray-700">Bloc</th>
+                    <th class="px-2 py-2 font-bold text-gray-700">${modHeaderLabel}</th>
+                    <th class="px-2 py-2 font-bold text-gray-700">Obs</th>
             `;
             
-            appState.selectedVars.forEach(vId => {
-                const conf = activeConfig.find(item => item.id === vId);
-                headersHTML += `<th class="px-2 py-2 font-semibold text-gray-700">${conf ? conf.label.split('(')[0] : vId}</th>`;
-            });
+            if (appState.saisieMode === "notation" || appState.saisieMode === "adventices") {
+                appState.selectedVars.forEach(vId => {
+                    const conf = activeConfig.find(item => item.id === vId);
+                    headersHTML += `<th class="px-2 py-2 font-bold text-gray-700">${conf ? conf.label.split('(')[0] : vId}</th>`;
+                    if (appState.saisieMode === "adventices") {
+                        headersHTML += `
+                            <th class="px-2 py-2 font-bold text-emerald-700 bg-emerald-50/20">Stades</th>
+                            <th class="px-2 py-2 font-bold text-emerald-700 bg-emerald-50/20">Props</th>
+                        `;
+                    }
+                });
+            } else {
+                headersHTML += `
+                    <th class="px-2 py-2 font-bold text-blue-700 bg-blue-50/50">Feuilles Obs.</th>
+                    <th class="px-2 py-2 font-bold text-purple-700 bg-purple-50/50">Cerco</th>
+                    <th class="px-2 py-2 font-bold text-slate-700 bg-slate-50/50">Oïdium</th>
+                    <th class="px-2 py-2 font-bold text-amber-700 bg-amber-50/50">Rouille</th>
+                    <th class="px-2 py-2 font-bold text-teal-700 bg-teal-50/50">Ramulariose</th>
+                `;
+            }
+
             headersHTML += `</tr>`;
             thead.innerHTML = headersHTML;
             table.appendChild(thead);
@@ -1475,17 +2180,42 @@
                 const tr = document.createElement("tr");
                 tr.className = p.isCompleted ? "bg-green-50/40 hover:bg-green-50" : "hover:bg-gray-50";
                 
+                const displayLabel = appState.saisieMode === "adventices" ? `B.${p.bloc} C.${p.mod}` : p.plotNum;
+                const secondColValue = appState.saisieMode === "adventices" ? (appState.trialNameAdv || "Comptage") : (p.variety || appState.trialVariety);
+
                 let rowHTML = `
-                    <td class="px-3 py-2.5 font-bold text-agri-700 cursor-pointer" onclick="goToPlot(${plotIdx})">${p.plotNum} ${p.isCompleted ? '✅' : ''}</td>
+                    <td class="px-3 py-2.5 font-bold text-blue-800 cursor-pointer" onclick="goToPlot(${plotIdx})">${displayLabel} ${p.isCompleted ? '✅' : ''}</td>
+                    <td class="px-2 py-2.5 text-gray-600 truncate max-w-[80px]" title="${secondColValue}">${secondColValue}</td>
                     <td class="px-2 py-2.5 text-gray-500">${p.bloc}</td>
                     <td class="px-2 py-2.5 text-gray-500">${p.mod}</td>
                     <td class="px-2 py-2.5 text-gray-400 font-bold">O${p.obs}</td>
                 `;
 
-                appState.selectedVars.forEach(vId => {
-                    const val = p.values[vId] !== undefined ? p.values[vId] : "-";
-                    rowHTML += `<td class="px-2 py-2.5 font-medium">${val}</td>`;
-                });
+                if (appState.saisieMode === "notation" || appState.saisieMode === "adventices") {
+                    appState.selectedVars.forEach(vId => {
+                        const val = p.values[vId] !== undefined ? p.values[vId] : "-";
+                        rowHTML += `<td class="px-2 py-2.5 font-medium">${val}</td>`;
+                        if (appState.saisieMode === "adventices") {
+                            const cleanName = vId.replace("cnt_adv_", "");
+                            const detailsArray = (appState.adventicesDetails && appState.adventicesDetails[cleanName]) || [];
+                            const stagesList = detailsArray.map(d => d.stage || "-").join("; ");
+                            const propsList = detailsArray.map(d => d.proportion ? `${d.proportion}%` : "-").join("; ");
+                            rowHTML += `
+                                <td class="px-2 py-2.5 text-gray-500 italic bg-emerald-50/5 truncate max-w-[100px]" title="${stagesList}">${stagesList || "-"}</td>
+                                <td class="px-2 py-2.5 text-gray-500 font-bold bg-emerald-50/5 truncate max-w-[80px]" title="${propsList}">${propsList || "-"}</td>
+                            `;
+                        }
+                    });
+                } else {
+                    const ipm = p.ipm || { total: 0, cerco: 0, oidium: 0, rouille: 0, ramu: 0 };
+                    rowHTML += `
+                        <td class="px-2 py-2.5 font-bold text-blue-850 bg-blue-50/20">${ipm.total || "0"}</td>
+                        <td class="px-2 py-2.5 font-bold text-purple-850 bg-purple-50/20">${ipm.cerco || "0"}</td>
+                        <td class="px-2 py-2.5 font-bold text-slate-850 bg-slate-50/20">${ipm.oidium || "0"}</td>
+                        <td class="px-2 py-2.5 font-bold text-amber-850 bg-amber-50/20">${ipm.rouille || "0"}</td>
+                        <td class="px-2 py-2.5 font-bold text-teal-850 bg-teal-50/20">${ipm.ramu || "0"}</td>
+                    `;
+                }
 
                 tr.innerHTML = rowHTML;
                 tbody.appendChild(tr);
@@ -1513,31 +2243,72 @@
             const activeConfig = getActiveVariablesConfig();
             let csvContent = "\uFEFF"; // BOM UTF-8
             
-            let headers = ["Essai", "Date", "Parcelle", "Bloc", "Modalite", "Observation"];
-            appState.selectedVars.forEach(vId => {
-                const conf = activeConfig.find(item => item.id === vId);
-                headers.push(conf ? conf.label : vId);
-            });
+            // Helper pour récupérer les conditions de traitement directement depuis l'état
+            const getConds = (p) => [
+                (p.date || appState.treatmentDate || ""),
+                (appState.treatmentTime || ""),
+                (appState.treatmentNebulosity || ""),
+                (appState.treatmentBeaufort || ""),
+                (appState.treatmentHygrometry || ""),
+                (appState.treatmentSoilMoisture || ""),
+                (appState.treatmentBeetStage || "")
+            ];
+            
+            // --- NOUVEAUX HEADERS AVEC CONDITIONS SYSTEMATIQUES ---
+            let headers = [];
+            let baseHeaders = ["Essai_Parcelle", "Variete", "Date", "Parcelle", "Bloc", "Modalite", "Observation"];
+            let conditionHeaders = ["Cond_Date_Traitement", "Cond_Heure_Traitement", "Cond_Nebulosite", "Cond_Vent_Beaufort", "Cond_Hygrometrie_Pct", "Cond_Humidite_Sol", "Cond_Stade_Betteraves"];
+            
+            if (appState.saisieMode === "adventices") {
+                headers = ["Essai_Comptage", "Date", "Bloc", "Cadre", ...conditionHeaders];
+                appState.selectedVars.forEach(vId => {
+                    const conf = activeConfig.find(item => item.id === vId);
+                    const weedLabel = conf ? conf.label : vId;
+                    headers.push(weedLabel);
+                    headers.push(`${weedLabel}_Stades`);
+                    headers.push(`${weedLabel}_Proportions_Pct`);
+                });
+            } else if (appState.saisieMode === "ipm") {
+                headers = [...baseHeaders, ...conditionHeaders, "IPM_Feuilles_Observees", "IPM_Cercosporiose", "IPM_Oidium", "IPM_Rouille", "IPM_Ramulariose"];
+            } else {
+                // Mode Notation
+                headers = [...baseHeaders, ...conditionHeaders];
+                appState.selectedVars.forEach(vId => {
+                    const conf = activeConfig.find(item => item.id === vId);
+                    headers.push(conf ? conf.label : vId);
+                });
+            }
+
             csvContent += headers.map(h => `"${h.replace(/"/g, '""')}"`).join(";") + "\n";
 
             appState.plots.forEach(p => {
-                let row = [
-                    appState.trialName,
-                    formatDateFR(p.date || appState.trialDate),
-                    p.plotNum,
-                    p.bloc,
-                    p.mod,
-                    p.obs
-                ];
-                appState.selectedVars.forEach(vId => {
-                    row.push(p.values[vId]);
-                });
+                let row = [];
+                
+                if (appState.saisieMode === "adventices") {
+                    row = [appState.trialNameAdv || appState.trialName, formatDateFR(p.date || appState.trialDate), p.bloc, p.mod, ...getConds(p)];
+                    appState.selectedVars.forEach(vId => {
+                        row.push(p.values[vId]);
+                        const cleanName = vId.replace("cnt_adv_", "");
+                        const detailsArray = (appState.adventicesDetails && appState.adventicesDetails[cleanName]) || [];
+                        row.push(detailsArray.map(d => d.stage || "").join("; "), detailsArray.map(d => d.proportion || "").join("; "));
+                    });
+                } else if (appState.saisieMode === "ipm") {
+                    row = [appState.trialNameIpm || appState.trialName, p.variety || appState.trialVariety, formatDateFR(p.date || appState.trialDate), p.plotNum, p.bloc, p.mod, p.obs, ...getConds(p)];
+                    const ipm = p.ipm || { total: 0, cerco: 0, oidium: 0, rouille: 0, ramu: 0 };
+                    row.push(ipm.total, ipm.cerco, ipm.oidium, ipm.rouille, ipm.ramu);
+                } else {
+                    // Mode Notation
+                    row = [appState.trialName, p.variety || appState.trialVariety, formatDateFR(p.date || appState.trialDate), p.plotNum, p.bloc, p.mod, p.obs, ...getConds(p)];
+                    appState.selectedVars.forEach(vId => {
+                        row.push(p.values[vId]);
+                    });
+                }
+
                 csvContent += row.map(val => `"${String(val).replace(/"/g, '""')}"`).join(";") + "\n";
             });
             return csvContent;
         }
 
-        // EXPORTER DIRECTEMENT LE FICHIER CSV EN LOCAL
         function exportToCSV() {
             if (appState.plots.length === 0) {
                 showToast("Aucune donnée à exporter.", true);
@@ -1548,13 +2319,18 @@
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
-            const cleanName = appState.trialName.toLowerCase().replace(/[^a-z0-9]/g, "_");
+            
+            let currentName = appState.trialName;
+            if (appState.saisieMode === "ipm") currentName = appState.trialNameIpm;
+            else if (appState.saisieMode === "adventices") currentName = appState.trialNameAdv;
+            
+            const cleanName = currentName.toLowerCase().replace(/[^a-z0-9]/g, "_");
             link.setAttribute("href", url);
             link.setAttribute("download", `notation_agri_${cleanName}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            showToast("CSV téléchargé !");
+            showToast("Extraction CSV téléchargée !");
         }
 
         function shareOrEmailCSV() {
@@ -1564,7 +2340,12 @@
             }
 
             const csvContent = generateCSVString();
-            const cleanName = appState.trialName.toLowerCase().replace(/[^a-z0-9]/g, "_");
+            
+            let currentName = appState.trialName;
+            if (appState.saisieMode === "ipm") currentName = appState.trialNameIpm;
+            else if (appState.saisieMode === "adventices") currentName = appState.trialNameAdv;
+
+            const cleanName = currentName.toLowerCase().replace(/[^a-z0-9]/g, "_");
             const filename = `notation_agri_${cleanName}.csv`;
 
             try {
@@ -1574,10 +2355,10 @@
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
                     navigator.share({
                         files: [file],
-                        title: `Extraction BetaSaisie - ${appState.trialName}`,
-                        text: `Bonjour, voici l'extraction CSV de mes notations de betteraves du ${formatDateFR(appState.trialDate)}.`
+                        title: `Saisie BetaSaisie - ${currentName}`,
+                        text: `Bonjour, voici le relevé de terrain BetaSaisie du ${formatDateFR(appState.trialDate)}.`
                     }).then(() => {
-                        showToast("Fichier partagé avec succès !");
+                        showToast("Fichier partagé !");
                     }).catch((err) => {
                         if (err.name !== 'AbortError') {
                             fallbackToMailto(csvContent);
@@ -1586,23 +2367,27 @@
                     return;
                 }
             } catch (e) {
-                console.log("Le partage natif n'est pas supporté, redirection vers email...");
+                console.log("Le partage système n'est pas supporté, redirection...");
             }
 
             fallbackToMailto(csvContent);
         }
 
         function fallbackToMailto(csvContent) {
-            const subject = encodeURIComponent(`Extraction BetaSaisie - ${appState.trialName}`);
-            let bodyText = `Bonjour,\n\nVoici les données de notation collectées avec l'application BetaSaisie pour l'essai "${appState.trialName}".\n\n`;
+            let currentName = appState.trialName;
+            if (appState.saisieMode === "ipm") currentName = appState.trialNameIpm;
+            else if (appState.saisieMode === "adventices") currentName = appState.trialNameAdv;
+
+            const subject = encodeURIComponent(`Notations Betteraves - ${currentName}`);
+            let bodyText = `Bonjour,\n\nVoici le récapitulatif des saisies de l'essai "${currentName}" (Variété : ${appState.trialVariety}) réalisées le ${formatDateFR(appState.trialDate)}.\n\n`;
             
             if (csvContent.length < 2000) {
                 bodyText += `--- DONNÉES CSV ---\n${csvContent}\n-------------------\n`;
             } else {
-                bodyText += `Les données de cet essai étant volumineuses, veuillez privilégier le téléchargement en cliquant sur le bouton "Exporter CSV" directement depuis l'application dans votre navigateur.\n`;
+                bodyText += `Les données de cet essai sont disponibles directement dans le fichier CSV téléchargeable via l'application.\n`;
             }
             
-            bodyText += `\nEnvoyé depuis l'application de terrain BetaSaisie.`;
+            bodyText += `\nEnvoyé depuis l'application BetaSaisie.`;
             const mailtoUrl = `mailto:?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
             
             window.location.href = mailtoUrl;
@@ -1618,55 +2403,180 @@
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
-                    if (!parsed.customAdventices) {
-                        parsed.customAdventices = [];
-                    }
                     if (!parsed.blockDirections) {
                         parsed.blockDirections = [];
                     }
-                    if (parsed.selectedVars) {
-                        parsed.selectedVars = parsed.selectedVars.filter(v => v !== "type_adventice");
+                    if (parsed.ipmTargetLeaves === undefined) {
+                        parsed.ipmTargetLeaves = 100;
+                    }
+                    if (parsed.saisieMode === undefined) {
+                        parsed.saisieMode = "notation";
+                    }
+                    if (parsed.currentView === undefined) {
+                        parsed.currentView = "config";
+                    }
+                    if (!parsed.trialVariety) {
+                        parsed.trialVariety = "Standard ITB";
+                    }
+                    if (!parsed.trialNameIpm) {
+                        parsed.trialNameIpm = "Saisie IPM Betteraves";
+                    }
+                    if (!parsed.trialNameAdv) {
+                        parsed.trialNameAdv = "Comptage Adventices Betteraves";
+                    }
+                    if (parsed.nbBlocksAdv === undefined) {
+                        parsed.nbBlocksAdv = 4;
+                    }
+                    if (parsed.nbCadres === undefined) {
+                        parsed.nbCadres = 5;
+                    }
+                    if (!parsed.customAdventicesAdv) {
+                        parsed.customAdventicesAdv = ["Ray-grass", "Chénopode", "Sanve"];
+                    }
+                    
+                    if (parsed.treatmentConditionsEnabled === undefined) parsed.treatmentConditionsEnabled = false;
+                    if (parsed.treatmentDate === undefined) parsed.treatmentDate = "";
+                    if (parsed.treatmentTime === undefined) parsed.treatmentTime = "";
+                    if (parsed.treatmentNebulosity === undefined) parsed.treatmentNebulosity = "";
+                    if (parsed.treatmentBeaufort === undefined) parsed.treatmentBeaufort = "";
+                    if (parsed.treatmentHygrometry === undefined) parsed.treatmentHygrometry = "";
+                    if (parsed.treatmentSoilMoisture === undefined) parsed.treatmentSoilMoisture = "";
+                    if (parsed.treatmentBeetStage === undefined) parsed.treatmentBeetStage = "";
+                    if (parsed.adventicesDetails === undefined) parsed.adventicesDetails = {};
+
+                    if (parsed.adventicesDetails) {
+                        Object.keys(parsed.adventicesDetails).forEach(key => {
+                            const val = parsed.adventicesDetails[key];
+                            if (val && !Array.isArray(val)) {
+                                parsed.adventicesDetails[key] = [{ stage: val.stage || "", proportion: val.proportion || "" }];
+                            }
+                        });
+                    }
+
+                    if (parsed.plots) {
+                        parsed.plots.forEach(p => {
+                            if (!p.variety) {
+                                p.variety = parsed.trialVariety;
+                            }
+                            if (!p.ipm) {
+                                p.ipm = { total: 0, cerco: 0, oidium: 0, rouille: 0, ramu: 0, history: [] };
+                            }
+                        });
                     }
                     appState = parsed;
+
+                    if (document.getElementById("trial-name")) document.getElementById("trial-name").value = appState.trialName || "Essai Betteraves 2026";
+                    if (document.getElementById("trial-name-ipm")) document.getElementById("trial-name-ipm").value = appState.trialNameIpm || "Saisie IPM Betteraves";
+                    if (document.getElementById("trial-name-adv")) document.getElementById("trial-name-adv").value = appState.trialNameAdv || "Comptage Adventices Betteraves";
+                    if (document.getElementById("trial-variety")) document.getElementById("trial-variety").value = appState.trialVariety || "Standard ITB";
+                    if (document.getElementById("nb-modalities")) document.getElementById("nb-modalities").value = appState.nbModalities || 18;
+                    if (document.getElementById("nb-blocks")) document.getElementById("nb-blocks").value = appState.nbBlocks || 4;
+                    if (document.getElementById("nb-blocks-adv")) document.getElementById("nb-blocks-adv").value = appState.nbBlocksAdv || 4;
+                    if (document.getElementById("nb-cadres-adv")) document.getElementById("nb-cadres-adv").value = appState.nbCadres || 5;
+                    if (document.getElementById("nb-obs")) document.getElementById("nb-obs").value = appState.nbObs || 1;
+                    if (document.getElementById("ipm-target")) document.getElementById("ipm-target").value = appState.ipmTargetLeaves || 100;
+                    
+                    const toggleCond = document.getElementById("toggle-treatment-conditions");
+                    if (toggleCond) {
+                        toggleCond.checked = appState.treatmentConditionsEnabled;
+                        toggleTreatmentConditionsUI(toggleCond.checked);
+                    }
+                    if (document.getElementById("adv-treatment-date")) document.getElementById("adv-treatment-date").value = appState.treatmentDate || "";
+                    if (document.getElementById("adv-treatment-time")) document.getElementById("adv-treatment-time").value = appState.treatmentTime || "";
+                    if (document.getElementById("adv-treatment-nebulosity")) document.getElementById("adv-treatment-nebulosity").value = appState.treatmentNebulosity || "";
+                    if (document.getElementById("adv-treatment-beaufort")) document.getElementById("adv-treatment-beaufort").value = appState.treatmentBeaufort || "";
+                    if (document.getElementById("adv-treatment-hygrometry")) document.getElementById("adv-treatment-hygrometry").value = appState.treatmentHygrometry || "";
+                    if (document.getElementById("adv-treatment-soil")) document.getElementById("adv-treatment-soil").value = appState.treatmentSoilMoisture || "";
+                    if (document.getElementById("adv-treatment-beet-stage")) document.getElementById("adv-treatment-beet-stage").value = appState.treatmentBeetStage || "";
+
                 } catch (e) {
                     console.error("Erreur de chargement des données locales", e);
                 }
             }
         }
 
+        // Réinitialisation propre préservant la session utilisateur actif
         function confirmResetAll() {
             showCustomConfirm(
-                "Effacer les données ?", 
-                "⚠️ Attention : Cette action va supprimer définitivement l'essai en cours, les adventices saisies et toutes les notations déjà enregistrées.",
+                "Effacer l'essai ?", 
+                "⚠️ Attention : Cette action va réinitialiser l'application et supprimer toutes vos notations enregistrées sur cet appareil.",
                 function() {
+                    const activeUser = appState.currentUser; // Conservation de l'agent connecté
                     localStorage.removeItem("agro_saisie_state");
+                    
                     appState.plots = [];
                     appState.customAdventices = ["Chénopode", "Matricaire"];
+                    appState.customAdventicesAdv = ["Ray-grass", "Chénopode", "Sanve"];
                     appState.selectedVars = [];
                     appState.trialDate = new Date().toISOString().split('T')[0];
+                    appState.trialVariety = "Standard ITB";
                     appState.currentPlotIndex = 0;
                     appState.activeObs = 1;
                     appState.blockDirections = [];
+                    appState.saisieMode = "notation";
+                    appState.ipmTargetLeaves = 100;
+                    appState.nbBlocksAdv = 4;
+                    appState.nbCadres = 5;
+                    appState.currentView = "config";
+                    
+                    appState.treatmentConditionsEnabled = false;
+                    appState.treatmentDate = "";
+                    appState.treatmentTime = "";
+                    appState.treatmentNebulosity = "";
+                    appState.treatmentBeaufort = "";
+                    appState.treatmentHygrometry = "";
+                    appState.treatmentSoilMoisture = "";
+                    appState.treatmentBeetStage = "";
+                    appState.adventicesDetails = {};
+                    
+                    // Restauration de l'utilisateur actif
+                    appState.currentUser = activeUser;
                     
                     document.getElementById("nb-modalities").value = 18;
                     document.getElementById("nb-blocks").value = 4;
+                    if (document.getElementById("nb-blocks-adv")) document.getElementById("nb-blocks-adv").value = 4;
+                    if (document.getElementById("nb-cadres-adv")) document.getElementById("nb-cadres-adv").value = 5;
                     document.getElementById("nb-obs").value = 1;
+                    document.getElementById("ipm-target").value = 100;
+                    document.getElementById("trial-variety").value = "Standard ITB";
+                    document.getElementById("trial-date").value = appState.trialDate;
+                    
+                    const toggleCond = document.getElementById("toggle-treatment-conditions");
+                    if (toggleCond) {
+                        toggleCond.checked = false;
+                        toggleTreatmentConditionsUI(false);
+                    }
+                    if (document.getElementById("adv-treatment-date")) document.getElementById("adv-treatment-date").value = "";
+                    if (document.getElementById("adv-treatment-time")) document.getElementById("adv-treatment-time").value = "";
+                    if (document.getElementById("adv-treatment-nebulosity")) document.getElementById("adv-treatment-nebulosity").value = "";
+                    if (document.getElementById("adv-treatment-beaufort")) document.getElementById("adv-treatment-beaufort").value = "";
+                    if (document.getElementById("adv-treatment-hygrometry")) document.getElementById("adv-treatment-hygrometry").value = "";
+                    if (document.getElementById("adv-treatment-soil")) document.getElementById("adv-treatment-soil").value = "";
+                    if (document.getElementById("adv-treatment-beet-stage")) document.getElementById("adv-treatment-beet-stage").value = "";
+
                     appState.nbModalities = 18;
                     appState.nbBlocks = 4;
                     appState.nbObs = 1;
                     
                     if (appState.currentUser) {
                         appState.trialName = `Essai Betteraves 2026 - ${appState.currentUser}`;
+                        appState.trialNameIpm = `Saisie IPM Betteraves - ${appState.currentUser}`;
+                        appState.trialNameAdv = `Comptage Adventices Betteraves - ${appState.currentUser}`;
                     } else {
                         appState.trialName = "Essai Betteraves 2026";
+                        appState.trialNameIpm = "Saisie IPM Betteraves";
+                        appState.trialNameAdv = "Comptage Adventices Betteraves";
                     }
                     
                     initVariablesList();
                     renderAdventicesBadges();
+                    renderAdventicesBadgesAdv();
+                    renderAdventicesDetailsInputs();
                     updateBlockDirectionsUI();
+                    setSaisieMode("notation");
                     showConfig();
                     updateUI();
-                    showToast("Application réinitialisée.");
+                    showToast("Application réinitialisée (session conservée).");
                 }
             );
         }
@@ -1717,6 +2627,28 @@
                 toast.classList.add("opacity-0", "pointer-events-none");
             }, 2500);
         }
+
+        window.onload = function() {
+            setupMobilePwaIcon();
+            loadStateFromLocalStorage();
+            checkAuthOnLoad();
+            
+            if (!appState.trialDate) {
+                appState.trialDate = new Date().toISOString().split('T')[0];
+                document.getElementById("trial-date").value = appState.trialDate;
+            }
+
+            document.getElementById("nb-blocks").addEventListener("input", updateBlockDirectionsUI);
+            document.getElementById("nb-modalities").addEventListener("input", updateBlockDirectionsUI);
+
+            initVariablesList();
+            renderAdventicesBadges();
+            renderAdventicesBadgesAdv();
+            renderAdventicesDetailsInputs();
+            updateBlockDirectionsUI();
+            setSaisieMode(appState.saisieMode || "notation");
+            updateUI();
+        };
     </script>
 </body>
 </html>
