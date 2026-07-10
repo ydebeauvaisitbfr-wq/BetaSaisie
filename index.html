@@ -115,6 +115,7 @@
 
         <div class="text-center text-[10px] text-gray-400 mt-4">
             <p class="font-semibold text-gray-500">© YohanDebeauvais2026</p>
+            <p class="font-semibold text-gray-500 mt-0.5">V1.5 du 10/07/2026</p>
         </div>
     </div>
 
@@ -472,12 +473,37 @@
                         <label class="block text-[9px] font-bold uppercase tracking-wider text-gray-500 mb-1">Stade des Betteraves</label>
                         <select id="adv-treatment-beet-stage" onchange="updateTreatmentField('treatmentBeetStage', this.value)" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-2 py-1.5 text-xs text-gray-900 focus:ring-1 focus:ring-blue-500">
                             <option value="">Sélectionner...</option>
-                            <option value="Levée / Cotylédons">Levée / Cotylédons</option>
-                            <option value="2 feuilles vraies">2 feuilles vraies</option>
-                            <option value="4 feuilles vraies">4 feuilles vraies</option>
-                            <option value="6 feuilles vraies">6 feuilles vraies</option>
-                            <option value="8 feuilles vraies et +">8 feuilles vraies et +</option>
-                            <option value="Couverture du sol">Couverture du sol</option>
+                            <option value="Semis">Semis</option>
+                            <option value="Germ">Germ</option>
+                            <option value="Levée">Levée</option>
+                            <option value="Coty_ACC">Coty_ACC</option>
+                            <option value="Coty_SEP">Coty_SEP</option>
+                            <option value="Coty_ETA">Coty_ETA</option>
+                            <option value="2FN">2FN</option>
+                            <option value="2FV">2FV</option>
+                            <option value="4FN">4FN</option>
+                            <option value="4FV">4FV</option>
+                            <option value="6FN">6FN</option>
+                            <option value="6FV">6FV</option>
+                            <option value="8FN">8FN</option>
+                            <option value="8FV">8FV</option>
+                            <option value="10FN">10FN</option>
+                            <option value="10FV">10FV</option>
+                            <option value="12FN">12FN</option>
+                            <option value="12FV">12FV</option>
+                            <option value="14FN">14FN</option>
+                            <option value="14FV">14FV</option>
+                            <option value="16FN">16FN</option>
+                            <option value="16FV">16FV</option>
+                            <option value="30% COUV">30% COUV</option>
+                            <option value="40% COUV">40% COUV</option>
+                            <option value="50% COUV">50% COUV</option>
+                            <option value="60% COUV">60% COUV</option>
+                            <option value="70% COUV">70% COUV</option>
+                            <option value="80% COUV">80% COUV</option>
+                            <option value="90% COUV">90% COUV</option>
+                            <option value="100% COUV">100% COUV</option>
+                            <option value="Récolte">Récolte</option>
                         </select>
                     </div>
                 </div>
@@ -1094,7 +1120,8 @@
                         appState.plots.push({
                             id: `B${b}-C${c}`, plotNum: (b * 100) + c, bloc: b, mod: c, obs: 1,
                             values: values, adventicesDetails: {}, ipm: null, isCompleted: false,
-                            date: appState.trialDate || new Date().toISOString().split('T')[0], variety: "N/A"
+                            date: appState.trialDate || new Date().toISOString().split('T')[0], variety: "N/A",
+                            observation: "", stade_betterave: ""
                         });
                     }
                 }
@@ -1116,7 +1143,8 @@
                             id: `B${b}-V${vIdx}`, plotNum: (b * 100) + (vIdx + 1), bloc: b, mod: (vIdx + 1), obs: 1,
                             values: {}, adventicesDetails: {},
                             ipm: { total: 0, cerco: 0, oidium: 0, rouille: 0, ramu: 0, history: [] },
-                            isCompleted: false, date: appState.trialDate || new Date().toISOString().split('T')[0], variety: variete
+                            isCompleted: false, date: appState.trialDate || new Date().toISOString().split('T')[0], variety: variete,
+                            observation: "", stade_betterave: ""
                         });
                     });
                 }
@@ -1147,7 +1175,8 @@
                             appState.plots.push({
                                 id: `P${(b * 100) + m}-O${o}`, plotNum: (b * 100) + m, bloc: b, mod: m, obs: o,
                                 values: values, adventicesDetails: {}, ipm: null, isCompleted: false,
-                                date: appState.trialDate || new Date().toISOString().split('T')[0], variety: "Standard"
+                                date: appState.trialDate || new Date().toISOString().split('T')[0], variety: "Standard",
+                                observation: "", stade_betterave: ""
                             });
                         }
                     }
@@ -1292,6 +1321,83 @@
             container.innerHTML = "";
             if (appState.saisieMode === "ipm") renderIpmDashboard(plot, container);
             else renderClassicInputs(plot, container);
+            
+            renderPlotMetadata(plot, container);
+        }
+
+        function renderPlotMetadata(plot, container) {
+            const metaCard = document.createElement("div");
+            metaCard.className = "bg-white p-3.5 rounded-xl border border-gray-200 shadow-sm mt-4 space-y-3";
+            
+            const stageOptions = `<option value="">Sélectionner...</option>
+                <option value="Semis" ${plot.stade_betterave === 'Semis' ? 'selected' : ''}>Semis</option>
+                <option value="Germ" ${plot.stade_betterave === 'Germ' ? 'selected' : ''}>Germ</option>
+                <option value="Levée" ${plot.stade_betterave === 'Levée' ? 'selected' : ''}>Levée</option>
+                <option value="Coty_ACC" ${plot.stade_betterave === 'Coty_ACC' ? 'selected' : ''}>Coty_ACC</option>
+                <option value="Coty_SEP" ${plot.stade_betterave === 'Coty_SEP' ? 'selected' : ''}>Coty_SEP</option>
+                <option value="Coty_ETA" ${plot.stade_betterave === 'Coty_ETA' ? 'selected' : ''}>Coty_ETA</option>
+                <option value="2FN" ${plot.stade_betterave === '2FN' ? 'selected' : ''}>2FN</option>
+                <option value="2FV" ${plot.stade_betterave === '2FV' ? 'selected' : ''}>2FV</option>
+                <option value="4FN" ${plot.stade_betterave === '4FN' ? 'selected' : ''}>4FN</option>
+                <option value="4FV" ${plot.stade_betterave === '4FV' ? 'selected' : ''}>4FV</option>
+                <option value="6FN" ${plot.stade_betterave === '6FN' ? 'selected' : ''}>6FN</option>
+                <option value="6FV" ${plot.stade_betterave === '6FV' ? 'selected' : ''}>6FV</option>
+                <option value="8FN" ${plot.stade_betterave === '8FN' ? 'selected' : ''}>8FN</option>
+                <option value="8FV" ${plot.stade_betterave === '8FV' ? 'selected' : ''}>8FV</option>
+                <option value="10FN" ${plot.stade_betterave === '10FN' ? 'selected' : ''}>10FN</option>
+                <option value="10FV" ${plot.stade_betterave === '10FV' ? 'selected' : ''}>10FV</option>
+                <option value="12FN" ${plot.stade_betterave === '12FN' ? 'selected' : ''}>12FN</option>
+                <option value="12FV" ${plot.stade_betterave === '12FV' ? 'selected' : ''}>12FV</option>
+                <option value="14FN" ${plot.stade_betterave === '14FN' ? 'selected' : ''}>14FN</option>
+                <option value="14FV" ${plot.stade_betterave === '14FV' ? 'selected' : ''}>14FV</option>
+                <option value="16FN" ${plot.stade_betterave === '16FN' ? 'selected' : ''}>16FN</option>
+                <option value="16FV" ${plot.stade_betterave === '16FV' ? 'selected' : ''}>16FV</option>
+                <option value="30% COUV" ${plot.stade_betterave === '30% COUV' ? 'selected' : ''}>30% COUV</option>
+                <option value="40% COUV" ${plot.stade_betterave === '40% COUV' ? 'selected' : ''}>40% COUV</option>
+                <option value="50% COUV" ${plot.stade_betterave === '50% COUV' ? 'selected' : ''}>50% COUV</option>
+                <option value="60% COUV" ${plot.stade_betterave === '60% COUV' ? 'selected' : ''}>60% COUV</option>
+                <option value="70% COUV" ${plot.stade_betterave === '70% COUV' ? 'selected' : ''}>70% COUV</option>
+                <option value="80% COUV" ${plot.stade_betterave === '80% COUV' ? 'selected' : ''}>80% COUV</option>
+                <option value="90% COUV" ${plot.stade_betterave === '90% COUV' ? 'selected' : ''}>90% COUV</option>
+                <option value="100% COUV" ${plot.stade_betterave === '100% COUV' ? 'selected' : ''}>100% COUV</option>
+                <option value="Récolte" ${plot.stade_betterave === 'Récolte' ? 'selected' : ''}>Récolte</option>`;
+
+            let html = `<div class="flex items-center space-x-2 border-b border-gray-100 pb-2 mb-2">
+                <i class="fa-solid fa-clipboard-list text-gray-400"></i>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-600">Détails de la saisie</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">Date d'observation</label>
+                    <input type="date" value="${plot.date}" onchange="updatePlotField('date', this.value)" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-2 py-1.5 text-xs text-gray-900 focus:ring-1 focus:ring-agri-500 font-bold">
+                </div>`;
+            
+            if (appState.saisieMode === "notation") {
+                html += `<div>
+                    <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">Stade Betterave</label>
+                    <select onchange="updatePlotField('stade_betterave', this.value)" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-2 py-1.5 text-xs text-gray-900 focus:ring-1 focus:ring-agri-500">
+                        ${stageOptions}
+                    </select>
+                </div>`;
+            }
+            
+            html += `</div>
+            <div>
+                <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">Observation / Remarque</label>
+                <textarea onchange="updatePlotField('observation', this.value)" placeholder="Note spécifique pour cette parcelle..." rows="2" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-2 py-1.5 text-xs text-gray-900 focus:ring-1 focus:ring-agri-500">${plot.observation || ""}</textarea>
+            </div>`;
+            
+            metaCard.innerHTML = html;
+            container.appendChild(metaCard);
+        }
+
+        function updatePlotField(field, value) {
+            const currentPlot = appState.plots[appState.currentPlotIndex];
+            if (currentPlot) {
+                currentPlot[field] = value;
+                currentPlot.isCompleted = true;
+                saveStateToLocalStorage();
+            }
         }
 
         // --- IPM DASHBOARD ---
@@ -1398,7 +1504,12 @@
                     innerHtmlStr = `
                         <div class="space-y-2">
                             <div class="flex items-center space-x-2">
-                                <input type="number" id="input-${vId}" min="${conf.min}" max="${conf.max}" value="${value}" oninput="updateValueFromInput('${vId}')" class="w-24 h-9 text-center text-sm font-bold border border-gray-300 rounded-lg">
+                                <div class="relative w-24">
+                                    <input type="number" id="input-${vId}" min="${conf.min}" max="${conf.max}" value="${value}" oninput="updateValueFromInput('${vId}')" class="w-full h-9 text-center text-sm font-bold border border-gray-300 rounded-lg pr-7 focus:ring-1 focus:ring-agri-500">
+                                    <button type="button" onclick="openKeypad('${vId}')" class="absolute inset-y-0 right-0 pr-2 flex items-center text-agri-600 active:scale-110" title="Saisie tactile assistée">
+                                        <i class="fa-solid fa-calculator text-sm"></i>
+                                    </button>
+                                </div>
                                 <span class="text-xs text-gray-500 font-bold">${conf.max===100 ? '%' : '/ 10'}</span>
                             </div>
                             <div class="flex gap-1 overflow-x-auto pb-1 scrollbar-none">
@@ -1478,6 +1589,8 @@
                 else if (appState.saisieMode === "adventices") { appState.selectedVars.forEach(vId => p.values[vId] = 0); p.adventicesDetails = {}; }
                 else appState.selectedVars.forEach(vId => { const conf = getActiveVariablesConfig().find(item => item.id === vId); p.values[vId] = conf ? conf.default : ""; });
                 p.isCompleted = false;
+                p.observation = "";
+                p.stade_betterave = "";
                 saveStateToLocalStorage();
                 updateUI();
                 showToast("Parcelle réinitialisée.");
@@ -1606,8 +1719,9 @@
                 tr.className = p.isCompleted ? "bg-green-50/40" : "hover:bg-gray-50";
                 const displayLabel = appState.saisieMode === "adventices" ? `B${p.bloc}-C${p.mod}` : appState.saisieMode === "ipm" ? `B${p.bloc}-${p.variety}` : p.plotNum;
                 const secondCol = appState.saisieMode === "adventices" ? appState.trialNameAdv : p.variety;
+                const obsBadge = p.observation ? ' <i class="fa-solid fa-comment-dots text-blue-500 text-[10px]" title="Observation présente"></i>' : '';
 
-                let rowHtml = `<td class="px-3 py-2 text-blue-800 cursor-pointer" onclick="appState.currentPlotIndex=${plotIdx};updateUI();window.scrollTo({top:150})">${displayLabel} ${p.isCompleted?'✅':''}</td>
+                let rowHtml = `<td class="px-3 py-2 text-blue-800 cursor-pointer" onclick="appState.currentPlotIndex=${plotIdx};updateUI();window.scrollTo({top:150})">${displayLabel} ${p.isCompleted?'✅':''}${obsBadge}</td>
                                <td class="px-2 py-2 text-gray-600 truncate max-w-[80px]" title="${secondCol}">${secondCol}</td>
                                <td class="px-2 py-2 text-gray-500">${p.bloc}</td>
                                <td class="px-2 py-2 text-gray-500">${p.mod}</td>
@@ -1644,16 +1758,16 @@
             const activeConfig = getActiveVariablesConfig();
 
             if (appState.saisieMode === "adventices") {
-                headers = ["Essai", "Date", "Bloc", "Cadre", "Cond_Date", "Cond_Heure", "Cond_Nebulo", "Cond_Vent", "Cond_Hygro", "Cond_Sol", "Cond_Stade_Betteraves"];
+                headers = ["Essai", "Date", "Observation", "Bloc", "Cadre", "Cond_Date", "Cond_Heure", "Cond_Nebulo", "Cond_Vent", "Cond_Hygro", "Cond_Sol", "Cond_Stade_Betteraves"];
                 appState.selectedVars.forEach(vId => {
                     const c = activeConfig.find(item => item.id === vId);
                     const l = c ? c.label : vId;
                     headers.push(l, `${l}_Stades`, `${l}_Props_Pct`);
                 });
             } else if (appState.saisieMode === "ipm") {
-                headers = ["Essai", "Variete", "Date", "Parcelle", "Bloc", "Modalite", "Cond_Date", "Cond_Heure", "Cond_Nebulo", "Cond_Vent", "Cond_Hygro", "Cond_Sol", "Cond_Stade_Betteraves", "IPM_Total", "IPM_Cerco", "IPM_Oidium", "IPM_Rouille", "IPM_Ramu"];
+                headers = ["Essai", "Variete", "Date", "Observation", "Parcelle", "Bloc", "Modalite", "Cond_Date", "Cond_Heure", "Cond_Nebulo", "Cond_Vent", "Cond_Hygro", "Cond_Sol", "Cond_Stade_Betteraves", "IPM_Total", "IPM_Cerco", "IPM_Oidium", "IPM_Rouille", "IPM_Ramu"];
             } else {
-                headers = ["Essai", "Variete", "Date", "Parcelle", "Bloc", "Modalite", "Obs", "Cond_Date", "Cond_Heure", "Cond_Nebulo", "Cond_Vent", "Cond_Hygro", "Cond_Sol", "Cond_Stade_Betteraves"];
+                headers = ["Essai", "Variete", "Date", "Observation", "Stade_Parcelle", "Parcelle", "Bloc", "Modalite", "Obs", "Cond_Date", "Cond_Heure", "Cond_Nebulo", "Cond_Vent", "Cond_Hygro", "Cond_Sol", "Cond_Stade_Betteraves"];
                 appState.selectedVars.forEach(vId => { const c = activeConfig.find(item => item.id === vId); headers.push(c ? c.label : vId); });
             }
             csv += headers.map(h => `"${h}"`).join(";") + "\n";
@@ -1662,16 +1776,16 @@
                 let row = [];
                 const conds = getConds();
                 if (appState.saisieMode === "adventices") {
-                    row = [appState.trialNameAdv, p.date, p.bloc, p.mod, ...conds];
+                    row = [appState.trialNameAdv, p.date || appState.trialDate, p.observation || "", p.bloc, p.mod, ...conds];
                     appState.selectedVars.forEach(vId => {
                         const d = (p.adventicesDetails && p.adventicesDetails[vId.replace("cnt_adv_", "")]) || [];
                         row.push(p.values[vId], d.map(x=>x.stage).join('; '), d.map(x=>x.proportion).join('; '));
                     });
                 } else if (appState.saisieMode === "ipm") {
                     const i = p.ipm || { total: 0, cerco: 0, oidium: 0, rouille: 0, ramu: 0 };
-                    row = [appState.trialNameIpm, p.variety, p.date, p.plotNum, p.bloc, p.mod, ...conds, i.total, i.cerco, i.oidium, i.rouille, i.ramu];
+                    row = [appState.trialNameIpm, p.variety, p.date || appState.trialDate, p.observation || "", p.plotNum, p.bloc, p.mod, ...conds, i.total, i.cerco, i.oidium, i.rouille, i.ramu];
                 } else {
-                    row = [appState.trialName, p.variety, p.date, p.plotNum, p.bloc, p.mod, p.obs, ...conds];
+                    row = [appState.trialName, p.variety, p.date || appState.trialDate, p.observation || "", p.stade_betterave || "", p.plotNum, p.bloc, p.mod, p.obs, ...conds];
                     appState.selectedVars.forEach(vId => row.push(p.values[vId]));
                 }
                 csv += row.map(val => `"${String(val).replace(/"/g, '""')}"`).join(";") + "\n";
@@ -1796,6 +1910,13 @@
                     document.getElementById("ipm-varieties-names").value = appState.ipmVarietiesString;
                     document.getElementById("toggle-treatment-conditions").checked = appState.treatmentConditionsEnabled;
                     toggleTreatmentConditionsUI(appState.treatmentConditionsEnabled);
+                    
+                    if (appState.plots) {
+                        appState.plots.forEach(p => {
+                            if (p.observation === undefined) p.observation = "";
+                            if (p.stade_betterave === undefined) p.stade_betterave = "";
+                        });
+                    }
                 } catch(e){}
             }
         }
