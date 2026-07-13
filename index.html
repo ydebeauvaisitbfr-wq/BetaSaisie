@@ -379,6 +379,9 @@
                 </div>
             </div>
 
+            <!-- NOUVEL EMPLACEMENT : DÉTAILS DE SAISIE AU-DESSUS DE PARCELLE ACTIVE -->
+            <div id="plot-metadata-container" class="mb-3"></div>
+
             <div class="flex items-center justify-between bg-gray-50 rounded-xl p-2 border border-gray-200 mb-3 select-none">
                 <button onclick="navigatePlotGroup(-1)" class="w-12 h-12 bg-white active:bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow flex items-center justify-center">
                     <i class="fa-solid fa-chevron-left text-lg"></i>
@@ -469,16 +472,16 @@
                         </div>
                     </div>
 
-                    <div>
-                        <label class="block text-[9px] font-bold uppercase tracking-wider text-gray-500 mb-1">Stade des Betteraves</label>
-                        <select id="adv-treatment-beet-stage" onchange="updateTreatmentField('treatmentBeetStage', this.value)" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-2 py-1.5 text-xs text-gray-900 focus:ring-1 focus:ring-blue-500">
-                            <option value="">Sélectionner...</option>
-                            <option value="Semis">Semis</option>
-                            <option value="Germ">Germ</option>
-                            <option value="Levée">Levée</option>
-                            <option value="Coty_ACC">Coty_ACC</option>
-                            <option value="Coty_SEP">Coty_SEP</option>
-                            <option value="Coty_ETA">Coty_ETA</option>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[9px] font-bold uppercase tracking-wider text-gray-500 mb-1">Température (°C)</label>
+                            <input type="number" id="adv-treatment-temperature" step="0.1" placeholder="Ex: 15.5" onchange="updateTreatmentField('treatmentTemperature', this.value)" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-2 py-1.5 text-xs text-gray-900 focus:ring-1 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-[9px] font-bold uppercase tracking-wider text-gray-500 mb-1">Stade des Betteraves</label>
+                            <select id="adv-treatment-beet-stage" onchange="updateTreatmentField('treatmentBeetStage', this.value)" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-2 py-1.5 text-xs text-gray-900 focus:ring-1 focus:ring-blue-500">
+                                <option value="">Sélectionner...</option>
+                                <option value="Semis">Semis</option>
                             <option value="2FN">2FN</option>
                             <option value="2FV">2FV</option>
                             <option value="4FN">4FN</option>
@@ -508,11 +511,12 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- CHAMPS DYNAMIQUES -->
-            <div id="dynamic-inputs" class="space-y-4"></div>
+        <!-- CHAMPS DYNAMIQUES -->
+        <div id="dynamic-inputs" class="space-y-4"></div>
 
-            <div class="mt-6 pt-4 border-t border-gray-100 flex gap-2 select-none">
+        <div class="mt-6 pt-4 border-t border-gray-100 flex gap-2 select-none">
                 <button onclick="resetCurrentPlot()" class="bg-red-50 text-red-600 px-4 py-4 rounded-xl font-bold flex items-center justify-center border border-red-200 active:scale-95 transition" title="Remettre à zéro cette parcelle">
                     <i class="fa-solid fa-rotate-left"></i>
                 </button>
@@ -854,6 +858,7 @@
             treatmentBeaufort: "",
             treatmentHygrometry: "",
             treatmentSoilMoisture: "",
+            treatmentTemperature: "",
             treatmentBeetStage: ""
         };
 
@@ -1319,15 +1324,21 @@
 
             const container = document.getElementById("dynamic-inputs");
             container.innerHTML = "";
+            
+            // 1. On affiche d'abord les compteurs et saisies (IPM ou Classique/Adventices)
             if (appState.saisieMode === "ipm") renderIpmDashboard(plot, container);
             else renderClassicInputs(plot, container);
-            
-            renderPlotMetadata(plot, container);
+
+            // 2. On met à jour l'encart "Détails de la saisie" (Date, Stade, Obs) placé plus haut
+            renderPlotMetadata(plot);
         }
 
-        function renderPlotMetadata(plot, container) {
-            const metaCard = document.createElement("div");
-            metaCard.className = "bg-white p-3.5 rounded-xl border border-gray-200 shadow-sm mt-4 space-y-3";
+        function renderPlotMetadata(plot) {
+            const container = document.getElementById("plot-metadata-container");
+            if (!container) return;
+            
+            const today = new Date().toISOString().split('T')[0];
+            const plotDate = plot.date || today;
             
             const stageOptions = `<option value="">Sélectionner...</option>
                 <option value="Semis" ${plot.stade_betterave === 'Semis' ? 'selected' : ''}>Semis</option>
@@ -1369,7 +1380,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
                 <div>
                     <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">Date d'observation</label>
-                    <input type="date" value="${plot.date}" onchange="updatePlotField('date', this.value)" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-2 py-1.5 text-xs text-gray-900 focus:ring-1 focus:ring-agri-500 font-bold">
+                    <input type="date" value="${plotDate}" onchange="updatePlotField('date', this.value)" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-2 py-1.5 text-xs text-gray-900 focus:ring-1 focus:ring-agri-500 font-bold">
                 </div>`;
             
             if (appState.saisieMode === "notation") {
@@ -1387,8 +1398,7 @@
                 <textarea onchange="updatePlotField('observation', this.value)" placeholder="Note spécifique pour cette parcelle..." rows="2" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-2 py-1.5 text-xs text-gray-900 focus:ring-1 focus:ring-agri-500">${plot.observation || ""}</textarea>
             </div>`;
             
-            metaCard.innerHTML = html;
-            container.appendChild(metaCard);
+            container.innerHTML = `<div class="bg-white p-3.5 rounded-xl border border-gray-200 shadow-sm space-y-3">${html}</div>`;
         }
 
         function updatePlotField(field, value) {
@@ -1748,8 +1758,17 @@
         }
 
         function getConds() {
-            if (!appState.treatmentConditionsEnabled) return ["", "", "", "", "", "", ""];
-            return [appState.treatmentDate||"", appState.treatmentTime||"", appState.treatmentNebulosity||"", appState.treatmentBeaufort||"", appState.treatmentHygrometry||"", appState.treatmentSoilMoisture||"", appState.treatmentBeetStage||""];
+            if (!appState.treatmentConditionsEnabled) return ["", "", "", "", "", "", "", ""];
+            return [
+                appState.treatmentDate || "", 
+                appState.treatmentTime || "", 
+                appState.treatmentNebulosity || "", 
+                appState.treatmentBeaufort || "", 
+                appState.treatmentHygrometry || "", 
+                appState.treatmentSoilMoisture || "",
+                appState.treatmentTemperature || "",
+                appState.treatmentBeetStage || ""
+            ];
         }
 
         function generateCSVString() {
@@ -1758,16 +1777,16 @@
             const activeConfig = getActiveVariablesConfig();
 
             if (appState.saisieMode === "adventices") {
-                headers = ["Essai", "Date", "Observation", "Bloc", "Cadre", "Cond_Date", "Cond_Heure", "Cond_Nebulo", "Cond_Vent", "Cond_Hygro", "Cond_Sol", "Cond_Stade_Betteraves"];
+                headers = ["Essai", "Date", "Observation", "Bloc", "Cadre", "Cond_Date", "Cond_Heure", "Cond_Nebulo", "Cond_Vent", "Cond_Hygro", "Cond_Sol", "Cond_Temp", "Cond_Stade_Betteraves"];
                 appState.selectedVars.forEach(vId => {
                     const c = activeConfig.find(item => item.id === vId);
                     const l = c ? c.label : vId;
                     headers.push(l, `${l}_Stades`, `${l}_Props_Pct`);
                 });
             } else if (appState.saisieMode === "ipm") {
-                headers = ["Essai", "Variete", "Date", "Observation", "Parcelle", "Bloc", "Modalite", "Cond_Date", "Cond_Heure", "Cond_Nebulo", "Cond_Vent", "Cond_Hygro", "Cond_Sol", "Cond_Stade_Betteraves", "IPM_Total", "IPM_Cerco", "IPM_Oidium", "IPM_Rouille", "IPM_Ramu"];
+                headers = ["Essai", "Variete", "Date", "Observation", "Parcelle", "Bloc", "Modalite", "Cond_Date", "Cond_Heure", "Cond_Nebulo", "Cond_Vent", "Cond_Hygro", "Cond_Sol", "Cond_Temp", "Cond_Stade_Betteraves", "IPM_Total", "IPM_Cerco", "IPM_Oidium", "IPM_Rouille", "IPM_Ramu"];
             } else {
-                headers = ["Essai", "Variete", "Date", "Observation", "Stade_Parcelle", "Parcelle", "Bloc", "Modalite", "Obs", "Cond_Date", "Cond_Heure", "Cond_Nebulo", "Cond_Vent", "Cond_Hygro", "Cond_Sol", "Cond_Stade_Betteraves"];
+                headers = ["Essai", "Variete", "Date", "Observation", "Stade_Parcelle", "Parcelle", "Bloc", "Modalite", "Obs", "Cond_Date", "Cond_Heure", "Cond_Nebulo", "Cond_Vent", "Cond_Hygro", "Cond_Sol", "Cond_Temp", "Cond_Stade_Betteraves"];
                 appState.selectedVars.forEach(vId => { const c = activeConfig.find(item => item.id === vId); headers.push(c ? c.label : vId); });
             }
             csv += headers.map(h => `"${h}"`).join(";") + "\n";
@@ -1884,7 +1903,7 @@
                     trialDate: new Date().toISOString().split('T')[0], nbModalities: 18, nbBlocks: 4, nbObs: 1, nbBlocksIpm: 3, ipmTargetLeaves: 100, ipmVarietiesString: "Variété 1, Variété 2, Variété 3", nbBlocksAdv: 4, nbCadres: 5,
                     customAdventices: ["Chénopode", "Matricaire"], customAdventicesAdv: ["Ray-grass", "Chénopode", "Sanve"],
                     selectedVars: [], plots: [], currentPlotIndex: 0, activeObs: 1, currentUser: u, blockDirections: [], saisieMode: "notation", currentView: "config",
-                    treatmentConditionsEnabled: false, treatmentDate: "", treatmentTime: "", treatmentNebulosity: "", treatmentBeaufort: "", treatmentHygrometry: "", treatmentSoilMoisture: "", treatmentBeetStage: ""
+                    treatmentConditionsEnabled: false, treatmentDate: "", treatmentTime: "", treatmentNebulosity: "", treatmentBeaufort: "", treatmentHygrometry: "", treatmentSoilMoisture: "", treatmentTemperature: "", treatmentBeetStage: ""
                 };
                 if(u) { appState.trialName += ` - ${u}`; appState.trialNameIpm += ` - ${u}`; appState.trialNameAdv += ` - ${u}`; }
                 document.querySelectorAll('input').forEach(i => { if(appState[i.id.replace(/-/g,'')]) i.value = appState[i.id.replace(/-/g,'')]});
