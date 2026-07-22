@@ -810,13 +810,13 @@
             { id: "sel_blanchiment", label: "Sélectivité blanchiment (0 à 10)", category: "Efficacité", type: "range", min: 0, max: 10, default: -99 },
             { id: "efficacite", label: "Efficacité Globale (0 à 10)", category: "Efficacité", type: "range", min: 0, max: 10, default: -99 },
             
-            { id: "grav_cerco", label: "Gravité Cercosporiose (0-10)", category: "Maladies", type: "range", min: 0, max: 10, default: -99 },
-            { id: "grav_oidium", label: "Gravité Oïdium (0-10)", category: "Maladies", type: "range", min: 0, max: 10, default: -99 },
-            { id: "grav_rouille", label: "Gravité Rouille (0-10)", category: "Maladies", type: "range", min: 0, max: 10, default: -99 },
-            { id: "grav_ramu", label: "Gravité Ramulariose (0-10)", category: "Maladies", type: "range", min: 0, max: 10, default: -99 },
+            { id: "grav_cerco", label: "Gravité Cercosporiose (0-10)", category: "Maladies", type: "select", values: [0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], default: -99 },
+            { id: "grav_oidium", label: "Gravité Oïdium (0-10)", category: "Maladies", type: "select", values: [0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], default: -99 },
+            { id: "grav_rouille", label: "Gravité Rouille (0-10)", category: "Maladies", type: "select", values: [0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], default: -99 },
+            { id: "grav_ramu", label: "Gravité Ramulariose (0-10)", category: "Maladies", type: "select", values: [0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], default: -99 },
             
             { id: "pct_jaunisse", label: "% Jaunisse", category: "Jaunisse", type: "range", min: 0, max: 100, default: -99 },
-            { id: "grav_jaunisse", label: "Gravité Jaunisse (0-10)", category: "Jaunisse", type: "range", min: 0, max: 10, default: -99 },
+            { id: "grav_jaunisse", label: "Gravité Jaunisse (0-10)", category: "Jaunisse", type: "select", values: [0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], default: -99 },
             
             { id: "nb_montee", label: "Nombre de montées", category: "Divers", type: "number", step: 1, default: 0 },
             { id: "nb_mildiou", label: "Nombre de mildiou", category: "Divers", type: "number", step: 1, default: 0 }
