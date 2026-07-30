@@ -115,7 +115,7 @@
 
         <div class="text-center text-[10px] text-gray-400 mt-4">
             <p class="font-semibold text-gray-500">© YohanDebeauvais2026</p>
-            <p class="font-semibold text-gray-500 mt-0.5">V1.5 du 10/07/2026</p>
+            <p class="font-semibold text-gray-500 mt-0.5">V1.6 du 30/07/2026</p>
         </div>
     </div>
 
@@ -554,7 +554,7 @@
 
     <!-- PAVÉ NUMÉRIQUE TACTILE VIRTUEL -->
     <div id="keypad-modal" onclick="if(event.target === this) closeKeypad()" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 z-[99999] hidden opacity-0 transition-opacity duration-200 select-none">
-        <div class="bg-white rounded-t-3xl sm:rounded-2xl p-5 w-full max-w-sm shadow-2xl transition-all duration-200">
+        <div class="bg-white rounded-t-3xl sm:rounded-2xl p-5 w-full max-w-sm shadow-2xl transform translate-y-full sm:translate-y-0 sm:scale-95 transition-all duration-200">
             <div class="flex justify-between items-start mb-4 border-b pb-3">
                 <div class="flex-1 min-w-0 pr-2">
                     <span id="keypad-var-category" class="text-xxs font-bold uppercase tracking-wider text-agri-600">Catégorie</span>
@@ -592,7 +592,7 @@
                     <button type="button" onclick="keypadPress('7')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition">7</button>
                     <button type="button" onclick="keypadPress('8')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition">8</button>
                     <button type="button" onclick="keypadPress('9')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition">9</button>
-                    <button type="button" id="keypad-dot-btn" onclick="keypadPress('.')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition">.</button>
+                    <button type="button" id="keypad-dot-btn" onclick="keypadPress(',')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition">,</button>
                     <button type="button" onclick="keypadPress('0')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition">0</button>
                     <button type="button" onclick="keypadBackspace()" class="h-14 bg-gray-100 text-gray-600 text-xl rounded-xl border border-gray-200 transition">
                         <i class="fa-solid fa-delete-left"></i>
@@ -810,13 +810,13 @@
             { id: "sel_blanchiment", label: "Sélectivité blanchiment (0 à 10)", category: "Efficacité", type: "range", min: 0, max: 10, default: -99 },
             { id: "efficacite", label: "Efficacité Globale (0 à 10)", category: "Efficacité", type: "range", min: 0, max: 10, default: -99 },
             
-            { id: "grav_cerco", label: "Gravité Cercosporiose (0-10)", category: "Maladies", type: "range", values: [0, 0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], default: -99 },
-            { id: "grav_oidium", label: "Gravité Oïdium (0-10)", category: "Maladies", type: "range", values: [0, 0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], default: -99 },
-            { id: "grav_rouille", label: "Gravité Rouille (0-10)", category: "Maladies", type: "range", values: [0, 0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], default: -99 },
-            { id: "grav_ramu", label: "Gravité Ramulariose (0-10)", category: "Maladies", type: "range", values: [0, 0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], default: -99 },
+            { id: "grav_cerco", label: "Gravité Cercosporiose (0-10)", category: "Maladies", type: "range", min: 0, max: 10, default: -99 },
+            { id: "grav_oidium", label: "Gravité Oïdium (0-10)", category: "Maladies", type: "range", min: 0, max: 10, default: -99 },
+            { id: "grav_rouille", label: "Gravité Rouille (0-10)", category: "Maladies", type: "range", min: 0, max: 10, default: -99 },
+            { id: "grav_ramu", label: "Gravité Ramulariose (0-10)", category: "Maladies", type: "range", min: 0, max: 10, default: -99 },
             
             { id: "pct_jaunisse", label: "% Jaunisse", category: "Jaunisse", type: "range", min: 0, max: 100, default: -99 },
-            { id: "grav_jaunisse", label: "Gravité Jaunisse (0-10)", category: "Jaunisse", type: "range", values: [0, 0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], default: -99 },
+            { id: "grav_jaunisse", label: "Gravité Jaunisse (0-10)", category: "Jaunisse", type: "range", min: 0, max: 10, default: -99 },
             
             { id: "nb_montee", label: "Nombre de montées", category: "Divers", type: "number", step: 1, default: 0 },
             { id: "nb_mildiou", label: "Nombre de mildiou", category: "Divers", type: "number", step: 1, default: 0 }
@@ -1338,6 +1338,11 @@
             if (!container) return;
             
             const today = new Date().toISOString().split('T')[0];
+            // Si la parcelle n'a pas encore été complétée, on force la date du jour à l'ouverture
+            if (!plot.isCompleted && plot.date !== today) {
+                plot.date = today;
+                saveStateToLocalStorage();
+            }
             const plotDate = plot.date || today;
             
             const stageOptions = `<option value="">Sélectionner...</option>
@@ -1524,10 +1529,10 @@
                             </div>
                             <div class="flex gap-1 overflow-x-auto pb-1 scrollbar-none">
                     `;
-                    const steps = conf.max===100 ? [0,10,20,30,40,50,60,70,80,90,100] : [0,1,2,3,4,5,6,7,8,9,10];
+                    const steps = conf.max===100 ? [0,10,20,30,40,50,60,70,80,90,100] : [0,0.5,1,2,3,4,5,6,7,8,9,10];
                     steps.forEach(val => {
-                        const isSelected = value !== "" && parseInt(value) === val;
-                        innerHtmlStr += `<button type="button" onclick="setQuickValue('${vId}', ${val})" class="quick-btn-${vId} text-xs font-bold rounded-lg border flex-none flex items-center justify-center ${conf.max===100?'px-2.5 py-1.5':'w-8 h-8 rounded-full'} ${isSelected ? 'bg-agri-600 text-white' : 'bg-white text-gray-600'}">${val}</button>`;
+                        const isSelected = value !== "" && parseFloat(value) === val;
+                        innerHtmlStr += `<button type="button" onclick="setQuickValue('${vId}', ${val})" class="quick-btn-${vId} text-xs font-bold rounded-lg border flex-none flex items-center justify-center ${conf.max===100?'px-2.5 py-1.5':'w-8 h-8 rounded-full'} ${isSelected ? 'bg-agri-600 text-white' : 'bg-white text-gray-600'}">${String(val).replace('.', ',')}</button>`;
                     });
                     innerHtmlStr += `</div></div>`;
                 }
@@ -1807,7 +1812,8 @@
                     row = [appState.trialName, p.variety, p.date || appState.trialDate, p.observation || "", p.stade_betterave || "", p.plotNum, p.bloc, p.mod, p.obs, ...conds];
                     appState.selectedVars.forEach(vId => row.push(p.values[vId]));
                 }
-                csv += row.map(val => `"${String(val).replace(/"/g, '""')}"`).join(";") + "\n";
+                // Remplacement des points par des virgules pour Excel FR avant l'écriture
+                csv += row.map(val => `"${String(val).replace(/\./g, ',').replace(/"/g, '""')}"`).join(";") + "\n";
             });
             return csv;
         }
@@ -1842,7 +1848,7 @@
             if (!conf) return;
             activeKeypadVarId = varId;
             const val = appState.plots[appState.currentPlotIndex].values[varId];
-            keypadValueString = (val !== undefined && val !== null) ? String(val) : "";
+            keypadValueString = (val !== undefined && val !== null && val !== "") ? String(val).replace('.', ',') : "";
             document.getElementById("keypad-var-category").innerText = conf.category;
             document.getElementById("keypad-var-label").innerText = conf.label;
             
@@ -1865,30 +1871,43 @@
         }
 
         function keypadPress(char) {
-            if (keypadValueString === "-99" || keypadValueString === "0") keypadValueString = char === "." ? "0." : char;
-            else if (!(char === "." && keypadValueString.includes("."))) keypadValueString += char;
+            if (keypadValueString === "-99" || keypadValueString === "0") keypadValueString = char === "," ? "0," : char;
+            else if (!(char === "," && keypadValueString.includes(","))) keypadValueString += char;
             updateKeypadDisplay();
         }
         function keypadBackspace() { keypadValueString = keypadValueString==="-99"?"":keypadValueString.slice(0,-1); updateKeypadDisplay(); }
         function keypadClear() { keypadValueString = ""; updateKeypadDisplay(); }
-        function keypadSetSpecial(val) { keypadValueString = String(val); updateKeypadDisplay(); }
-        function keypadAddValue(offset) { keypadValueString = String((parseFloat(keypadValueString)||0) + offset); updateKeypadDisplay(); }
+        function keypadSetSpecial(val) { keypadValueString = String(val).replace('.', ','); updateKeypadDisplay(); }
+        function keypadAddValue(offset) { keypadValueString = String((parseFloat(keypadValueString.replace(',', '.'))||0) + offset).replace('.', ','); updateKeypadDisplay(); }
         
         function keypadValidate() {
             if (!keypadValueString) keypadValueString = "-99";
-            appState.plots[appState.currentPlotIndex].values[activeKeypadVarId] = keypadValueString;
+            
+            // On repasse en point pour le stockage interne informatique
+            let numericValue = keypadValueString.replace(',', '.');
+            appState.plots[appState.currentPlotIndex].values[activeKeypadVarId] = numericValue;
             appState.plots[appState.currentPlotIndex].isCompleted = true;
             saveStateToLocalStorage();
-            if (appState.currentPlotIndex < appState.plots.length - 1) {
-                appState.currentPlotIndex++;
-                updateUI();
-                const nextVal = appState.plots[appState.currentPlotIndex].values[activeKeypadVarId];
-                keypadValueString = (nextVal !== undefined && nextVal !== null) ? String(nextVal) : "";
-                const p = appState.plots[appState.currentPlotIndex];
-                document.getElementById("keypad-plot-badge").innerText = appState.saisieMode==="adventices"?`B${p.bloc} C${p.mod}`:`P. ${p.plotNum}`;
-                updateKeypadDisplay();
+            
+            // NAVIGATION : Variable suivante de la parcelle
+            const varIndex = appState.selectedVars.indexOf(activeKeypadVarId);
+            if (varIndex > -1 && varIndex < appState.selectedVars.length - 1) {
+                // S'il y a une variable suivante, on y passe sans changer de parcelle
+                updateUI(); // Mise à jour de l'arrière plan
+                const nextVarId = appState.selectedVars[varIndex + 1];
+                openKeypad(nextVarId); // Rouvre la calculette sur la variable suivante
             } else {
-                updateUI(); closeKeypad(); showToast("Notation terminée !");
+                // C'était la dernière variable : On ferme et on passe à la parcelle d'après
+                if (appState.currentPlotIndex < appState.plots.length - 1) {
+                    appState.currentPlotIndex++;
+                    appState.activeObs = appState.plots[appState.currentPlotIndex].obs;
+                    updateUI();
+                    closeKeypad();
+                    window.scrollTo({ top: 120, behavior: 'smooth' });
+                    showToast("Parcelle terminée !");
+                } else {
+                    updateUI(); closeKeypad(); showToast("Notation terminée !");
+                }
             }
         }
 
