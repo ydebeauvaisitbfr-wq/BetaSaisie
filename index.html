@@ -11,6 +11,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome pour les icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- JSZip pour la génération de dossiers avec photos -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     
     <script>
         tailwind.config = {
@@ -531,12 +533,15 @@
                 <h2 class="text-base font-bold text-gray-900">Données & Export</h2>
             </div>
             
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="exportToZIP()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow transition active:scale-95">
+                    <i class="fa-solid fa-file-zipper"></i> Exporter ZIP (CSV + Photos)
+                </button>
                 <button onclick="exportToCSV()" class="bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow transition active:scale-95">
-                    <i class="fa-solid fa-file-csv"></i> Télécharger CSV
+                    <i class="fa-solid fa-file-csv"></i> Uniquement CSV
                 </button>
                 <button onclick="shareOrEmailCSV()" class="bg-agri-600 hover:bg-agri-700 text-white text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow transition active:scale-95">
-                    <i class="fa-solid fa-paper-plane"></i> Partager (Mail/SMS)
+                    <i class="fa-solid fa-paper-plane"></i> Partager CSV (Mail/SMS)
                 </button>
                 <button onclick="confirmResetAll()" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 transition active:scale-95">
                     <i class="fa-solid fa-trash-can"></i> Réinitialiser l'essai
@@ -646,6 +651,7 @@
     <!-- MODAL AFFICHAGE PHOTO -->
     <div id="photo-viewer-modal" class="fixed inset-0 bg-black/90 flex flex-col items-center justify-center z-[100000] hidden opacity-0 transition-opacity duration-200">
         <div class="absolute top-4 right-4 flex gap-4">
+            <button onclick="downloadCurrentPhoto()" class="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center text-lg"><i class="fa-solid fa-download"></i></button>
             <button onclick="deleteCurrentPhoto()" class="bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center text-lg"><i class="fa-solid fa-trash"></i></button>
             <button onclick="closePhotoViewer()" class="bg-gray-600 text-white w-10 h-10 rounded-full flex items-center justify-center text-xl"><i class="fa-solid fa-xmark"></i></button>
         </div>
@@ -662,6 +668,7 @@
     </div>
 
     <script>
+        // LISTE UNIVERSELLE DES STADES (Avec nuances FN/FV et % COUV)
         const STADES_LIST = [
             "Semis", "Pointant", "Cotylédons", 
             "2FN", "2FV", "4FN", "4FV", "6FN", "6FV", "8FN", "8FV", "10FN", "10FV", "12FN", "12FV", "14FN", "14FV", 
@@ -1829,15 +1836,15 @@
 
         async function exportToZIP() {
             if (appState.plots.length === 0) return showToast("Aucune donnée.", true);
-            if (typeof JSZip === 'undefined') return showToast("Erreur: Bibliothèque ZIP non chargée.", true);
+            if (typeof JSZip === 'undefined') return showToast("Erreur: Bibliothèque ZIP non chargée. Vérifiez internet.", true);
             
             showToast("Création du ZIP en cours...");
             const zip = new JSZip();
             
-            // Ajout du CSV au dossier
+            // Ajout du CSV au dossier principal
             zip.file(`saisie_${appState.trialName.toLowerCase().replace(/[^a-z0-9]/g, "_")}.csv`, generateCSVString());
             
-            // Création d'un dossier Photos et renommage intelligent
+            // Création d'un dossier Photos et renommage intelligent des images
             const photoFolder = zip.folder("Photos");
             let photoCount = 0;
             appState.plots.forEach(p => {
@@ -1856,7 +1863,7 @@
                 link.href = URL.createObjectURL(content);
                 link.download = `Export_Complet_${appState.trialName.toLowerCase().replace(/[^a-z0-9]/g, "_")}.zip`;
                 document.body.appendChild(link); link.click(); document.body.removeChild(link);
-                showToast(`ZIP téléchargé (${photoCount} photos) !`);
+                showToast(`ZIP téléchargé (${photoCount} photos incluses) !`);
             });
         }
 
@@ -1867,7 +1874,7 @@
                 link.href = p.photos[viewingPhotoIndex];
                 link.download = `Bloc${p.bloc}_Parcelle${p.plotNum}_Photo${viewingPhotoIndex + 1}.jpg`;
                 document.body.appendChild(link); link.click(); document.body.removeChild(link);
-                showToast("Photo enregistrée !");
+                showToast("Photo enregistrée sur l'appareil !");
             }
         }
 
