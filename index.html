@@ -534,7 +534,7 @@
             </div>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <button onclick="exportToZIP()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow transition active:scale-95">
+                <button onclick="shareOrEmailZIP()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow transition active:scale-95">
                     <i class="fa-solid fa-file-zipper"></i> Exporter ZIP (CSV + Photos)
                 </button>
                 <button onclick="exportToCSV()" class="bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow transition active:scale-95">
@@ -545,6 +545,9 @@
                 </button>
                 <button onclick="confirmResetAll()" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 transition active:scale-95">
                     <i class="fa-solid fa-trash-can"></i> Réinitialiser l'essai
+                </button>
+                <button onclick="transmitToBetaAnalyse()" class="col-span-1 sm:col-span-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold py-3 px-3 rounded-lg flex items-center justify-center gap-2 shadow transition active:scale-95 mt-2">
+                    <i class="fa-solid fa-bolt"></i> Transmettre directement à BetaAnalyse (Local)
                 </button>
             </div>
 
@@ -1825,24 +1828,83 @@
             return csv;
         }
 
+        function transmitToBetaAnalyse() {
+            if (appState.plots.length === 0) return showToast("Aucune donnée à transmettre.", true);
+            
+            showCustomConfirm("Transmission Locale", "Enregistrer cet essai directement dans le tableau de bord d'analyse sur cet appareil ?", () => {
+                const activeConfig = getActiveVariablesConfig();
+                let headers = ["Essai", "Variete", "Date", "Observation", "Stade_Parcelle", "Parcelle", "Bloc", "Modalite", "Obs", "Cond_Date", "Cond_Heure", "Cond_Nebulo", "Cond_Vent", "Cond_Hygro", "Cond_Sol", "Cond_Temp", "Cond_Stade_Betteraves", "Photos_Count"];
+                appState.selectedVars.forEach(vId => { const c = activeConfig.find(item => item.id === vId); headers.push(c ? c.label : vId); });
+                
+                const data = [];
+                appState.plots.forEach(p => {
+                    const conds = getConds();
+                    let rowObj = {
+                        "Essai": appState.trialName, "Variete": p.variety, "Date": p.date || appState.trialDate, "Observation": p.observation || "", "Stade_Parcelle": p.stade_betterave || "",
+                        "Parcelle": p.plotNum, "Bloc": p.bloc, "Modalite": p.mod, "Obs": p.obs,
+                        "Cond_Date": conds[0], "Cond_Heure": conds[1], "Cond_Nebulo": conds[2], "Cond_Vent": conds[3], "Cond_Hygro": conds[4], "Cond_Sol": conds[5], "Cond_Temp": conds[6], "Cond_Stade_Betteraves": conds[7],
+                        "Photos_Count": p.photos ? p.photos.length : 0
+                    };
+                    appState.selectedVars.forEach(vId => { 
+                        let val = p.values[vId];
+                        if(val !== undefined && val !== "" && val !== -99) { val = parseFloat(String(val).replace(',', '.')); } else { val = ""; }
+                        const c = activeConfig.find(item => item.id === vId); 
+                        rowObj[c ? c.label : vId] = val;
+                    });
+                    data.push(rowObj);
+                });
+
+                let db = [];
+                try {
+                    const stored = localStorage.getItem('beta_analyse_db');
+                    if (stored) db = JSON.parse(stored);
+                } catch(e) {}
+
+                const importDate = new Date().toISOString();
+                const existingIdx = db.findIndex(t => t.name === appState.trialName);
+
+                if (existingIdx > -1) {
+                    db[existingIdx].data = data; db[existingIdx].headers = headers; db[existingIdx].lastUpdate = importDate;
+                } else {
+                    db.push({ id: 'trial_' + Date.now(), name: appState.trialName, lastUpdate: importDate, headers: headers, data: data });
+                }
+
+                try {
+                    localStorage.setItem('beta_analyse_db', JSON.stringify(db));
+                    showToast("Transmis à BetaAnalyse avec succès !");
+                    setTimeout(() => {
+                        if(confirm("Données transmises avec succès ! Voulez-vous ouvrir BetaAnalyse maintenant ?")) {
+                            window.location.href = "beta_analyse_dashboard.html"; 
+                        }
+                    }, 500);
+                } catch(e) {
+                    showToast("Erreur : Mémoire de l'appareil pleine.", true);
+                }
+            });
+        }
+
         function exportToCSV() {
             if (appState.plots.length === 0) return showToast("Aucune donnée.", true);
+            const dateStr = new Date().toISOString().split('T')[0];
             const blob = new Blob([generateCSVString()], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = `saisie_${appState.trialName.toLowerCase().replace(/[^a-z0-9]/g, "_")}.csv`;
+            link.download = `saisie_${appState.trialName.toLowerCase().replace(/[^a-z0-9]/g, "_")}_${dateStr}.csv`;
             document.body.appendChild(link); link.click(); document.body.removeChild(link); showToast("Fichier CSV téléchargé !");
         }
 
-        async function exportToZIP() {
+        async function shareOrEmailZIP() {
             if (appState.plots.length === 0) return showToast("Aucune donnée.", true);
             if (typeof JSZip === 'undefined') return showToast("Erreur: Bibliothèque ZIP non chargée. Vérifiez internet.", true);
             
-            showToast("Création du ZIP en cours...");
+            showToast("Préparation du ZIP (Photos)...");
             const zip = new JSZip();
             
+            const dateStr = new Date().toISOString().split('T')[0];
+            const safeName = appState.trialName.toLowerCase().replace(/[^a-z0-9]/g, "_");
+            
             // Ajout du CSV au dossier principal
-            zip.file(`saisie_${appState.trialName.toLowerCase().replace(/[^a-z0-9]/g, "_")}.csv`, generateCSVString());
+            zip.file(`saisie_${safeName}_${dateStr}.csv`, generateCSVString());
             
             // Création d'un dossier Photos et renommage intelligent des images
             const photoFolder = zip.folder("Photos");
@@ -1858,13 +1920,43 @@
                 }
             });
             
-            zip.generateAsync({type:"blob"}).then(function(content) {
-                const link = document.createElement("a");
-                link.href = URL.createObjectURL(content);
-                link.download = `Export_Complet_${appState.trialName.toLowerCase().replace(/[^a-z0-9]/g, "_")}.zip`;
-                document.body.appendChild(link); link.click(); document.body.removeChild(link);
-                showToast(`ZIP téléchargé (${photoCount} photos incluses) !`);
-            });
+            try {
+                const content = await zip.generateAsync({type:"blob"});
+                const name = `Export_${safeName}_${dateStr}.zip`;
+                const file = new File([content], name, { type: 'application/zip' });
+                
+                // On tente le menu de partage natif (Mail, SMS, etc)
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({
+                            files: [file],
+                            title: 'Export BetaSaisie',
+                            text: 'Voici le fichier contenant les données et les photos de l\'essai.'
+                        });
+                        showToast("Partage réussi !");
+                    } catch (e) {
+                        // Si l'utilisateur annule le partage ou que l'app plante, on télécharge.
+                        console.log("Partage annulé ou échoué", e);
+                        triggerDownload(content, name);
+                    }
+                } else {
+                    // Si le téléphone ne supporte pas le partage direct de fichiers, on télécharge.
+                    triggerDownload(content, name);
+                    showToast(`Partage impossible, ZIP téléchargé (${photoCount} photos) !`);
+                }
+            } catch (err) {
+                showToast("Erreur lors de la création du ZIP", true);
+            }
+        }
+        
+        function triggerDownload(blob, filename) {
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast("Le fichier ZIP a été téléchargé.");
         }
 
         function downloadCurrentPhoto() {
@@ -1880,8 +1972,9 @@
 
         function shareOrEmailCSV() {
             if (appState.plots.length === 0) return;
+            const dateStr = new Date().toISOString().split('T')[0];
             const csv = generateCSVString();
-            const name = `saisie_${appState.trialName.toLowerCase().replace(/[^a-z0-9]/g, "_")}.csv`;
+            const name = `saisie_${appState.trialName.toLowerCase().replace(/[^a-z0-9]/g, "_")}_${dateStr}.csv`;
             const file = new File([new Blob([csv], { type: 'text/csv;charset=utf-8;' })], name, { type: 'text/csv' });
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 navigator.share({ files: [file], title: `Export BetaSaisie`, text: `Saisie du jour` }).catch(() => window.location.href = `mailto:?subject=Export BetaSaisie&body=${encodeURIComponent(csv.substring(0,1000) + '...')}`);
