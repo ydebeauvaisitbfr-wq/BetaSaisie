@@ -2338,10 +2338,21 @@
             const dateStr = new Date().toISOString().split('T')[0];
             const csv = generateCSVString();
             const name = `saisie_${appState.trialName.toLowerCase().replace(/[^a-z0-9]/g, "_")}_${dateStr}.csv`;
+            
+            // --- NOUVEAU : Récupération des catégories ---
+            const activeConfig = getActiveVariablesConfig();
+            const selectedCategories = new Set();
+            appState.selectedVars.forEach(vId => {
+                const conf = activeConfig.find(item => item.id === vId);
+                if (conf && conf.category) selectedCategories.add(conf.category);
+            });
+            const catString = Array.from(selectedCategories).join(', ') || 'Notation générale';
+            // ---------------------------------------------
+            
             const file = new File([new Blob([csv], { type: 'text/csv;charset=utf-8;' })], name, { type: 'text/csv' });
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                navigator.share({ files: [file], title: `Export BetaSaisie`, text: `Saisie du jour` }).catch(() => window.location.href = `mailto:?subject=Export BetaSaisie&body=${encodeURIComponent(csv.substring(0,1000) + '...')}`);
-            } else window.location.href = `mailto:?subject=Export BetaSaisie&body=${encodeURIComponent(csv.substring(0,1000) + '...')}`;
+                navigator.share({ files: [file], title: `Export BetaSaisie - ${catString}`, text: `Saisie du jour : ${catString}` }).catch(() => window.location.href = `mailto:?subject=Export BetaSaisie - ${encodeURIComponent(catString)}&body=${encodeURIComponent(csv.substring(0,1000) + '...')}`);
+            } else window.location.href = `mailto:?subject=Export BetaSaisie - ${encodeURIComponent(catString)}&body=${encodeURIComponent(csv.substring(0,1000) + '...')}`;
         }
 
         function resetCurrentPlot() {
