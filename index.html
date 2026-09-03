@@ -53,7 +53,6 @@
         .shake {
             animation: shake 0.2s ease-in-out 0s 2;
         }
-        /* Style pour les photos */
         .photo-thumbnail {
             width: 60px; height: 60px; object-fit: cover; border-radius: 0.5rem; border: 2px solid #e2f0e5;
         }
@@ -81,10 +80,6 @@
                     <h1 class="text-3xl font-black text-agri-700 tracking-tight">BetaSaisie</h1>
                     <i class="fa-solid fa-calculator text-blue-600 text-2xl"></i>
                 </div>
-            </div>
-            
-            <div class="my-4 flex justify-center w-full max-w-xs">
-                <img src="Logo%20ITB%20cartouche%20rvb%20(1).png" alt="Logo ITB" class="h-24 md:h-28 w-auto filter drop-shadow-sm object-contain" onerror="showSvgLogoFallback(this)">
             </div>
             <p class="text-xs text-gray-500 font-bold tracking-wider uppercase">Accès sécurisé réservé ITB</p>
         </div>
@@ -123,7 +118,7 @@
 
         <div class="text-center text-[10px] text-gray-400 mt-4">
             <p class="font-semibold text-gray-500">© YohanDebeauvais2026</p>
-            <p class="font-semibold text-gray-500 mt-0.5">V2 du 05/08/2026</p>
+            <p class="font-semibold text-gray-500 mt-0.5">V3 du 03/09/2026</p>
         </div>
     </div>
 
@@ -149,7 +144,6 @@
                 <i class="fa-solid fa-user-check mr-1 flex items-center"></i>
                 <span id="header-username">ITB</span>
             </span>
-            <img src="Logo%20ITB%20cartouche%20rvb%20(1).png" alt="Logo ITB" class="h-9 w-auto" onerror="showSvgLogoFallback(this)">
             <button onclick="logout()" title="Se déconnecter" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-red-600 active:bg-gray-100 transition-colors">
                 <i class="fa-solid fa-power-off text-base"></i>
             </button>
@@ -202,17 +196,17 @@
                     </label>
                     <div class="flex items-center gap-2">
                         <input type="file" id="csv-upload" accept=".csv" class="hidden" onchange="handleCSVImport(event)">
-                        <label for="csv-upload" class="flex-1 cursor-pointer bg-white border-2 border-dashed border-blue-300 hover:border-blue-500 text-blue-600 font-bold py-2 px-3 rounded-lg text-center text-sm transition">
+                        <label for="csv-upload" class="flex-1 cursor-pointer bg-white border-2 border-dashed border-blue-300 hover:border-blue-500 text-blue-600 font-bold py-2 px-3 rounded-lg text-center text-sm transition shadow-sm">
                             <i class="fa-solid fa-upload"></i> Fichier .csv
                         </label>
                         <button type="button" onclick="clearImportedPlan()" id="clear-import-btn" class="hidden bg-red-100 text-red-600 p-2.5 rounded-lg border border-red-200 font-bold">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
-                    <div id="import-badge" class="hidden mt-2 text-xs font-bold text-green-700 bg-green-100 py-1.5 px-3 rounded-lg text-center border border-green-200">
+                    <div id="import-badge" class="hidden mt-2 text-xs font-bold text-green-700 bg-green-100 py-1.5 px-3 rounded-lg text-center border border-green-200 shadow-sm">
                         <i class="fa-solid fa-check-circle mr-1"></i> Plan importé et verrouillé
                     </div>
-                    <p class="text-[9px] text-gray-500 mt-2 italic text-center">Colonnes requises : Parcelle, Bloc, Modalite (ou Niveau/Nom)</p>
+                    <p class="text-[9px] text-gray-500 mt-2 italic text-center">Format auto-détecté (Dictionnaire de noms supporté)</p>
                 </div>
 
                 <div class="space-y-3">
@@ -245,6 +239,12 @@
                         </div>
                     </div>
 
+                    <!-- BOUTON DU PLAN VISUEL -->
+                    <button type="button" id="btn-view-plan" onclick="openPlanVisualizer()" class="hidden w-full bg-purple-100 hover:bg-purple-200 text-purple-800 font-black py-3 rounded-xl border border-purple-200 shadow-sm transition flex items-center justify-center space-x-2 select-none mb-3 text-sm">
+                        <i class="fa-solid fa-map-location-dot text-lg"></i>
+                        <span>Visualiser le plan de l'essai</span>
+                    </button>
+
                     <div id="block-directions-container" class="space-y-2 bg-gray-50/50 p-3 rounded-xl border border-gray-200">
                         <!-- Injecté en JS -->
                     </div>
@@ -270,14 +270,14 @@
                                     <button onclick="toggleAllVars(false)" class="text-xs text-gray-500 hover:underline">Effacer</button>
                                 </div>
                             </div>
-                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-3 max-h-60 overflow-y-auto space-y-2 text-sm" id="variables-container">
+                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-3 max-h-60 overflow-y-auto space-y-2 text-sm shadow-inner" id="variables-container">
                                 <!-- Généré en JS -->
                             </div>
                         </div>
                     </div>
 
                     <button onclick="startClassicSaisieDirectly()" class="w-full bg-agri-600 hover:bg-agri-700 text-white font-black py-4 rounded-xl shadow transition flex items-center justify-center space-x-2 select-none mt-4 text-sm">
-                        <i class="fa-solid fa-layer-group"></i>
+                        <i class="fa-solid fa-layer-group text-lg"></i>
                         <span>Générer le plan & Débuter</span>
                     </button>
                 </div>
@@ -390,6 +390,9 @@
                     <h2 class="text-base font-bold text-gray-900" id="entry-step-title">Saisie au champ</h2>
                 </div>
                 <div class="flex gap-1.5">
+                    <button onclick="openPlanVisualizer()" id="btn-view-plan-entry" class="hidden text-xs text-purple-700 border border-purple-200 bg-purple-50 hover:bg-purple-100 rounded-lg px-2.5 py-1.5 flex items-center gap-1 active:bg-purple-200 font-bold shadow-sm transition">
+                        <i class="fa-solid fa-map-location-dot"></i> Plan
+                    </button>
                     <button onclick="manualSave()" class="text-xs text-blue-600 border border-blue-200 bg-blue-50 hover:bg-blue-100 rounded-lg px-2.5 py-1.5 flex items-center gap-1 active:bg-blue-200 font-bold shadow-sm transition">
                         <i class="fa-solid fa-floppy-disk"></i> Sauver
                     </button>
@@ -408,7 +411,7 @@
 
             <div id="plot-metadata-container" class="mb-3"></div>
 
-            <div class="flex items-center justify-between bg-gray-50 rounded-xl p-2 border border-gray-200 mb-3 select-none">
+            <div class="flex items-center justify-between bg-gray-50 rounded-xl p-2 border border-gray-200 mb-3 select-none shadow-inner">
                 <button onclick="navigatePlotGroup(-1)" class="w-12 h-12 bg-white active:bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow flex items-center justify-center">
                     <i class="fa-solid fa-chevron-left text-lg"></i>
                 </button>
@@ -417,7 +420,7 @@
                     <select id="plot-selector" onchange="onPlotSelectChange()" class="text-xl font-black text-agri-700 bg-transparent border-none focus:outline-none text-center py-1 cursor-pointer w-full text-ellipsis overflow-hidden">
                         <!-- Généré en JS -->
                     </select>
-                    <div id="plot-sub-info" class="text-[10px] text-gray-500 font-bold">Bloc 1 | Mod 1</div>
+                    <div id="plot-sub-info" class="text-[10px] text-gray-500 font-bold truncate px-2 max-w-[200px] mx-auto">Bloc 1 | Mod 1</div>
                 </div>
                 <button onclick="navigatePlotGroup(1)" class="w-12 h-12 bg-white active:bg-gray-200 text-gray-700 border border-gray-300 rounded-lg shadow flex items-center justify-center">
                     <i class="fa-solid fa-chevron-right text-lg"></i>
@@ -426,7 +429,7 @@
 
             <div id="obs-selector-container" class="mb-4 bg-gray-50 p-2.5 rounded-xl border border-gray-200 hidden select-none"></div>
 
-            <div class="w-full bg-gray-100 rounded-full h-1.5 mb-4 select-none">
+            <div class="w-full bg-gray-200 rounded-full h-1.5 mb-4 select-none">
                 <div id="progress-bar" class="bg-agri-500 h-1.5 rounded-full transition-all duration-200" style="width: 0%"></div>
             </div>
 
@@ -505,7 +508,7 @@
                         <div>
                             <label class="block text-[9px] font-bold uppercase tracking-wider text-gray-500 mb-1">Stade des Betteraves</label>
                             <select id="adv-treatment-beet-stage" onchange="updateTreatmentField('treatmentBeetStage', this.value)" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-2 py-1.5 text-xs text-gray-900 focus:ring-1 focus:ring-blue-500">
-                                <!-- Options injectées par JavaScript (liste universelle) -->
+                                <!-- Options injectées par JavaScript -->
                             </select>
                         </div>
                     </div>
@@ -534,20 +537,17 @@
             </div>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <button onclick="shareOrEmailZIP()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow transition active:scale-95">
+                <button onclick="shareOrEmailZIP()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-3 px-3 rounded-lg flex items-center justify-center gap-2 shadow transition active:scale-95">
                     <i class="fa-solid fa-file-zipper"></i> Exporter ZIP (CSV + Photos)
                 </button>
-                <button onclick="exportToCSV()" class="bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow transition active:scale-95">
+                <button onclick="exportToCSV()" class="bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-3 px-3 rounded-lg flex items-center justify-center gap-2 shadow transition active:scale-95">
                     <i class="fa-solid fa-file-csv"></i> Uniquement CSV
                 </button>
-                <button onclick="shareOrEmailCSV()" class="bg-agri-600 hover:bg-agri-700 text-white text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow transition active:scale-95">
+                <button onclick="shareOrEmailCSV()" class="col-span-1 sm:col-span-2 bg-agri-600 hover:bg-agri-700 text-white text-sm font-bold py-3 px-3 rounded-lg flex items-center justify-center gap-2 shadow transition active:scale-95 mt-1">
                     <i class="fa-solid fa-paper-plane"></i> Partager CSV (Mail/SMS)
                 </button>
-                <button onclick="confirmResetAll()" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-sm font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 transition active:scale-95">
+                <button onclick="confirmResetAll()" class="col-span-1 sm:col-span-2 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-sm font-bold py-3 px-3 rounded-lg flex items-center justify-center gap-2 transition active:scale-95 mt-2">
                     <i class="fa-solid fa-trash-can"></i> Réinitialiser l'essai
-                </button>
-                <button onclick="transmitToBetaAnalyse()" class="col-span-1 sm:col-span-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold py-3 px-3 rounded-lg flex items-center justify-center gap-2 shadow transition active:scale-95 mt-2">
-                    <i class="fa-solid fa-bolt"></i> Transmettre directement à BetaAnalyse (Local)
                 </button>
             </div>
 
@@ -555,20 +555,24 @@
             <div id="stats-section" class="mt-6 border-t border-gray-200 pt-4">
                 <div class="flex justify-between items-center mb-2">
                     <h3 class="text-xs font-bold uppercase text-gray-700"><i class="fa-solid fa-chart-line mr-1"></i> Analyses & Moyennes</h3>
-                    <select id="stats-var-select" onchange="renderStatsTable()" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-agri-500 p-1.5 font-bold max-w-[150px]">
+                    <select id="stats-var-select" onchange="renderStatsTable()" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-agri-500 p-1.5 font-bold max-w-[150px] outline-none">
                         <!-- Options injectées en JS -->
                     </select>
                 </div>
-                <div class="overflow-x-auto border border-gray-200 rounded-xl bg-white">
-                    <table class="min-w-full divide-y divide-gray-200 text-xs text-left" id="stats-table"></table>
+                <div class="overflow-x-auto border border-gray-200 rounded-xl bg-white shadow-sm">
+                    <table class="w-full divide-y divide-gray-200 text-xs text-left" id="stats-table">
+                        <!-- Généré en JS -->
+                    </table>
                 </div>
             </div>
 
             <!-- TABLEAU COMPLET -->
             <div class="mt-6 border-t border-gray-200 pt-4">
                 <h3 class="text-xs font-bold uppercase text-gray-700 mb-2"><i class="fa-solid fa-table mr-1"></i> Données brutes</h3>
-                <div class="overflow-x-auto border border-gray-200 rounded-xl">
-                    <table class="min-w-full divide-y divide-gray-200 text-xs text-left" id="summary-table"></table>
+                <div class="overflow-x-auto border border-gray-200 rounded-xl shadow-sm">
+                    <table class="w-full divide-y divide-gray-200 text-xs text-left whitespace-nowrap" id="summary-table">
+                        <!-- Généré en JS -->
+                    </table>
                 </div>
             </div>
         </section>
@@ -576,7 +580,7 @@
         <!-- FOOTER CORPORATE -->
         <footer class="mt-8 text-center text-[10px] text-gray-400 select-none pb-4">
             <p class="font-bold">© YohanDebeauvais2026</p>
-            <p class="font-bold mt-0.5">V2 du 05/08/2026</p>
+            <p class="font-bold mt-0.5">V3 du 03/09/2026</p>
         </footer>
     </main>
 
@@ -592,7 +596,7 @@
                     <button onclick="manualSave()" class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 flex items-center justify-center font-bold transition shadow-sm" title="Sauvegarder">
                         <i class="fa-solid fa-floppy-disk"></i>
                     </button>
-                    <span id="keypad-plot-badge" class="bg-agri-600 text-white px-2.5 py-1.5 rounded-lg text-xs font-black tracking-wider shadow-sm">Parcelle --</span>
+                    <span id="keypad-plot-badge" class="bg-agri-600 text-white px-2.5 py-1.5 rounded-lg text-xs font-black tracking-wider shadow-sm truncate max-w-[100px]">--</span>
                     <button onclick="closeKeypad()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 font-bold transition">&times;</button>
                 </div>
             </div>
@@ -611,25 +615,25 @@
 
             <div class="grid grid-cols-4 gap-2">
                 <div class="col-span-3 grid grid-cols-3 gap-2">
-                    <button type="button" onclick="keypadPress('1')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition">1</button>
-                    <button type="button" onclick="keypadPress('2')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition">2</button>
-                    <button type="button" onclick="keypadPress('3')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition">3</button>
-                    <button type="button" onclick="keypadPress('4')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition">4</button>
-                    <button type="button" onclick="keypadPress('5')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition">5</button>
-                    <button type="button" onclick="keypadPress('6')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition">6</button>
-                    <button type="button" onclick="keypadPress('7')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition">7</button>
-                    <button type="button" onclick="keypadPress('8')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition">8</button>
-                    <button type="button" onclick="keypadPress('9')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition">9</button>
-                    <button type="button" id="keypad-dot-btn" onclick="keypadPress(',')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition">,</button>
-                    <button type="button" onclick="keypadPress('0')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition">0</button>
-                    <button type="button" onclick="keypadBackspace()" class="h-14 bg-gray-100 text-gray-600 text-xl rounded-xl border border-gray-200 transition">
+                    <button type="button" onclick="keypadPress('1')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition shadow-sm">1</button>
+                    <button type="button" onclick="keypadPress('2')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition shadow-sm">2</button>
+                    <button type="button" onclick="keypadPress('3')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition shadow-sm">3</button>
+                    <button type="button" onclick="keypadPress('4')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition shadow-sm">4</button>
+                    <button type="button" onclick="keypadPress('5')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition shadow-sm">5</button>
+                    <button type="button" onclick="keypadPress('6')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition shadow-sm">6</button>
+                    <button type="button" onclick="keypadPress('7')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition shadow-sm">7</button>
+                    <button type="button" onclick="keypadPress('8')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition shadow-sm">8</button>
+                    <button type="button" onclick="keypadPress('9')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition shadow-sm">9</button>
+                    <button type="button" id="keypad-dot-btn" onclick="keypadPress(',')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition shadow-sm">,</button>
+                    <button type="button" onclick="keypadPress('0')" class="h-14 bg-gray-50 hover:bg-gray-100 text-gray-800 text-xl font-bold rounded-xl border border-gray-200 transition shadow-sm">0</button>
+                    <button type="button" onclick="keypadBackspace()" class="h-14 bg-gray-100 text-gray-600 text-xl rounded-xl border border-gray-300 transition shadow-sm">
                         <i class="fa-solid fa-delete-left"></i>
                     </button>
                 </div>
                 
                 <div class="col-span-1 flex flex-col gap-2">
-                    <button type="button" onclick="keypadClear()" class="flex-1 bg-red-50 text-red-700 font-bold text-xs rounded-xl border border-red-200 transition">Effacer</button>
-                    <button type="button" onclick="keypadValidate()" class="flex-[2] bg-agri-600 text-white font-black text-sm rounded-xl py-4 flex flex-col items-center justify-center transition">
+                    <button type="button" onclick="keypadClear()" class="flex-1 bg-red-50 text-red-700 font-bold text-xs rounded-xl border border-red-200 transition shadow-sm">Effacer</button>
+                    <button type="button" onclick="keypadValidate()" class="flex-[2] bg-agri-600 active:bg-agri-700 text-white font-black text-sm rounded-xl py-4 flex flex-col items-center justify-center transition shadow-md active:scale-95">
                         <i class="fa-solid fa-check text-xl mb-1"></i>
                         <span>VALIDER</span>
                     </button>
@@ -661,6 +665,28 @@
         <img id="photo-viewer-img" src="" class="max-w-full max-h-[80vh] object-contain rounded">
     </div>
 
+    <!-- MODAL PLAN VISUALIZER -->
+    <div id="plan-viewer-modal" class="fixed inset-0 bg-slate-900/80 flex items-center justify-center p-2 sm:p-4 z-[99999] hidden opacity-0 transition-opacity duration-200 backdrop-blur-sm">
+        <div class="bg-white rounded-xl w-full max-w-5xl max-h-[95vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="flex justify-between items-center p-3 border-b bg-slate-50">
+                <h3 class="text-base font-black text-slate-800"><i class="fa-solid fa-map-location-dot text-blue-600 mr-2"></i> Plan de l'essai</h3>
+                <button onclick="closePlanVisualizer()" class="w-8 h-8 bg-slate-200 hover:bg-slate-300 rounded-lg flex items-center justify-center text-slate-600 font-bold transition">&times;</button>
+            </div>
+            <div class="p-3 border-b bg-white flex flex-col sm:flex-row sm:items-center gap-3">
+                <label class="text-xs font-bold uppercase text-slate-500 whitespace-nowrap">Mettre en évidence :</label>
+                <select id="plan-viewer-select" onchange="highlightPlanVariety()" class="flex-1 bg-slate-50 border border-slate-300 text-slate-800 text-sm rounded-lg focus:ring-blue-500 font-bold p-2 outline-none">
+                    <!-- Options injectées -->
+                </select>
+            </div>
+            <div id="plan-viewer-summary" class="px-4 py-2 bg-blue-50 text-xs font-bold text-blue-800 border-b border-blue-100 min-h-[36px] flex items-center">
+                Sélectionnez une variété pour la mettre en évidence.
+            </div>
+            <div id="plan-viewer-grid" class="p-4 overflow-y-auto flex-1 bg-white">
+                <!-- Grille CSS injectée en JS -->
+            </div>
+        </div>
+    </div>
+
     <!-- CANVAS CACHE POUR COMPRESSION PHOTO -->
     <canvas id="photo-compress-canvas" style="display:none;"></canvas>
 
@@ -671,7 +697,7 @@
     </div>
 
     <script>
-        // LISTE UNIVERSELLE DES STADES (Avec nuances FN/FV et % COUV)
+        // LISTE UNIVERSELLE DES STADES
         const STADES_LIST = [
             "Semis", "Pointant", "Cotylédons", 
             "2FN", "2FV", "4FN", "4FV", "6FN", "6FV", "8FN", "8FV", "10FN", "10FV", "12FN", "12FV", "14FN", "14FV", 
@@ -697,15 +723,6 @@
             "ITB45": "Betteraves452026!", "ITB02": "Betteraves022026!", "ITB80/60": "Betteraves802026!",
             "ITB76": "Betteraves762026!", "ITB51": "Betteraves512026!", "ITBGRIFFON": "Griffon022026!"
         };
-
-        function showSvgLogoFallback(imgElement) {
-            if(imgElement.getAttribute('data-fallback-applied')) return;
-            imgElement.setAttribute('data-fallback-applied', 'true');
-            const fallbackDiv = document.createElement("div");
-            fallbackDiv.className = imgElement.className + " flex items-center justify-center bg-agri-100 border border-agri-200 text-agri-700 font-black text-sm rounded-lg tracking-widest";
-            fallbackDiv.style.minWidth = "60px"; fallbackDiv.innerText = "ITB";
-            imgElement.parentNode.replaceChild(fallbackDiv, imgElement);
-        }
 
         function cleanString(str) {
             if (!str) return "";
@@ -856,8 +873,18 @@
                 
                 const badge = document.getElementById("import-badge");
                 const clearBtn = document.getElementById("clear-import-btn");
-                if (appState.importedPlan) { badge.classList.remove("hidden"); clearBtn.classList.remove("hidden"); } 
-                else { badge.classList.add("hidden"); clearBtn.classList.add("hidden"); }
+                const btnPlan = document.getElementById("btn-view-plan");
+                
+                if (appState.importedPlan) { 
+                    badge.classList.remove("hidden"); 
+                    clearBtn.classList.remove("hidden"); 
+                    if(btnPlan) btnPlan.classList.remove("hidden");
+                } 
+                else { 
+                    badge.classList.add("hidden"); 
+                    clearBtn.classList.add("hidden"); 
+                    if(btnPlan) btnPlan.classList.add("hidden");
+                }
                 
                 updateBlockDirectionsUI();
             } else if (mode === "ipm") {
@@ -887,13 +914,6 @@
             });
         }
 
-        function clearImportedPlan() {
-            appState.importedPlan = null;
-            document.getElementById("import-badge").classList.add("hidden");
-            document.getElementById("clear-import-btn").classList.add("hidden");
-            document.getElementById("csv-upload").value = "";
-        }
-
         function parseCSVLine(text, sep) {
             let result = []; let current = ''; let inQuotes = false;
             for (let i = 0; i < text.length; i++) {
@@ -914,63 +934,299 @@
             reader.onload = function(e) {
                 const text = e.target.result;
                 const lines = text.split(/\r\n|\n|\r/).filter(l => l.trim() !== '');
-                if (lines.length < 2) return showToast("Fichier CSV vide ou invalide", true);
+                if (lines.length < 1) return showToast("Fichier CSV vide", true);
 
                 const sepCount = { ';': 0, ',': 0, '\t': 0 };
                 for (let char of lines[0]) { if (sepCount[char] !== undefined) sepCount[char]++; }
                 const sep = Object.keys(sepCount).reduce((a, b) => sepCount[a] > sepCount[b] ? a : b);
 
-                const headers = parseCSVLine(lines[0], sep).map(h => cleanString(h));
+                const grid = lines.map(line => parseCSVLine(line, sep).map(c => c.trim()));
                 
-                const plotIdx = headers.findIndex(h => h.includes('parcelle') || h.includes('plot') || h.includes('micro') || h.includes('pc') || h.match(/^n_?$/) || h.includes('num'));
-                const blocIdx = headers.findIndex(h => h.includes('bloc') || h.includes('rep') || h.includes('block') || h.match(/^b[a-z]*$/));
-                let modIdx = headers.findIndex(h => h.includes('mod') || h.includes('trait') || h.includes('niv') || h.includes('obj') || h.includes('trt') || h.includes('code'));
-                let nameIdx = headers.findIndex(h => h.includes('nom') || h.includes('var') || h.includes('prod') || h.includes('lib') || h.includes('trait') || h.includes('niv') || h.includes('trt'));
+                let importedPlan = [];
+                let mapping = {};
+                let uniqueMods = new Set();
+                let maxBloc = 0;
 
-                if (nameIdx === -1 && modIdx !== -1) nameIdx = modIdx;
-                if (modIdx === -1 && nameIdx !== -1) modIdx = nameIdx;
-                if (plotIdx === -1 || blocIdx === -1) return showToast("Colonnes requises introuvables (Parcelle, Bloc)", true);
-
-                let maxBloc = 0, importedPlan = [], uniqueMods = new Set(), modTextToId = {}, nextModId = 1;
-
-                for (let i = 1; i < lines.length; i++) {
-                    const cols = parseCSVLine(lines[i], sep);
-                    if (cols.length > Math.max(plotIdx, blocIdx)) {
-                        const bStr = cols[blocIdx] ? cols[blocIdx].match(/\d+/) : null;
-                        const pStr = cols[plotIdx] ? cols[plotIdx].match(/\d+/) : null;
-
-                        if (bStr && pStr) {
-                            const b = parseInt(bStr[0]); 
-                            const p = parseInt(pStr[0]);
-                            
-                            let rawMod = modIdx !== -1 && cols[modIdx] ? cols[modIdx] : "1";
-                            let name = nameIdx !== -1 && cols[nameIdx] ? cols[nameIdx] : rawMod;
-
-                            let m;
-                            if (modTextToId[rawMod] !== undefined) m = modTextToId[rawMod];
-                            else { m = nextModId++; modTextToId[rawMod] = m; }
-
-                            if (b > maxBloc) maxBloc = b; 
-                            uniqueMods.add(m);
-                            importedPlan.push({ bloc: b, mod: m, plotNum: p, variety: name });
+                // 1. Dictionnaire Global (Lignes avec 1 niveau et 1 texte)
+                grid.forEach(row => {
+                    let numsUnder100 = [];
+                    let texts = [];
+                    let numsOver100Count = 0;
+                    
+                    row.forEach((cell, idx) => {
+                        let val = cell.trim();
+                        if (val === "") return;
+                        if (/^\d+$/.test(val)) {
+                            let v = parseInt(val);
+                            if (v < 100) {
+                                // Vérifier si c'est la légende (chiffre suivi ou précédé de texte)
+                                let isLegend = false;
+                                if (idx > 0 && row[idx-1] && /[a-zA-Z]/.test(row[idx-1]) && !/^(bloc|rep|parcelle|niveau|modalite|traitement|trt|nom|var|produit)$/i.test(row[idx-1])) isLegend = true;
+                                if (idx < row.length - 1 && row[idx+1] && /[a-zA-Z]/.test(row[idx+1]) && !/^(bloc|rep|parcelle|niveau|modalite|traitement|trt|nom|var|produit)$/i.test(row[idx+1])) isLegend = true;
+                                
+                                if (isLegend) numsUnder100.push(v);
+                            } else {
+                                numsOver100Count++;
+                            }
+                        } else if (val.match(/[a-zA-Z]/)) {
+                            if (!val.toLowerCase().match(/^(bloc|rep|parcelle|niveau|modalite|traitement|trt|nom|var|produit)$/)) {
+                                texts.push(val);
+                            }
                         }
+                    });
+
+                    if (numsUnder100.length >= 1 && texts.length >= 1 && numsOver100Count === 0) {
+                        mapping[numsUnder100[0]] = texts.join(" - ");
+                    }
+                });
+
+                // 2. Détection Stratégie A : Colonnes Groupées (Format 26971AS_4)
+                let strategyFound = false;
+                let maxCols = Math.max(...grid.map(r => r.length));
+                
+                for (let c = 0; c < maxCols; c++) {
+                    let levels = [];
+                    let plots = [];
+                    let texts = [];
+                    
+                    grid.forEach(row => {
+                        if (row[c] !== undefined && row[c] !== "") {
+                            let val = row[c].trim();
+                            if (/^\d+$/.test(val)) {
+                                let v = parseInt(val);
+                                // On ne prend pas les niveaux de la légende
+                                if (v < 100) {
+                                   let isLegend = false;
+                                   const rIdx = grid.indexOf(row);
+                                   if (rIdx >= 0) {
+                                       if (c > 0 && row[c-1] && /[a-zA-Z]/.test(row[c-1]) && !/^(bloc|rep|parcelle|niveau|modalite|traitement|trt|nom|var|produit)$/i.test(row[c-1])) isLegend = true;
+                                       if (c < row.length - 1 && row[c+1] && /[a-zA-Z]/.test(row[c+1]) && !/^(bloc|rep|parcelle|niveau|modalite|traitement|trt|nom|var|produit)$/i.test(row[c+1])) isLegend = true;
+                                   }
+                                   if (!isLegend) levels.push(v);
+                                }
+                                else plots.push(v);
+                            } else if (val.match(/[a-zA-Z]/)) {
+                                if (!val.toLowerCase().match(/^(bloc|rep|parcelle|niveau|modalite|traitement|trt|nom|var|produit)$/)) {
+                                    texts.push(val);
+                                }
+                            }
+                        }
+                    });
+                    
+                    if (levels.length > 0 && plots.length >= 1) {
+                        let level = levels[0];
+                        let name = mapping[level] || texts[0] || `Niveau ${level}`;
+                        plots.forEach(p => {
+                            importedPlan.push({ plotNum: p, mod: level, variety: name, bloc: Math.floor(p/100) });
+                        });
+                        strategyFound = true;
                     }
                 }
 
+                // 3. Détection Stratégie B : Lignes Groupées
+                if (!strategyFound) {
+                    grid.forEach(row => {
+                        let levels = [];
+                        let plots = [];
+                        let texts = [];
+                        
+                        row.forEach((cell, idx) => {
+                            let val = cell.trim();
+                            if (/^\d+$/.test(val)) {
+                                let v = parseInt(val);
+                                if (v < 100) {
+                                    // On ne prend pas les niveaux de la légende
+                                    let isLegend = false;
+                                    if (idx > 0 && row[idx-1] && /[a-zA-Z]/.test(row[idx-1]) && !/^(bloc|rep|parcelle|niveau|modalite|traitement|trt|nom|var|produit)$/i.test(row[idx-1])) isLegend = true;
+                                    if (idx < row.length - 1 && row[idx+1] && /[a-zA-Z]/.test(row[idx+1]) && !/^(bloc|rep|parcelle|niveau|modalite|traitement|trt|nom|var|produit)$/i.test(row[idx+1])) isLegend = true;
+                                    if (!isLegend) levels.push(v);
+                                }
+                                else plots.push(v);
+                            } else if (val.match(/[a-zA-Z]/)) {
+                                if (!val.toLowerCase().match(/^(bloc|rep|parcelle|niveau|modalite|traitement|trt|nom|var|produit)$/)) {
+                                    texts.push(val);
+                                }
+                            }
+                        });
+                        
+                        if (levels.length > 0 && plots.length >= 1) {
+                            let level = levels[0];
+                            let name = mapping[level] || texts[0] || `Niveau ${level}`;
+                            plots.forEach(p => {
+                                importedPlan.push({ plotNum: p, mod: level, variety: name, bloc: Math.floor(p/100) });
+                            });
+                            strategyFound = true;
+                        }
+                    });
+                }
+
+                // 4. Détection Stratégie C : Liste Classique (Ligne par ligne)
+                if (!strategyFound) {
+                    let isB1Format = lines.some(l => l.trim().toLowerCase().match(/^b\s*1\b/));
+                    if (isB1Format) {
+                        grid.forEach(cols => {
+                            if(cols.length === 0) return;
+                            const match = cols[0].toLowerCase().match(/^b\s*(\d+)$/);
+                            if(match) {
+                                const b = parseInt(match[1]);
+                                let plotIdx = 1;
+                                for(let i=1; i<cols.length; i++) {
+                                    let val = cols[i];
+                                    if(val === "") continue;
+                                    const mod = parseInt(val);
+                                    if(!isNaN(mod)) {
+                                        const plotNum = (b * 100) + plotIdx;
+                                        const name = mapping[mod] || `Niveau ${mod}`;
+                                        importedPlan.push({ bloc: b, mod: mod, plotNum: plotNum, variety: name });
+                                        plotIdx++;
+                                    }
+                                }
+                            }
+                        });
+                    } else {
+                        grid.forEach(cols => {
+                            let levels = [];
+                            let plots = [];
+                            let texts = [];
+                            
+                            cols.forEach((cell, idx) => {
+                                let val = cell.trim();
+                                if (/^\d+$/.test(val)) {
+                                    let v = parseInt(val);
+                                    if (v < 100) {
+                                         // On ne prend pas les niveaux de la légende
+                                         let isLegend = false;
+                                         if (idx > 0 && cols[idx-1] && /[a-zA-Z]/.test(cols[idx-1]) && !/^(bloc|rep|parcelle|niveau|modalite|traitement|trt|nom|var|produit)$/i.test(cols[idx-1])) isLegend = true;
+                                         if (idx < cols.length - 1 && cols[idx+1] && /[a-zA-Z]/.test(cols[idx+1]) && !/^(bloc|rep|parcelle|niveau|modalite|traitement|trt|nom|var|produit)$/i.test(cols[idx+1])) isLegend = true;
+                                         if (!isLegend) levels.push(v);
+                                    }
+                                    else plots.push(v);
+                                } else if (val.match(/[a-zA-Z]/) && !val.toLowerCase().match(/^(bloc|rep|parcelle|niveau|modalite|traitement|trt|nom|var|produit)$/)) {
+                                    texts.push(val);
+                                }
+                            });
+
+                            if (plots.length === 1 && levels.length >= 1) {
+                                let level = levels[0]; 
+                                let name = mapping[level] || texts[0] || `Niveau ${level}`;
+                                importedPlan.push({ plotNum: plots[0], mod: level, variety: name, bloc: Math.floor(plots[0]/100) });
+                            }
+                            else if (plots.length === 0 && levels.length >= 2) {
+                                let plot = Math.max(...levels);
+                                let level = Math.min(...levels);
+                                let name = mapping[level] || texts[0] || `Niveau ${level}`;
+                                importedPlan.push({ plotNum: plot, mod: level, variety: name, bloc: null });
+                            }
+                        });
+                    }
+                }
+
+                // 5. Nettoyage final, Blocs et Variables
                 if (importedPlan.length > 0) {
+                    // Passe 1 : Récupérer toutes les modalités uniques
+                    importedPlan.forEach(item => {
+                        if (mapping[item.mod]) item.variety = mapping[item.mod];
+                        uniqueMods.add(item.mod);
+                    });
+                    
+                    let nbMods = uniqueMods.size;
+
+                    // Passe 2 : Appliquer les blocs et les calculs
+                    importedPlan.forEach(item => {
+                        if (item.bloc === null || isNaN(item.bloc) || item.bloc === 0) {
+                            if (item.plotNum >= 100) item.bloc = Math.floor(item.plotNum / 100);
+                            else item.bloc = Math.ceil(item.plotNum / nbMods) || 1;
+                        }
+                        if (item.bloc > maxBloc) maxBloc = item.bloc;
+                    });
+                    
                     appState.importedPlan = importedPlan;
                     document.getElementById("nb-blocks").value = maxBloc;
-                    document.getElementById("nb-modalities").value = uniqueMods.size;
-                    document.getElementById("trial-name").value = file.name.replace(/\.[^/.]+$/, "");
+                    document.getElementById("nb-modalities").value = nbMods;
+                    
+                    let trialName = file.name.replace(/\.[^/.]+$/, "").replace(/_2|_3|_4$/, "");
+                    // Si on importe depuis le dictionnaire (fallback), le nom peut être pris là
+                    if (trialName.match(/^\d{5}[a-zA-Z]{2}$/)) {
+                        document.getElementById("trial-name").value = trialName;
+                        appState.trialName = trialName;
+                    } else {
+                         document.getElementById("trial-name").value = trialName;
+                         appState.trialName = trialName;
+                    }
                     
                     document.getElementById("import-badge").classList.remove("hidden");
                     document.getElementById("clear-import-btn").classList.remove("hidden");
+                    
+                    const btnPlan = document.getElementById("btn-view-plan");
+                    if(btnPlan) btnPlan.classList.remove("hidden");
+
                     updateBlockDirectionsUI();
                     saveCurrentConfig('notation');
-                    showToast(`Plan importé : ${importedPlan.length} parcelles trouvées !`);
-                } else showToast("Format illisible ou aucune donnée de parcelle.", true);
+                    showToast(`Plan importé : ${importedPlan.length} parcelles prêtes !`);
+                } else {
+                    // FALLBACK INTUITIF : Fichier sans en-tête (Dictionnaire pur : 101, 1, 201, 2)
+                    let fallbackPlan = [];
+                    grid.forEach(row => {
+                         let plotNum = null;
+                         let mod = null;
+                         let variety = "Standard";
+                         
+                         row.forEach(cell => {
+                              let val = cell.trim();
+                              if (/^\d+$/.test(val)) {
+                                  let v = parseInt(val);
+                                  if (v >= 100) plotNum = v;
+                                  else if (v < 100) mod = v;
+                              } else if (val.match(/[a-zA-Z]/)) {
+                                  variety = val;
+                              }
+                         });
+                         
+                         if (plotNum !== null && mod !== null) {
+                             fallbackPlan.push({plotNum: plotNum, mod: mod, variety: variety, bloc: Math.floor(plotNum/100)});
+                         }
+                    });
+                    
+                    if (fallbackPlan.length > 0) {
+                         let maxFBloc = 0;
+                         let uniqueFMods = new Set();
+                         fallbackPlan.forEach(item => {
+                              uniqueFMods.add(item.mod);
+                              if (item.bloc > maxFBloc) maxFBloc = item.bloc;
+                         });
+                         
+                         appState.importedPlan = fallbackPlan;
+                         document.getElementById("nb-blocks").value = maxFBloc;
+                         document.getElementById("nb-modalities").value = uniqueFMods.size;
+                         
+                         let trialName = file.name.replace(/\.[^/.]+$/, "").replace(/_2|_3|_4$/, "");
+                         document.getElementById("trial-name").value = trialName;
+                         appState.trialName = trialName;
+                         
+                         document.getElementById("import-badge").classList.remove("hidden");
+                         document.getElementById("clear-import-btn").classList.remove("hidden");
+                         
+                         const btnPlan = document.getElementById("btn-view-plan");
+                         if(btnPlan) btnPlan.classList.remove("hidden");
+
+                         updateBlockDirectionsUI();
+                         saveCurrentConfig('notation');
+                         showToast(`Plan (Simple) importé : ${fallbackPlan.length} parcelles !`);
+                    } else {
+                         showToast("Format illisible ou aucune donnée de parcelle valide.", true);
+                    }
+                }
             };
             reader.readAsText(file, 'windows-1252');
+        }
+
+        function clearImportedPlan() {
+            appState.importedPlan = null;
+            document.getElementById("import-badge").classList.add("hidden");
+            document.getElementById("clear-import-btn").classList.add("hidden");
+            document.getElementById("csv-upload").value = "";
+            const btnPlan = document.getElementById("btn-view-plan");
+            if(btnPlan) btnPlan.classList.add("hidden");
         }
 
         function generateTrialPlan(silent = false) {
@@ -1097,9 +1353,14 @@
                     if (appState.saisieMode === "ipm" || appState.saisieMode === "adventices") treatmentCard.classList.remove("hidden");
                     else treatmentCard.classList.add("hidden");
                 }
+                
+                const btnPlanEntry = document.getElementById("btn-view-plan-entry");
+                if(btnPlanEntry) {
+                    if (appState.saisieMode === "notation" && appState.importedPlan) btnPlanEntry.classList.remove("hidden");
+                    else btnPlanEntry.classList.add("hidden");
+                }
             }
 
-            // Sync Stades list dropdowns
             populateStadesDropdowns();
 
             let currentTitle = appState.trialName;
@@ -1110,7 +1371,7 @@
             const varietyContainer = document.getElementById("entry-header-variety-container");
             const currentPlot = appState.plots[appState.currentPlotIndex];
             
-            if (currentPlot && currentPlot.variety && currentPlot.variety !== "Standard" && currentPlot.variety !== "N/A") {
+            if (currentPlot && currentPlot.variety && currentPlot.variety !== "Standard" && currentPlot.variety !== "N/A" && !currentPlot.variety.startsWith("Niveau")) {
                 varietyContainer.classList.remove("hidden");
                 document.getElementById("entry-header-variety").innerText = currentPlot.variety;
             } else {
@@ -1134,7 +1395,7 @@
                 
                 if (appState.saisieMode === "adventices") opt.innerText = `B${up.bloc} - C${up.mod} ${allDone ? '✅' : ''}`;
                 else if (appState.saisieMode === "ipm") opt.innerText = `B${up.bloc} - ${up.variety} ${allDone ? '✅' : ''}`;
-                else opt.innerText = `B${up.bloc} - P. ${up.plotNum} ${up.variety && up.variety !== 'Standard' ? '('+up.variety+')' : ''} ${allDone ? '✅' : `(${countDone}/${appState.nbObs})`}`;
+                else opt.innerText = `${up.plotNum} ${allDone ? '✅' : `(${countDone}/${appState.nbObs})`}`;
                 
                 selector.appendChild(opt);
             });
@@ -1150,8 +1411,105 @@
             const completedCount = appState.plots.filter(p => p.isCompleted).length;
             document.getElementById("progress-bar").style.width = ((completedCount / appState.plots.length) * 100) + "%";
 
-            renderSummaryTable();
-            populateStatsDropdown();
+            // Mise à jour des tableaux (Stats et Summary)
+            renderTables();
+        }
+
+        // --- Nouveaux Tableaux en direct ---
+        function renderTables() {
+            // Options du menu stat
+            const statsSelect = document.getElementById("stats-var-select");
+            if(statsSelect) {
+                const currentVal = statsSelect.value;
+                statsSelect.innerHTML = "";
+                appState.selectedVars.forEach(vId => {
+                    const conf = getActiveVariablesConfig().find(item => item.id === vId);
+                    if (conf && conf.type !== 'text') {
+                        const opt = document.createElement("option");
+                        opt.value = vId; opt.innerText = conf.label;
+                        statsSelect.appendChild(opt);
+                    }
+                });
+                if(currentVal && Array.from(statsSelect.options).some(o => o.value === currentVal)) {
+                    statsSelect.value = currentVal;
+                }
+                renderStatsTable();
+            }
+
+            // Tableau complet
+            const sumTable = document.getElementById("summary-table");
+            if(sumTable) {
+                let html = `<thead class="bg-gray-50 border-b"><tr>
+                    <th class="px-3 py-2.5 font-bold text-gray-600">Parcelle</th>
+                    <th class="px-3 py-2.5 font-bold text-gray-600">Variété / Modalité</th>`;
+                appState.selectedVars.forEach(vId => {
+                    const conf = getActiveVariablesConfig().find(item => item.id === vId);
+                    html += `<th class="px-3 py-2.5 font-bold text-gray-600 text-center text-xs truncate max-w-[80px]" title="${conf?conf.label:vId}">${conf?conf.label:vId}</th>`;
+                });
+                html += `</tr></thead><tbody class="divide-y divide-gray-100">`;
+                
+                const sortedPlots = [...appState.plots].sort((a,b) => a.plotNum - b.plotNum);
+                sortedPlots.forEach(p => {
+                    if(!p.isCompleted) return;
+                    html += `<tr class="hover:bg-gray-50"><td class="px-3 py-2 font-black text-gray-800">${p.plotNum}</td><td class="px-3 py-2 font-medium text-gray-600 truncate max-w-[150px]" title="${p.variety}">${p.variety}</td>`;
+                    appState.selectedVars.forEach(vId => {
+                        const val = p.values[vId];
+                        html += `<td class="px-3 py-2 text-center text-gray-800 font-bold">${(val!==undefined && val!=="" && val!==-99)?String(val).replace('.',','):'-'}</td>`;
+                    });
+                    html += `</tr>`;
+                });
+                html += `</tbody>`;
+                sumTable.innerHTML = html;
+            }
+        }
+
+        function renderStatsTable() {
+            const varId = document.getElementById("stats-var-select").value;
+            const table = document.getElementById("stats-table");
+            if(!varId || !table) return;
+
+            const conf = getActiveVariablesConfig().find(item => item.id === varId);
+            const isCount = conf && (conf.type === 'number' || varId.startsWith('cnt_'));
+
+            const groups = {};
+            appState.plots.forEach(p => {
+                if(!p.isCompleted) return;
+                const v = (p.variety && p.variety !== 'Standard' && !p.variety.startsWith('Niveau')) ? p.variety : `Mod. ${p.mod}`;
+                let val = p.values[varId];
+                if(val !== undefined && val !== "" && val !== -99) {
+                    if(!groups[v]) groups[v] = [];
+                    groups[v].push(parseFloat(val));
+                }
+            });
+
+            let html = `<thead class="bg-gray-50 border-b"><tr>
+                <th class="px-3 py-2.5 font-bold text-gray-600">Variété / Modalité</th>
+                <th class="px-3 py-2.5 font-bold text-gray-600 text-center">Moyenne</th>
+                <th class="px-3 py-2.5 font-bold text-gray-600 text-center text-[10px]">Nb d'Obs</th>
+            </tr></thead><tbody class="divide-y divide-gray-100">`;
+
+            const stats = [];
+            for(let key in groups) {
+                const arr = groups[key];
+                const sum = arr.reduce((a,b)=>a+b,0);
+                stats.push({ key: key, mean: sum/arr.length, count: arr.length });
+            }
+
+            stats.sort((a,b) => b.mean - a.mean); // Tri décroissant
+
+            if(stats.length === 0) {
+                html += `<tr><td colspan="3" class="px-3 py-6 text-center text-gray-400 font-medium">Aucune donnée validée.</td></tr>`;
+            } else {
+                stats.forEach(s => {
+                    html += `<tr class="hover:bg-gray-50">
+                        <td class="px-3 py-2 font-bold text-gray-800">${s.key}</td>
+                        <td class="px-3 py-2 font-black text-agri-700 text-center bg-agri-50/30">${isCount ? s.mean.toFixed(1).replace('.',',') : s.mean.toFixed(2).replace('.',',')}</td>
+                        <td class="px-3 py-2 text-gray-400 text-center font-bold text-xs">${s.count}</td>
+                    </tr>`;
+                });
+            }
+            html += `</tbody>`;
+            table.innerHTML = html;
         }
 
         function populateStadesDropdowns() {
@@ -1259,7 +1617,12 @@
 
             if (appState.saisieMode === "adventices") document.getElementById("plot-sub-info").innerText = `Bloc ${plot.bloc} | Cadre ${plot.mod}`;
             else if (appState.saisieMode === "ipm") document.getElementById("plot-sub-info").innerText = `Bloc ${plot.bloc} | Var : ${plot.variety}`;
-            else document.getElementById("plot-sub-info").innerText = `Bloc ${plot.bloc} | Mod. ${plot.mod}`;
+            else {
+                let txt = `Bloc ${plot.bloc}`;
+                if (plot.variety && plot.variety !== 'Standard' && !plot.variety.startsWith('Niveau')) txt += ` | ${plot.variety}`;
+                else txt += ` | Niv. ${plot.mod}`;
+                document.getElementById("plot-sub-info").innerText = txt;
+            }
 
             const container = document.getElementById("dynamic-inputs");
             container.innerHTML = "";
@@ -1332,6 +1695,7 @@
             if (currentPlot) { currentPlot[field] = value; currentPlot.isCompleted = true; saveStateToLocalStorage(); }
         }
 
+        // --- CALCULETTE ET SAISIE CONTINUE ---
         function openKeypad(varId) {
             const conf = getActiveVariablesConfig().find(item => item.id === varId);
             if (!conf) return;
@@ -1341,7 +1705,13 @@
             keypadValueString = (val !== undefined && val !== null && val !== "") ? String(val).replace('.', ',') : "";
             document.getElementById("keypad-var-category").innerText = conf.category;
             document.getElementById("keypad-var-label").innerText = conf.label;
-            document.getElementById("keypad-plot-badge").innerText = appState.saisieMode==="adventices"?`B${p.bloc} C${p.mod}`:`P. ${p.plotNum} ${p.variety && p.variety!=='Standard' && p.variety!=='N/A'?'('+p.variety+')':''}`;
+            
+            let badgeText = "";
+            let varText = (p.variety && p.variety !== "Standard" && !p.variety.startsWith("Niveau")) ? p.variety : `N°${p.mod}`;
+            
+            if (appState.saisieMode === "adventices") badgeText = `B${p.bloc} C${p.mod}`;
+            else badgeText = `${p.plotNum} | ${varText}`; // Plus de P devant, ajout du nom
+            document.getElementById("keypad-plot-badge").innerText = badgeText;
             
             const modal = document.getElementById("keypad-modal");
             modal.classList.remove("hidden"); setTimeout(() => modal.classList.remove("opacity-0"), 10);
@@ -1374,11 +1744,11 @@
             appState.plots[appState.currentPlotIndex].values[activeKeypadVarId] = keypadValueString.replace(',', '.');
             appState.plots[appState.currentPlotIndex].isCompleted = true;
             saveStateToLocalStorage();
-            updateUI();
             
             let currentIndexInVars = appState.selectedVars.indexOf(activeKeypadVarId);
             let nextNumVarId = null;
             
+            // Cherche la prochaine variable mathématique dans la MÊME parcelle
             for (let i = currentIndexInVars + 1; i < appState.selectedVars.length; i++) {
                 const nextId = appState.selectedVars[i];
                 const nextConf = getActiveVariablesConfig().find(item => item.id === nextId);
@@ -1389,10 +1759,36 @@
             }
             
             if (nextNumVarId) {
+                updateUI();
                 openKeypad(nextNumVarId);
             } else {
-                closeKeypad();
-                saveCurrentPlotAndNext();
+                // S'il n'y a plus de variables, on SAUTE à la parcelle suivante
+                if (appState.currentPlotIndex < appState.plots.length - 1) {
+                    appState.currentPlotIndex++;
+                    appState.activeObs = appState.plots[appState.currentPlotIndex].obs;
+                    updateUI(); 
+                    window.scrollTo({ top: 120, behavior: 'smooth' });
+                    
+                    let firstNumVarId = null;
+                    for (let i = 0; i < appState.selectedVars.length; i++) {
+                        const nextId = appState.selectedVars[i];
+                        const nextConf = getActiveVariablesConfig().find(item => item.id === nextId);
+                        if (nextConf && nextConf.type !== 'text') {
+                            firstNumVarId = nextId;
+                            break;
+                        }
+                    }
+                    
+                    if (firstNumVarId) {
+                        openKeypad(firstNumVarId); // Rouvre instantanément sur la nouvelle parcelle !
+                    } else {
+                        closeKeypad();
+                    }
+                } else {
+                    updateUI();
+                    closeKeypad();
+                    showToast("🎉 Notation complétée !");
+                }
             }
         }
         
@@ -1421,6 +1817,7 @@
             appState.plots[appState.currentPlotIndex].values[varId] = input.value;
             appState.plots[appState.currentPlotIndex].isCompleted = true;
             saveStateToLocalStorage();
+            renderTables();
         }
         
         function saveCurrentPlotAndNext() {
@@ -1544,6 +1941,7 @@
             }
             const totEl = document.getElementById('ipm-total-display');
             if(totEl) totEl.innerText = p.ipm.total;
+            renderTables();
         }
         
         function ipmUndoLast() {
@@ -1561,6 +1959,7 @@
             updateIpmValues(p);
             saveStateToLocalStorage();
             loadPlotData(appState.currentPlotIndex);
+            renderTables();
         }
 
         function ipmResetPlot() {
@@ -1569,6 +1968,7 @@
             updateIpmValues(p);
             saveStateToLocalStorage();
             loadPlotData(appState.currentPlotIndex);
+            renderTables();
         }
 
         function updateIpmValues(plot) {
@@ -1735,81 +2135,114 @@
             if (!appState.treatmentConditionsEnabled) return ["", "", "", "", "", "", "", ""];
             return [appState.treatmentDate || "", appState.treatmentTime || "", appState.treatmentNebulosity || "", appState.treatmentBeaufort || "", appState.treatmentHygrometry || "", appState.treatmentSoilMoisture || "", appState.treatmentTemperature || "", appState.treatmentBeetStage || ""];
         }
-        
-        function populateStatsDropdown() {
-            const select = document.getElementById("stats-var-select");
-            if(!select) return; select.innerHTML = "";
-            appState.selectedVars.forEach(vId => {
-                const conf = getActiveVariablesConfig().find(item => item.id === vId);
-                if (conf && conf.type === 'text') return; // Ignore text for statistics
-                const opt = document.createElement("option"); opt.value = vId; opt.innerText = conf ? conf.label : vId;
-                select.appendChild(opt);
-            });
-            renderStatsTable();
-        }
 
-        function renderStatsTable() {
-            const table = document.getElementById("stats-table");
-            const varId = document.getElementById("stats-var-select")?.value;
-            if (!table || !varId) return; table.innerHTML = "";
+        // --- NOUVEAU VISUALISEUR DE PLAN EXACT ---
+        function openPlanVisualizer() {
+            const plan = appState.importedPlan || appState.plots;
+            if (!plan || plan.length === 0) return showToast("Aucun plan généré ou importé.", true);
             
-            const stats = {}; const blocs = new Set();
-            appState.plots.forEach(p => {
-                if(p.values[varId] !== undefined && p.values[varId] !== "" && p.values[varId] != "-99") {
-                    if(!stats[p.variety]) stats[p.variety] = {};
-                    stats[p.variety][p.bloc] = parseFloat(p.values[varId]);
-                    blocs.add(p.bloc);
+            const modal = document.getElementById("plan-viewer-modal");
+            const select = document.getElementById("plan-viewer-select");
+            const grid = document.getElementById("plan-viewer-grid");
+            
+            select.innerHTML = '<option value="">Toutes les modalités...</option>';
+            
+            const modsMap = new Map();
+            plan.forEach(p => {
+                const varietyName = p.variety === 'Standard' ? `Niveau ${p.mod}` : p.variety;
+                if (!modsMap.has(p.mod)) {
+                    modsMap.set(p.mod, varietyName);
                 }
             });
-            const sortedBlocs = Array.from(blocs).sort((a,b)=>a-b);
             
-            let html = `<thead class="bg-blue-50/50 border-b"><tr><th class="px-2 py-2 font-bold text-blue-900">Variété/Traitement</th>`;
-            sortedBlocs.forEach(b => html += `<th class="px-2 py-2 font-bold text-center">B${b}</th>`);
-            html += `<th class="px-2 py-2 font-black text-center text-agri-700 bg-agri-50">Moy.</th><th class="px-2 py-2 font-bold text-center text-gray-500 bg-gray-50">Ecart-T.</th></tr></thead><tbody class="divide-y divide-gray-100">`;
+            const sortedMods = Array.from(modsMap.entries()).sort((a, b) => a[0] - b[0]);
+            sortedMods.forEach(([mod, varietyName]) => {
+                let label = varietyName.startsWith('Niveau') ? varietyName : `Niveau ${mod} - ${varietyName}`;
+                select.innerHTML += `<option value="${varietyName.replace(/"/g, '&quot;')}">${label}</option>`;
+            });
             
-            for(let variete in stats) {
-                let rowHtml = `<td class="px-2 py-2 font-bold text-gray-700">${variete}</td>`;
-                let sum = 0, count = 0, vals = [];
-                sortedBlocs.forEach(b => {
-                    const val = stats[variete][b];
-                    rowHtml += `<td class="px-2 py-2 text-center text-gray-600">${val !== undefined ? String(val).replace('.',',') : '-'}</td>`;
-                    if(val !== undefined) { sum += val; count++; vals.push(val); }
+            const blocks = {};
+            plan.forEach(p => { if(!blocks[p.bloc]) blocks[p.bloc] = []; blocks[p.bloc].push(p); });
+            const blockKeys = Object.keys(blocks).sort((a,b)=>parseInt(a)-parseInt(b));
+            
+            blockKeys.forEach(b => { 
+                const uniquePlots = [];
+                blocks[b].forEach(p => {
+                    if(!uniquePlots.find(x => x.plotNum === p.plotNum)) uniquePlots.push(p);
                 });
-                const moy = count > 0 ? (sum/count) : 0;
-                let ecartType = 0;
-                if(count > 1) {
-                    const variance = vals.reduce((acc, val) => acc + Math.pow(val - moy, 2), 0) / (count - 1);
-                    ecartType = Math.sqrt(variance);
-                }
-                rowHtml += `<td class="px-2 py-2 text-center font-black text-agri-700 bg-agri-50/50">${count>0?String(moy.toFixed(1)).replace('.',','):'-'}</td>`;
-                rowHtml += `<td class="px-2 py-2 text-center font-bold text-gray-500 bg-gray-50/50">${count>1?String(ecartType.toFixed(2)).replace('.',','):'-'}</td>`;
-                html += `<tr>${rowHtml}</tr>`;
+                blocks[b] = uniquePlots.sort((a,b) => a.plotNum - b.plotNum); 
+            });
+
+            let maxRows = 0;
+            blockKeys.forEach(b => { if(blocks[b].length > maxRows) maxRows = blocks[b].length; });
+
+            let tableHtml = `<div class="overflow-x-auto"><table class="w-full text-xs border-collapse border-2 border-blue-900 bg-white min-w-max"><tbody>`;
+            
+            for(let r = 0; r < maxRows; r++) {
+                tableHtml += `<tr>`;
+                blockKeys.forEach(b => {
+                    const plot = blocks[b][r];
+                    if (plot) {
+                        const varietyDisplay = plot.variety === 'Standard' ? `Niveau ${plot.mod}` : plot.variety;
+                        tableHtml += `
+                        <td class="border border-blue-900 p-0 h-[28px] plan-cell transition-colors min-w-[120px]" data-var="${plot.variety.replace(/"/g, '&quot;')}" data-plot="${plot.plotNum}">
+                            <div class="flex h-full w-full">
+                                <div class="w-10 flex-shrink-0 bg-gray-100 flex items-center justify-center border-r border-blue-900 font-bold text-gray-800 text-[11px] num-div">${plot.plotNum}</div>
+                                <div class="flex-1 px-1 flex items-center justify-center font-bold text-gray-900 text-[9px] text-center uppercase truncate var-div" title="${varietyDisplay.replace(/"/g, '&quot;')}">${varietyDisplay}</div>
+                            </div>
+                        </td>`;
+                    } else {
+                        tableHtml += `<td class="border border-blue-900 bg-gray-50 h-[28px] min-w-[120px]"></td>`;
+                    }
+                });
+                tableHtml += `</tr>`;
             }
-            table.innerHTML = html + `</tbody>`;
+            tableHtml += `</tbody></table></div>`;
+            grid.innerHTML = tableHtml;
+            
+            highlightPlanVariety();
+            modal.classList.remove("hidden"); setTimeout(() => modal.classList.remove("opacity-0"), 10);
+        }
+        
+        function highlightPlanVariety() {
+            const selVar = document.getElementById("plan-viewer-select").value;
+            const cells = document.querySelectorAll(".plan-cell");
+            let count = 0; let plots = [];
+            
+            cells.forEach(c => {
+                const varDiv = c.querySelector('.var-div');
+                const numDiv = c.querySelector('.num-div');
+                if(!varDiv) return;
+
+                if (selVar && c.getAttribute("data-var") === selVar) {
+                    c.classList.add("ring-2", "ring-inset", "ring-purple-600");
+                    varDiv.classList.add("bg-purple-100", "text-purple-800");
+                    varDiv.classList.remove("text-gray-900");
+                    numDiv.classList.add("bg-purple-200", "text-purple-900");
+                    numDiv.classList.remove("bg-gray-100", "text-gray-800");
+                    count++; plots.push(c.getAttribute("data-plot"));
+                } else {
+                    c.classList.remove("ring-2", "ring-inset", "ring-purple-600", "opacity-30");
+                    varDiv.classList.remove("bg-purple-100", "text-purple-800");
+                    varDiv.classList.add("text-gray-900");
+                    numDiv.classList.remove("bg-purple-200", "text-purple-900");
+                    numDiv.classList.add("bg-gray-100", "text-gray-800");
+                    
+                    if (selVar) c.classList.add("opacity-30");
+                }
+            });
+            
+            const summary = document.getElementById("plan-viewer-summary");
+            if (selVar) {
+                summary.innerHTML = `<span class="text-purple-700"><i class="fa-solid fa-seedling mr-1"></i> <b>${selVar}</b> : ${count} parcelles trouvées (${plots.join(', ')})</span>`;
+            } else {
+                summary.innerHTML = "Sélectionnez une variété pour la mettre en évidence.";
+            }
         }
 
-        function renderSummaryTable() {
-            const table = document.getElementById("summary-table");
-            if (!table) return; table.innerHTML = "";
-            const thead = document.createElement("thead"); thead.className = "bg-gray-50 border-b";
-            let html = `<tr><th class="px-3 py-2 font-bold">Parcelle</th><th class="px-2 py-2 font-bold">Variété/Traitement</th><th class="px-2 py-2 font-bold">Bloc</th><th class="px-2 py-2 font-bold">Mod</th>`;
-            appState.selectedVars.forEach(vId => { const conf = getActiveVariablesConfig().find(item => item.id === vId); html += `<th class="px-2 py-2 font-bold">${conf?conf.label.split('(')[0]:vId}</th>`; });
-            html += `<th class="px-2 py-2 font-bold text-center"><i class="fa-solid fa-camera text-gray-500"></i></th></tr>`;
-            thead.innerHTML = html; table.appendChild(thead);
-
-            const tbody = document.createElement("tbody"); tbody.className = "divide-y divide-gray-100";
-            appState.plots.forEach((p, plotIdx) => {
-                const tr = document.createElement("tr"); tr.className = p.isCompleted ? "bg-green-50/40" : "hover:bg-gray-50";
-                const obsBadge = p.observation ? ' <i class="fa-solid fa-comment-dots text-blue-500 text-[10px]"></i>' : '';
-                const photoBadge = p.photos && p.photos.length > 0 ? `<span class="bg-blue-100 text-blue-700 text-xxs font-bold px-1.5 py-0.5 rounded-full">${p.photos.length}</span>` : '-';
-                let rowHtml = `<td class="px-3 py-2 text-blue-800 cursor-pointer" onclick="appState.currentPlotIndex=${plotIdx};updateUI();window.scrollTo({top:150})">${p.plotNum} ${p.isCompleted?'✅':''}${obsBadge}</td>
-                               <td class="px-2 py-2 text-gray-600 truncate max-w-[100px]">${p.variety}</td>
-                               <td class="px-2 py-2 text-gray-500">${p.bloc}</td><td class="px-2 py-2 text-gray-500">${p.mod}</td>`;
-                appState.selectedVars.forEach(vId => { rowHtml += `<td class="px-2 py-2 font-bold">${p.values[vId]!==undefined&&p.values[vId]!==""?String(p.values[vId]).replace('.',','):'-'}</td>`; });
-                rowHtml += `<td class="px-2 py-2 text-center">${photoBadge}</td>`;
-                tr.innerHTML = rowHtml; tbody.appendChild(tr);
-            });
-            table.appendChild(tbody);
+        function closePlanVisualizer() {
+            const modal = document.getElementById("plan-viewer-modal");
+            modal.classList.add("opacity-0"); setTimeout(() => modal.classList.add("hidden"), 200);
         }
 
         function generateCSVString() {
@@ -1826,61 +2259,6 @@
                 csv += row.map(val => `"${String(val).replace(/"/g, '""')}"`).join(";") + "\n";
             });
             return csv;
-        }
-
-        function transmitToBetaAnalyse() {
-            if (appState.plots.length === 0) return showToast("Aucune donnée à transmettre.", true);
-            
-            showCustomConfirm("Transmission Locale", "Enregistrer cet essai directement dans le tableau de bord d'analyse sur cet appareil ?", () => {
-                const activeConfig = getActiveVariablesConfig();
-                let headers = ["Essai", "Variete", "Date", "Observation", "Stade_Parcelle", "Parcelle", "Bloc", "Modalite", "Obs", "Cond_Date", "Cond_Heure", "Cond_Nebulo", "Cond_Vent", "Cond_Hygro", "Cond_Sol", "Cond_Temp", "Cond_Stade_Betteraves", "Photos_Count"];
-                appState.selectedVars.forEach(vId => { const c = activeConfig.find(item => item.id === vId); headers.push(c ? c.label : vId); });
-                
-                const data = [];
-                appState.plots.forEach(p => {
-                    const conds = getConds();
-                    let rowObj = {
-                        "Essai": appState.trialName, "Variete": p.variety, "Date": p.date || appState.trialDate, "Observation": p.observation || "", "Stade_Parcelle": p.stade_betterave || "",
-                        "Parcelle": p.plotNum, "Bloc": p.bloc, "Modalite": p.mod, "Obs": p.obs,
-                        "Cond_Date": conds[0], "Cond_Heure": conds[1], "Cond_Nebulo": conds[2], "Cond_Vent": conds[3], "Cond_Hygro": conds[4], "Cond_Sol": conds[5], "Cond_Temp": conds[6], "Cond_Stade_Betteraves": conds[7],
-                        "Photos_Count": p.photos ? p.photos.length : 0
-                    };
-                    appState.selectedVars.forEach(vId => { 
-                        let val = p.values[vId];
-                        if(val !== undefined && val !== "" && val !== -99) { val = parseFloat(String(val).replace(',', '.')); } else { val = ""; }
-                        const c = activeConfig.find(item => item.id === vId); 
-                        rowObj[c ? c.label : vId] = val;
-                    });
-                    data.push(rowObj);
-                });
-
-                let db = [];
-                try {
-                    const stored = localStorage.getItem('beta_analyse_db');
-                    if (stored) db = JSON.parse(stored);
-                } catch(e) {}
-
-                const importDate = new Date().toISOString();
-                const existingIdx = db.findIndex(t => t.name === appState.trialName);
-
-                if (existingIdx > -1) {
-                    db[existingIdx].data = data; db[existingIdx].headers = headers; db[existingIdx].lastUpdate = importDate;
-                } else {
-                    db.push({ id: 'trial_' + Date.now(), name: appState.trialName, lastUpdate: importDate, headers: headers, data: data });
-                }
-
-                try {
-                    localStorage.setItem('beta_analyse_db', JSON.stringify(db));
-                    showToast("Transmis à BetaAnalyse avec succès !");
-                    setTimeout(() => {
-                        if(confirm("Données transmises avec succès ! Voulez-vous ouvrir BetaAnalyse maintenant ?")) {
-                            window.location.href = "https://ydebeauvaisitbfr-wq.github.io/BetaAnalyse/"; 
-                        }
-                    }, 500);
-                } catch(e) {
-                    showToast("Erreur : Mémoire de l'appareil pleine.", true);
-                }
-            });
         }
 
         function exportToCSV() {
@@ -1903,10 +2281,8 @@
             const dateStr = new Date().toISOString().split('T')[0];
             const safeName = appState.trialName.toLowerCase().replace(/[^a-z0-9]/g, "_");
             
-            // Ajout du CSV au dossier principal
             zip.file(`saisie_${safeName}_${dateStr}.csv`, generateCSVString());
             
-            // Création d'un dossier Photos et renommage intelligent des images
             const photoFolder = zip.folder("Photos");
             let photoCount = 0;
             appState.plots.forEach(p => {
@@ -1925,28 +2301,16 @@
                 const name = `Export_${safeName}_${dateStr}.zip`;
                 const file = new File([content], name, { type: 'application/zip' });
                 
-                // On tente le menu de partage natif (Mail, SMS, etc)
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
                     try {
-                        await navigator.share({
-                            files: [file],
-                            title: 'Export BetaSaisie',
-                            text: 'Voici le fichier contenant les données et les photos de l\'essai.'
-                        });
+                        await navigator.share({ files: [file], title: 'Export BetaSaisie', text: 'Données et photos' });
                         showToast("Partage réussi !");
-                    } catch (e) {
-                        // Si l'utilisateur annule le partage ou que l'app plante, on télécharge.
-                        console.log("Partage annulé ou échoué", e);
-                        triggerDownload(content, name);
-                    }
+                    } catch (e) { triggerDownload(content, name); }
                 } else {
-                    // Si le téléphone ne supporte pas le partage direct de fichiers, on télécharge.
                     triggerDownload(content, name);
-                    showToast(`Partage impossible, ZIP téléchargé (${photoCount} photos) !`);
+                    showToast(`ZIP téléchargé (${photoCount} photos) !`);
                 }
-            } catch (err) {
-                showToast("Erreur lors de la création du ZIP", true);
-            }
+            } catch (err) { showToast("Erreur lors de la création du ZIP", true); }
         }
         
         function triggerDownload(blob, filename) {
@@ -1956,7 +2320,6 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            showToast("Le fichier ZIP a été téléchargé.");
         }
 
         function downloadCurrentPhoto() {
@@ -2095,7 +2458,6 @@
 
         function attemptLogin() { 
             const usernameInput = document.getElementById("login-username").value.trim().toUpperCase().replace('\\', '/'); 
-            // Ajout du trim() sur le mot de passe pour corriger le problème du clavier téléphonique qui ajoute un espace
             const passwordInput = document.getElementById("login-password").value.trim(); 
             const rememberCheck = document.getElementById("login-remember").checked; 
             if (!usernameInput || !passwordInput) return showToast("Veuillez renseigner les deux champs.", true); 
@@ -2212,10 +2574,13 @@
                 
                 const badge = document.getElementById("import-badge");
                 const clearBtn = document.getElementById("clear-import-btn");
-                if (appState.importedPlan) { badge.classList.remove("hidden"); clearBtn.classList.remove("hidden"); }
-            } catch(e) {
-                console.error(e);
-            }
+                const btnPlan = document.getElementById("btn-view-plan");
+                if (appState.importedPlan) { 
+                    badge.classList.remove("hidden"); 
+                    clearBtn.classList.remove("hidden"); 
+                    if(btnPlan) btnPlan.classList.remove("hidden");
+                }
+            } catch(e) { console.error(e); }
         };
     </script>
 </body>
