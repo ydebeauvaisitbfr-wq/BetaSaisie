@@ -565,16 +565,6 @@
                     </table>
                 </div>
             </div>
-
-            <!-- TABLEAU COMPLET -->
-            <div class="mt-6 border-t border-gray-200 pt-4">
-                <h3 class="text-xs font-bold uppercase text-gray-700 mb-2"><i class="fa-solid fa-table mr-1"></i> Données brutes</h3>
-                <div class="overflow-x-auto border border-gray-200 rounded-xl shadow-sm">
-                    <table class="w-full divide-y divide-gray-200 text-xs text-left whitespace-nowrap" id="summary-table">
-                        <!-- Généré en JS -->
-                    </table>
-                </div>
-            </div>
         </section>
 
         <!-- FOOTER CORPORATE -->
@@ -668,19 +658,46 @@
     <!-- MODAL PLAN VISUALIZER -->
     <div id="plan-viewer-modal" class="fixed inset-0 bg-slate-900/80 flex items-center justify-center p-2 sm:p-4 z-[99999] hidden opacity-0 transition-opacity duration-200 backdrop-blur-sm">
         <div class="bg-white rounded-xl w-full max-w-5xl max-h-[95vh] flex flex-col shadow-2xl overflow-hidden">
+            <!-- Header -->
             <div class="flex justify-between items-center p-3 border-b bg-slate-50">
-                <h3 class="text-base font-black text-slate-800"><i class="fa-solid fa-map-location-dot text-blue-600 mr-2"></i> Plan de l'essai</h3>
+                <h3 class="text-base font-black text-slate-800"><i class="fa-solid fa-map-location-dot text-blue-600 mr-2"></i> Carte de l'essai & Analyses</h3>
                 <button onclick="closePlanVisualizer()" class="w-8 h-8 bg-slate-200 hover:bg-slate-300 rounded-lg flex items-center justify-center text-slate-600 font-bold transition">&times;</button>
             </div>
-            <div class="p-3 border-b bg-white flex flex-col sm:flex-row sm:items-center gap-3">
-                <label class="text-xs font-bold uppercase text-slate-500 whitespace-nowrap">Mettre en évidence :</label>
-                <select id="plan-viewer-select" onchange="highlightPlanVariety()" class="flex-1 bg-slate-50 border border-slate-300 text-slate-800 text-sm rounded-lg focus:ring-blue-500 font-bold p-2 outline-none">
-                    <!-- Options injectées -->
-                </select>
+            
+            <!-- Controls (Tabs / Filters) -->
+            <div class="flex flex-col md:flex-row border-b border-slate-200 bg-white">
+                <!-- Zone 1 : Multisélection Variétés -->
+                <div class="flex-1 p-3 border-b md:border-b-0 md:border-r border-slate-200">
+                    <label class="block text-[10px] font-black uppercase text-purple-700 mb-1.5"><i class="fa-solid fa-eye mr-1"></i> Mettre en évidence (Variétés)</label>
+                    <select id="plan-viewer-select" onchange="addVarietyHighlight(this.value)" class="w-full bg-purple-50 border border-purple-200 text-purple-900 text-xs rounded-lg focus:ring-purple-500 font-bold p-2 outline-none cursor-pointer">
+                        <!-- Options injectées -->
+                    </select>
+                    <div id="plan-variety-tags" class="flex flex-wrap gap-1.5 mt-2">
+                        <!-- Tags injectés -->
+                    </div>
+                </div>
+                
+                <!-- Zone 2 : Carte de chaleur -->
+                <div class="flex-1 p-3">
+                    <label class="block text-[10px] font-black uppercase text-agri-700 mb-1.5"><i class="fa-solid fa-fire mr-1"></i> Carte de chaleur (Résultats)</label>
+                    <select id="plan-viewer-heatmap-select" onchange="renderPlanGrid()" class="w-full bg-agri-50 border border-agri-200 text-agri-900 text-xs rounded-lg focus:ring-agri-500 font-bold p-2 outline-none cursor-pointer">
+                        <!-- Options injectées -->
+                    </select>
+                    
+                    <div id="heatmap-legend" class="hidden mt-2 flex items-center justify-between text-[9px] font-bold text-slate-500">
+                        <span id="heatmap-legend-low">Faible</span>
+                        <div id="heatmap-legend-bar" class="flex-1 h-2 mx-2 bg-gradient-to-r from-green-500 via-orange-500 to-red-500 border border-slate-200 rounded"></div>
+                        <span id="heatmap-legend-high">Fort</span>
+                    </div>
+                </div>
             </div>
-            <div id="plan-viewer-summary" class="px-4 py-2 bg-blue-50 text-xs font-bold text-blue-800 border-b border-blue-100 min-h-[36px] flex items-center">
-                Sélectionnez une variété pour la mettre en évidence.
+            
+            <!-- Summary Bar -->
+            <div class="px-4 py-2 bg-slate-100 text-xs font-medium text-slate-600 border-b border-slate-200 flex items-center justify-between">
+                <span id="plan-summary-text">Sélectionnez une variété ou une variable pour analyser l'essai.</span>
             </div>
+
+            <!-- Grid -->
             <div id="plan-viewer-grid" class="p-4 overflow-y-auto flex-1 bg-white">
                 <!-- Grille CSS injectée en JS -->
             </div>
@@ -1422,44 +1439,21 @@
             if(statsSelect) {
                 const currentVal = statsSelect.value;
                 statsSelect.innerHTML = "";
+                let hasOptions = false;
                 appState.selectedVars.forEach(vId => {
                     const conf = getActiveVariablesConfig().find(item => item.id === vId);
                     if (conf && conf.type !== 'text') {
                         const opt = document.createElement("option");
                         opt.value = vId; opt.innerText = conf.label;
                         statsSelect.appendChild(opt);
+                        hasOptions = true;
                     }
                 });
                 if(currentVal && Array.from(statsSelect.options).some(o => o.value === currentVal)) {
                     statsSelect.value = currentVal;
                 }
-                renderStatsTable();
-            }
-
-            // Tableau complet
-            const sumTable = document.getElementById("summary-table");
-            if(sumTable) {
-                let html = `<thead class="bg-gray-50 border-b"><tr>
-                    <th class="px-3 py-2.5 font-bold text-gray-600">Parcelle</th>
-                    <th class="px-3 py-2.5 font-bold text-gray-600">Variété / Modalité</th>`;
-                appState.selectedVars.forEach(vId => {
-                    const conf = getActiveVariablesConfig().find(item => item.id === vId);
-                    html += `<th class="px-3 py-2.5 font-bold text-gray-600 text-center text-xs truncate max-w-[80px]" title="${conf?conf.label:vId}">${conf?conf.label:vId}</th>`;
-                });
-                html += `</tr></thead><tbody class="divide-y divide-gray-100">`;
-                
-                const sortedPlots = [...appState.plots].sort((a,b) => a.plotNum - b.plotNum);
-                sortedPlots.forEach(p => {
-                    if(!p.isCompleted) return;
-                    html += `<tr class="hover:bg-gray-50"><td class="px-3 py-2 font-black text-gray-800">${p.plotNum}</td><td class="px-3 py-2 font-medium text-gray-600 truncate max-w-[150px]" title="${p.variety}">${p.variety}</td>`;
-                    appState.selectedVars.forEach(vId => {
-                        const val = p.values[vId];
-                        html += `<td class="px-3 py-2 text-center text-gray-800 font-bold">${(val!==undefined && val!=="" && val!==-99)?String(val).replace('.',','):'-'}</td>`;
-                    });
-                    html += `</tr>`;
-                });
-                html += `</tbody>`;
-                sumTable.innerHTML = html;
+                if(hasOptions) renderStatsTable();
+                else document.getElementById("stats-table").innerHTML = "<tr><td class='p-4 text-center text-gray-500'>Aucune variable chiffrée.</td></tr>";
             }
         }
 
@@ -1471,40 +1465,88 @@
             const conf = getActiveVariablesConfig().find(item => item.id === varId);
             const isCount = conf && (conf.type === 'number' || varId.startsWith('cnt_'));
 
-            const groups = {};
+            // 1. Collecter les blocs et regrouper les données par modalité
+            const modsMap = new Map();
+            const blocksSet = new Set();
+            
             appState.plots.forEach(p => {
                 if(!p.isCompleted) return;
-                const v = (p.variety && p.variety !== 'Standard' && !p.variety.startsWith('Niveau')) ? p.variety : `Mod. ${p.mod}`;
+                blocksSet.add(p.bloc);
+                
+                if (!modsMap.has(p.mod)) {
+                    modsMap.set(p.mod, { variety: p.variety, values: {} });
+                }
+                
                 let val = p.values[varId];
-                if(val !== undefined && val !== "" && val !== -99) {
-                    if(!groups[v]) groups[v] = [];
-                    groups[v].push(parseFloat(val));
+                if(val !== undefined && val !== "" && val !== -99 && val !== null) {
+                    modsMap.get(p.mod).values[p.bloc] = parseFloat(val);
                 }
             });
-
+            
+            const blocks = Array.from(blocksSet).sort((a,b) => a - b);
+            
+            // 2. Construire l'en-tête (Dynamique selon le nombre de blocs)
             let html = `<thead class="bg-gray-50 border-b"><tr>
-                <th class="px-3 py-2.5 font-bold text-gray-600">Variété / Modalité</th>
-                <th class="px-3 py-2.5 font-bold text-gray-600 text-center">Moyenne</th>
-                <th class="px-3 py-2.5 font-bold text-gray-600 text-center text-[10px]">Nb d'Obs</th>
+                <th class="px-3 py-2.5 font-bold text-gray-600 border-r border-gray-200 text-center">Mod.</th>
+                <th class="px-3 py-2.5 font-bold text-gray-600 border-r border-gray-200">Variété / Traitement</th>`;
+            
+            blocks.forEach(b => {
+                html += `<th class="px-3 py-2.5 font-bold text-blue-700 text-center">B${b}</th>`;
+            });
+            
+            html += `<th class="px-3 py-2.5 font-black text-agri-700 text-center border-l border-gray-200 bg-agri-50/50">Moy.</th>
+                <th class="px-3 py-2.5 font-bold text-gray-500 text-center">E.T.</th>
             </tr></thead><tbody class="divide-y divide-gray-100">`;
 
-            const stats = [];
-            for(let key in groups) {
-                const arr = groups[key];
-                const sum = arr.reduce((a,b)=>a+b,0);
-                stats.push({ key: key, mean: sum/arr.length, count: arr.length });
-            }
-
-            stats.sort((a,b) => b.mean - a.mean); // Tri décroissant
-
-            if(stats.length === 0) {
-                html += `<tr><td colspan="3" class="px-3 py-6 text-center text-gray-400 font-medium">Aucune donnée validée.</td></tr>`;
+            // 3. Remplir les lignes
+            if(modsMap.size === 0) {
+                html += `<tr><td colspan="${blocks.length + 4}" class="px-3 py-6 text-center text-gray-400 font-medium">Aucune donnée validée pour le moment.</td></tr>`;
             } else {
-                stats.forEach(s => {
+                const sortedMods = Array.from(modsMap.keys()).sort((a,b) => a - b);
+                
+                sortedMods.forEach(mod => {
+                    const data = modsMap.get(mod);
+                    const varName = data.variety === 'Standard' ? `Niveau ${mod}` : data.variety;
+                    
                     html += `<tr class="hover:bg-gray-50">
-                        <td class="px-3 py-2 font-bold text-gray-800">${s.key}</td>
-                        <td class="px-3 py-2 font-black text-agri-700 text-center bg-agri-50/30">${isCount ? s.mean.toFixed(1).replace('.',',') : s.mean.toFixed(2).replace('.',',')}</td>
-                        <td class="px-3 py-2 text-gray-400 text-center font-bold text-xs">${s.count}</td>
+                        <td class="px-3 py-2 font-black text-gray-800 border-r border-gray-200 text-center">${mod}</td>
+                        <td class="px-3 py-2 font-bold text-gray-700 border-r border-gray-200 truncate max-w-[150px]" title="${varName.replace(/"/g, '&quot;')}">${varName}</td>`;
+                        
+                    let sum = 0;
+                    let count = 0;
+                    let valsArr = [];
+                    
+                    // Ajouter chaque bloc
+                    blocks.forEach(b => {
+                        const val = data.values[b];
+                        if(val !== undefined) {
+                            html += `<td class="px-3 py-2 text-center text-blue-900 font-medium">${isCount ? val : val.toFixed(1).replace('.',',')}</td>`;
+                            sum += val;
+                            count++;
+                            valsArr.push(val);
+                        } else {
+                            html += `<td class="px-3 py-2 text-center text-gray-300">-</td>`;
+                        }
+                    });
+                    
+                    // Calculs Moyenne & Écart-type
+                    let mean = "-";
+                    let stdDev = "-";
+                    
+                    if (count > 0) {
+                        const m = sum / count;
+                        mean = isCount ? m.toFixed(1).replace('.',',') : m.toFixed(2).replace('.',',');
+                        
+                        if (count > 1) {
+                            const variance = valsArr.reduce((a, v) => a + Math.pow(v - m, 2), 0) / (count - 1);
+                            stdDev = Math.sqrt(variance).toFixed(2).replace('.',',');
+                        } else {
+                            stdDev = "0,00"; // Si un seul bloc a été saisi
+                        }
+                    }
+                    
+                    html += `<td class="px-3 py-2 text-center font-black text-agri-700 border-l border-gray-200 bg-agri-50/30">${mean}</td>
+                        <td class="px-3 py-2 text-center text-gray-500 text-xs font-bold">${stdDev}</td>
                     </tr>`;
                 });
             }
@@ -2136,40 +2178,157 @@
             return [appState.treatmentDate || "", appState.treatmentTime || "", appState.treatmentNebulosity || "", appState.treatmentBeaufort || "", appState.treatmentHygrometry || "", appState.treatmentSoilMoisture || "", appState.treatmentTemperature || "", appState.treatmentBeetStage || ""];
         }
 
-        // --- NOUVEAU VISUALISEUR DE PLAN EXACT ---
+        // --- MODULE D'ANALYSE INTEGRE (CARTE & BOXPLOT) ---
+        
+        const HIGHLIGHT_COLORS = [
+            { bg: '#e0e7ff', text: '#3730a3', border: '#c7d2fe' }, // Indigo
+            { bg: '#fce7f3', text: '#831843', border: '#fbcfe8' }, // Pink
+            { bg: '#ccfbf1', text: '#115e59', border: '#99f6e4' }, // Teal
+            { bg: '#fef3c7', text: '#92400e', border: '#fde68a' }, // Amber
+            { bg: '#e0f2fe', text: '#075985', border: '#bae6fd' }, // Sky
+            { bg: '#f3e8ff', text: '#581c87', border: '#e9d5ff' }, // Purple
+            { bg: '#ffe4e6', text: '#881337', border: '#fecdd3' }, // Rose
+            { bg: '#dcfce7', text: '#166534', border: '#bbf7d0' }, // Green
+        ];
+        
+        let selectedHighlightVarieties = []; // Stocke {name: "Variété X", colorObj: {...}}
+        let colorIndex = 0;
+        let boxplotSaisieInst = null;
+
+        function addVarietyHighlight(val) {
+            if (!val || selectedHighlightVarieties.find(v => v.name === val)) return;
+            const color = HIGHLIGHT_COLORS[colorIndex % HIGHLIGHT_COLORS.length];
+            selectedHighlightVarieties.push({ name: val, colorObj: color });
+            colorIndex++;
+            document.getElementById("plan-viewer-select").value = "";
+            renderPlanGrid();
+        }
+
+        function removeVarietyHighlight(val) {
+            selectedHighlightVarieties = selectedHighlightVarieties.filter(v => v.name !== val);
+            renderPlanGrid();
+        }
+
         function openPlanVisualizer() {
-            const plan = appState.importedPlan || appState.plots;
+            const plan = appState.plots && appState.plots.length > 0 ? appState.plots : appState.importedPlan;
             if (!plan || plan.length === 0) return showToast("Aucun plan généré ou importé.", true);
             
             const modal = document.getElementById("plan-viewer-modal");
-            const select = document.getElementById("plan-viewer-select");
-            const grid = document.getElementById("plan-viewer-grid");
             
-            select.innerHTML = '<option value="">Toutes les modalités...</option>';
-            
+            // 1. Remplir le menu des Variétés (Multisélection)
+            const selectVar = document.getElementById("plan-viewer-select");
+            selectVar.innerHTML = '<option value="">+ Ajouter une variété à mettre en évidence...</option>';
             const modsMap = new Map();
             plan.forEach(p => {
                 const varietyName = p.variety === 'Standard' ? `Niveau ${p.mod}` : p.variety;
-                if (!modsMap.has(p.mod)) {
-                    modsMap.set(p.mod, varietyName);
-                }
+                if (!modsMap.has(p.mod)) modsMap.set(p.mod, varietyName);
             });
-            
-            const sortedMods = Array.from(modsMap.entries()).sort((a, b) => a[0] - b[0]);
-            sortedMods.forEach(([mod, varietyName]) => {
+            Array.from(modsMap.entries()).sort((a, b) => a[0] - b[0]).forEach(([mod, varietyName]) => {
                 let label = varietyName.startsWith('Niveau') ? varietyName : `Niveau ${mod} - ${varietyName}`;
-                select.innerHTML += `<option value="${varietyName.replace(/"/g, '&quot;')}">${label}</option>`;
+                selectVar.innerHTML += `<option value="${varietyName.replace(/"/g, '&quot;')}">${label}</option>`;
             });
+
+            // 2. Remplir les menus des Variables (Heatmap & Boxplot)
+            const selectHeatmap = document.getElementById("plan-viewer-heatmap-select");
+            const selectBoxplot = document.getElementById("boxplot-var-select");
             
+            if (selectHeatmap) selectHeatmap.innerHTML = '<option value="">-- Affichage Plan Standard --</option>';
+            if (selectBoxplot) selectBoxplot.innerHTML = '<option value="">-- Choisissez une variable notée --</option>';
+            
+            if (appState.selectedVars && appState.selectedVars.length > 0) {
+                appState.selectedVars.forEach(vId => {
+                    const conf = getActiveVariablesConfig().find(item => item.id === vId);
+                    if (conf && conf.type !== 'text') {
+                        if (selectHeatmap) selectHeatmap.innerHTML += `<option value="${vId}">${conf.label}</option>`;
+                        if (selectBoxplot) selectBoxplot.innerHTML += `<option value="${vId}">${conf.label}</option>`;
+                    }
+                });
+            }
+            
+            // Réinitialiser les affichages
+            selectedHighlightVarieties = [];
+            colorIndex = 0;
+            if (document.getElementById("plan-viewer-heatmap-select")) document.getElementById("plan-viewer-heatmap-select").value = "";
+            if (document.getElementById("boxplot-var-select")) document.getElementById("boxplot-var-select").value = "";
+            
+            switchAnalysisTabInSaisie('carte');
+            renderPlanGrid();
+            
+            modal.classList.remove("hidden"); setTimeout(() => modal.classList.remove("opacity-0"), 10);
+        }
+        
+        function renderPlanGrid() {
+            const plan = appState.plots && appState.plots.length > 0 ? appState.plots : appState.importedPlan;
+            const grid = document.getElementById("plan-viewer-grid");
+            const heatmapVarId = document.getElementById("plan-viewer-heatmap-select").value;
+            const tagsContainer = document.getElementById("plan-variety-tags");
+            const legend = document.getElementById("heatmap-legend");
+            const summaryText = document.getElementById("plan-summary-text");
+            
+            // Affichage des tags multicolores
+            tagsContainer.innerHTML = "";
+            selectedHighlightVarieties.forEach(v => {
+                tagsContainer.innerHTML += `<span style="background-color: ${v.colorObj.bg}; color: ${v.colorObj.text}; border-color: ${v.colorObj.border};" class="text-[10px] font-black px-2 py-1 rounded border flex items-center shadow-sm uppercase tracking-wider">${v.name} <button onclick="removeVarietyHighlight('${v.name.replace(/'/g, "\\'")}')" class="ml-1.5 opacity-70 hover:opacity-100 focus:outline-none"><i class="fa-solid fa-xmark"></i></button></span>`;
+            });
+
+            if (heatmapVarId) {
+                legend.classList.remove("hidden");
+                const conf = getActiveVariablesConfig().find(item => item.id === heatmapVarId);
+                summaryText.innerHTML = `<span class="text-agri-700 font-bold"><i class="fa-solid fa-fire mr-1"></i> Carte de chaleur : <b>${conf ? conf.label : heatmapVarId}</b></span>`;
+                
+                // Determiner le sens du dégradé selon la variable (High is Good vs High is Bad)
+                let highIsGood = false;
+                const goodWhenHighVars = ['bet_nb_plante', 'bet_nb_plante_saine', 'bet_vigueur', 'bet_aspect_visuel', 'selectivite', 'sel_tassement', 'sel_blanchiment', 'efficacite'];
+                if (conf && (goodWhenHighVars.includes(conf.id) || conf.id.startsWith('eff_adv_'))) {
+                    highIsGood = true;
+                }
+                
+                const legendBar = document.getElementById("heatmap-legend-bar");
+                const legendLow = document.getElementById("heatmap-legend-low");
+                const legendHigh = document.getElementById("heatmap-legend-high");
+                
+                if (legendBar && legendLow && legendHigh) {
+                    if (highIsGood) {
+                        legendBar.className = "flex-1 h-2 mx-2 bg-gradient-to-r from-red-500 via-orange-500 to-green-500 border border-slate-200 rounded";
+                        legendLow.innerText = "Faible (Rouge)";
+                        legendHigh.innerText = "Fort (Vert)";
+                    } else {
+                        legendBar.className = "flex-1 h-2 mx-2 bg-gradient-to-r from-green-500 via-orange-500 to-red-500 border border-slate-200 rounded";
+                        legendLow.innerText = "Faible (Vert)";
+                        legendHigh.innerText = "Fort (Rouge)";
+                    }
+                }
+            } else {
+                legend.classList.add("hidden");
+                if (selectedHighlightVarieties.length > 0) {
+                    summaryText.innerHTML = `<span class="text-blue-700 font-bold"><i class="fa-solid fa-eye mr-1"></i> <b>${selectedHighlightVarieties.length}</b> variété(s) en évidence.</span>`;
+                } else {
+                    summaryText.innerHTML = "Sélectionnez une variété ou une variable pour analyser l'essai.";
+                }
+            }
+
+            // Calcul Min/Max pour la Heatmap
+            let minVal = Infinity, maxVal = -Infinity;
+            if (heatmapVarId) {
+                plan.forEach(p => {
+                    let val = p.values && p.values[heatmapVarId];
+                    if (val !== undefined && val !== "" && val !== -99 && val !== null) {
+                        let num = parseFloat(val);
+                        if (!isNaN(num)) {
+                            if (num < minVal) minVal = num;
+                            if (num > maxVal) maxVal = num;
+                        }
+                    }
+                });
+            }
+
             const blocks = {};
             plan.forEach(p => { if(!blocks[p.bloc]) blocks[p.bloc] = []; blocks[p.bloc].push(p); });
             const blockKeys = Object.keys(blocks).sort((a,b)=>parseInt(a)-parseInt(b));
             
             blockKeys.forEach(b => { 
                 const uniquePlots = [];
-                blocks[b].forEach(p => {
-                    if(!uniquePlots.find(x => x.plotNum === p.plotNum)) uniquePlots.push(p);
-                });
+                blocks[b].forEach(p => { if(!uniquePlots.find(x => x.plotNum === p.plotNum)) uniquePlots.push(p); });
                 blocks[b] = uniquePlots.sort((a,b) => a.plotNum - b.plotNum); 
             });
 
@@ -2184,60 +2343,189 @@
                     const plot = blocks[b][r];
                     if (plot) {
                         const varietyDisplay = plot.variety === 'Standard' ? `Niveau ${plot.mod}` : plot.variety;
+                        
+                        let bgColor = "bg-white";
+                        let numBgColor = "bg-gray-200";
+                        let textColor = "text-gray-900";
+                        let numTextColor = "text-gray-900 font-bold";
+                        let innerStyle = "";
+                        let displayedValue = varietyDisplay;
+
+                        // Multisélection de variétés (Couleurs multiples)
+                        if (!heatmapVarId && selectedHighlightVarieties.length > 0) {
+                            const highlight = selectedHighlightVarieties.find(v => v.name === varietyDisplay);
+                            if (highlight) {
+                                // Application de la couleur de la palette
+                                innerStyle = `background-color: ${highlight.colorObj.bg};`;
+                                bgColor = ""; 
+                                numBgColor = `style="background-color: ${highlight.colorObj.border}; color: ${highlight.colorObj.text};"`;
+                                numTextColor = "";
+                                textColor = `style="color: ${highlight.colorObj.text};"`;
+                            } else {
+                                innerStyle = "opacity: 0.25;"; // Estomper les autres
+                            }
+                        }
+
+                        // Carte de chaleur mathématique (Vert -> Orange -> Rouge)
+                        if (heatmapVarId) {
+                            let val = plot.values && plot.values[heatmapVarId];
+                            if (val !== undefined && val !== "" && val !== -99 && val !== null) {
+                                let num = parseFloat(val);
+                                if (!isNaN(num) && maxVal > minVal) {
+                                    let intensity = (num - minVal) / (maxVal - minVal);
+                                    
+                                    // Inverser l'intensité si une valeur forte est une bonne chose
+                                    let highIsGood = false;
+                                    const goodWhenHighVars = ['bet_nb_plante', 'bet_nb_plante_saine', 'bet_vigueur', 'bet_aspect_visuel', 'selectivite', 'sel_tassement', 'sel_blanchiment', 'efficacite'];
+                                    if (goodWhenHighVars.includes(heatmapVarId) || heatmapVarId.startsWith('eff_adv_')) {
+                                        highIsGood = true;
+                                    }
+                                    
+                                    let effectiveIntensity = highIsGood ? (1 - intensity) : intensity;
+                                    
+                                    let r_col, g_col, b_col;
+                                    
+                                    if (effectiveIntensity <= 0.5) {
+                                        // Vert (34, 197, 94) vers Orange (249, 115, 22)
+                                        let pct = effectiveIntensity * 2;
+                                        r_col = Math.round(34 + pct * (249 - 34));
+                                        g_col = Math.round(197 + pct * (115 - 197));
+                                        b_col = Math.round(94 + pct * (22 - 94));
+                                    } else {
+                                        // Orange (249, 115, 22) vers Rouge (239, 68, 68)
+                                        let pct = (effectiveIntensity - 0.5) * 2;
+                                        r_col = Math.round(249 + pct * (239 - 249));
+                                        g_col = Math.round(115 + pct * (68 - 115));
+                                        b_col = Math.round(22 + pct * (68 - 22));
+                                    }
+                                    
+                                    innerStyle = `background-color: rgb(${r_col}, ${g_col}, ${b_col}); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);`;
+                                    bgColor = "bg-transparent";
+                                    
+                                    // Affichage hyper-lisible : Texte blanc avec ombre noire légère
+                                    textColor = "text-white font-black drop-shadow-md";
+                                    numTextColor = "text-white opacity-95 font-black drop-shadow-md";
+                                    numBgColor = "bg-black/20";
+                                    displayedValue = `<div class="flex flex-col"><span class="text-[8px] opacity-90 leading-none truncate mb-0.5">${varietyDisplay}</span><span class="font-black text-[15px] leading-tight">${num}</span></div>`;
+                                } else if (!isNaN(num) && maxVal === minVal) {
+                                    innerStyle = `background-color: #22c55e;`; // Valeur unique partout = Vert
+                                    bgColor = "bg-transparent";
+                                    textColor = "text-white font-black drop-shadow-md";
+                                    numTextColor = "text-white opacity-95 font-black drop-shadow-md";
+                                    numBgColor = "bg-black/20";
+                                    displayedValue = `<div class="flex flex-col"><span class="text-[8px] opacity-90 leading-none truncate mb-0.5">${varietyDisplay}</span><span class="font-black text-[15px] leading-tight">${num}</span></div>`;
+                                }
+                            } else {
+                                bgColor = "bg-slate-100";
+                                textColor = "text-slate-400";
+                                innerStyle = "opacity: 0.6; background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, #f1f5f9 5px, #f1f5f9 10px);";
+                                displayedValue = `<span class="text-[9px] italic">Pas de note</span>`;
+                            }
+                        }
+
                         tableHtml += `
-                        <td class="border border-blue-900 p-0 h-[28px] plan-cell transition-colors min-w-[120px]" data-var="${plot.variety.replace(/"/g, '&quot;')}" data-plot="${plot.plotNum}">
-                            <div class="flex h-full w-full">
-                                <div class="w-10 flex-shrink-0 bg-gray-100 flex items-center justify-center border-r border-blue-900 font-bold text-gray-800 text-[11px] num-div">${plot.plotNum}</div>
-                                <div class="flex-1 px-1 flex items-center justify-center font-bold text-gray-900 text-[9px] text-center uppercase truncate var-div" title="${varietyDisplay.replace(/"/g, '&quot;')}">${varietyDisplay}</div>
+                        <td class="border border-blue-900 p-0 h-[38px] transition-colors min-w-[120px]" style="${innerStyle}">
+                            <div class="flex h-full w-full ${bgColor}">
+                                <div class="w-10 flex-shrink-0 flex items-center justify-center border-r border-blue-900 text-[11px] ${numBgColor} ${numTextColor}" ${numBgColor.includes('style') ? numBgColor : ''}>${plot.plotNum}</div>
+                                <div class="flex-1 px-1 flex items-center justify-center font-bold text-[9px] text-center uppercase truncate ${textColor}" ${textColor.includes('style') ? textColor : ''} title="${varietyDisplay.replace(/"/g, '&quot;')}">${displayedValue}</div>
                             </div>
                         </td>`;
                     } else {
-                        tableHtml += `<td class="border border-blue-900 bg-gray-50 h-[28px] min-w-[120px]"></td>`;
+                        tableHtml += `<td class="border border-blue-900 bg-gray-50 h-[38px] min-w-[120px]"></td>`;
                     }
                 });
                 tableHtml += `</tr>`;
             }
             tableHtml += `</tbody></table></div>`;
             grid.innerHTML = tableHtml;
-            
-            highlightPlanVariety();
-            modal.classList.remove("hidden"); setTimeout(() => modal.classList.remove("opacity-0"), 10);
         }
-        
-        function highlightPlanVariety() {
-            const selVar = document.getElementById("plan-viewer-select").value;
-            const cells = document.querySelectorAll(".plan-cell");
-            let count = 0; let plots = [];
-            
-            cells.forEach(c => {
-                const varDiv = c.querySelector('.var-div');
-                const numDiv = c.querySelector('.num-div');
-                if(!varDiv) return;
 
-                if (selVar && c.getAttribute("data-var") === selVar) {
-                    c.classList.add("ring-2", "ring-inset", "ring-purple-600");
-                    varDiv.classList.add("bg-purple-100", "text-purple-800");
-                    varDiv.classList.remove("text-gray-900");
-                    numDiv.classList.add("bg-purple-200", "text-purple-900");
-                    numDiv.classList.remove("bg-gray-100", "text-gray-800");
-                    count++; plots.push(c.getAttribute("data-plot"));
-                } else {
-                    c.classList.remove("ring-2", "ring-inset", "ring-purple-600", "opacity-30");
-                    varDiv.classList.remove("bg-purple-100", "text-purple-800");
-                    varDiv.classList.add("text-gray-900");
-                    numDiv.classList.remove("bg-purple-200", "text-purple-900");
-                    numDiv.classList.add("bg-gray-100", "text-gray-800");
-                    
-                    if (selVar) c.classList.add("opacity-30");
+        // --- GESTION DES ONGLETS & BOXPLOT ---
+        function switchAnalysisTabInSaisie(tabName) {
+            const tabCarte = document.getElementById('tab-saisie-carte');
+            const tabBoxplot = document.getElementById('tab-saisie-boxplot');
+            const btnCarte = document.getElementById('tab-btn-saisie-carte');
+            const btnBoxplot = document.getElementById('tab-btn-saisie-boxplot');
+            
+            if(!tabCarte || !tabBoxplot) return; // Sécurité vitale
+            
+            if(tabName === 'carte') {
+                tabCarte.classList.remove('hidden'); tabCarte.classList.add('flex');
+                tabBoxplot.classList.add('hidden'); tabBoxplot.classList.remove('flex');
+                btnCarte.className = "px-4 py-2 text-sm font-bold border-b-2 border-blue-600 text-blue-600 outline-none";
+                btnBoxplot.className = "px-4 py-2 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition outline-none";
+            } else {
+                tabBoxplot.classList.remove('hidden'); tabBoxplot.classList.add('flex');
+                tabCarte.classList.add('hidden'); tabCarte.classList.remove('flex');
+                btnBoxplot.className = "px-4 py-2 text-sm font-bold border-b-2 border-blue-600 text-blue-600 outline-none";
+                btnCarte.className = "px-4 py-2 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition outline-none";
+                
+                // Dessiner le Boxplot
+                renderBoxplot();
+            }
+        }
+
+        function renderBoxplot() {
+            const varId = document.getElementById('boxplot-var-select').value;
+            if (!varId || typeof Chart === 'undefined') return; // Sécurité si ChartJS charge mal
+
+            const plan = appState.plots && appState.plots.length > 0 ? appState.plots : [];
+            const groups = {};
+            
+            plan.forEach(p => {
+                if(!p.isCompleted) return;
+                const varietyName = p.variety === 'Standard' ? `Niveau ${p.mod}` : p.variety;
+                let val = p.values && p.values[varId];
+                
+                if (val !== undefined && val !== "" && val !== -99 && val !== null) {
+                    let num = parseFloat(val);
+                    if(!isNaN(num)) {
+                        if(!groups[varietyName]) groups[varietyName] = [];
+                        groups[varietyName].push(num);
+                    }
                 }
             });
+
+            // Tri alphabétique ou numérique des variétés
+            const labels = Object.keys(groups).sort((a,b) => {
+                const isNumA = !isNaN(a.replace('Niveau ',''));
+                const isNumB = !isNaN(b.replace('Niveau ',''));
+                if(isNumA && isNumB) return parseFloat(a.replace('Niveau ','')) - parseFloat(b.replace('Niveau ',''));
+                return String(a).localeCompare(String(b));
+            });
             
-            const summary = document.getElementById("plan-viewer-summary");
-            if (selVar) {
-                summary.innerHTML = `<span class="text-purple-700"><i class="fa-solid fa-seedling mr-1"></i> <b>${selVar}</b> : ${count} parcelles trouvées (${plots.join(', ')})</span>`;
-            } else {
-                summary.innerHTML = "Sélectionnez une variété pour la mettre en évidence.";
-            }
+            const boxData = labels.map(l => groups[l]);
+
+            const ctx = document.getElementById('analysisBoxplotCanvas').getContext('2d');
+            if (boxplotSaisieInst) boxplotSaisieInst.destroy();
+
+            boxplotSaisieInst = new Chart(ctx, {
+                type: 'boxplot',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Distribution Inter-blocs',
+                        data: boxData,
+                        backgroundColor: 'rgba(34, 197, 94, 0.4)', // Vert Agri transparent
+                        borderColor: '#166534', // Vert Agri foncé
+                        borderWidth: 2,
+                        outlierBackgroundColor: '#ef4444',
+                        itemRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: { backgroundColor: '#1e293b', padding: 12, titleFont: { family: 'sans-serif', size: 14 } }
+                    },
+                    scales: {
+                        y: { grid: { color: '#f1f5f9' }, title: { display: true, text: 'Note / Valeur observée', font: { weight: 'bold' } } },
+                        x: { grid: { display: false }, ticks: { font: { weight: 'bold' } } }
+                    }
+                }
+            });
         }
 
         function closePlanVisualizer() {
@@ -2246,15 +2534,28 @@
         }
 
         function generateCSVString() {
-            let csv = "\uFEFF"; let headers = []; const activeConfig = getActiveVariablesConfig();
-            headers = ["Essai", "Variete", "Date", "Observation", "Stade_Parcelle", "Parcelle", "Bloc", "Modalite", "Obs", "Cond_Date", "Cond_Heure", "Cond_Nebulo", "Cond_Vent", "Cond_Hygro", "Cond_Sol", "Cond_Temp", "Cond_Stade_Betteraves", "Photos_Count"];
-            appState.selectedVars.forEach(vId => { const c = activeConfig.find(item => item.id === vId); headers.push(c ? c.label : vId); });
+            let csv = "\uFEFF"; 
+            const activeConfig = getActiveVariablesConfig();
+            
+            // 1. Filtrer pour ne garder que les variables qui ont au moins une vraie valeur saisie
+            const completedVars = appState.selectedVars.filter(vId => {
+                return appState.plots.some(p => {
+                    const val = p.values[vId];
+                    return val !== undefined && val !== "" && val !== -99 && val !== "-99";
+                });
+            });
+
+            // 2. En-têtes
+            let headers = ["Essai", "Variete", "Date", "Observation", "Stade_Parcelle", "Parcelle", "Bloc", "Modalite", "Obs", "Cond_Date", "Cond_Heure", "Cond_Nebulo", "Cond_Vent", "Cond_Hygro", "Cond_Sol", "Cond_Temp", "Cond_Stade_Betteraves", "Photos_Count"];
+            completedVars.forEach(vId => { const c = activeConfig.find(item => item.id === vId); headers.push(c ? c.label : vId); });
             csv += headers.map(h => `"${h}"`).join(";") + "\n";
+            
+            // 3. Lignes
             appState.plots.forEach(p => {
                 const conds = getConds();
                 let row = [appState.trialName, p.variety, p.date || appState.trialDate, p.observation || "", p.stade_betterave || "", p.plotNum, p.bloc, p.mod, p.obs, ...conds, p.photos ? p.photos.length : 0];
-                appState.selectedVars.forEach(vId => { 
-                    row.push(p.values[vId] !== undefined ? String(p.values[vId]).replace(/\./g, ',') : ""); 
+                completedVars.forEach(vId => { 
+                    row.push(p.values[vId] !== undefined && p.values[vId] !== -99 && p.values[vId] !== "-99" ? String(p.values[vId]).replace(/\./g, ',') : ""); 
                 });
                 csv += row.map(val => `"${String(val).replace(/"/g, '""')}"`).join(";") + "\n";
             });
