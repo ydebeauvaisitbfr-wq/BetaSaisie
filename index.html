@@ -756,6 +756,9 @@
             { id: "puc_ail_vert", label: "Pucerons ailés verts / pl", category: "Pucerons", type: "number", step: 1, default: 0 },
             { id: "puc_apt_noir", label: "Pucerons aptères noirs / pl", category: "Pucerons", type: "number", step: 1, default: 0 },
             { id: "puc_ail_noir", label: "Pucerons ailés noirs / pl", category: "Pucerons", type: "number", step: 1, default: 0 },
+            { id: "charançon", label: "Charançon piqûres / pl", category: "Insectes", type: "number", step: 1, default: 0 },
+            { id: "charançon", label: "Charançon galeries / pl", category: "Insectes", type: "number", step: 1, default: 0 },
+            { id: "teignes", label: "Teignes chenilles / pl", category: "Insectes", type: "number", step: 1, default: 0 },
             { id: "aux_larve_chrysope", label: "Larve de chrysope / pl", category: "Auxiliaires", type: "number", step: 1, default: 0 },
             { id: "aux_oeuf_chrysope", label: "Oeuf de chrysope / pl", category: "Auxiliaires", type: "number", step: 1, default: 0 },
             { id: "aux_larve_syrphe", label: "Larve de syrphe / pl", category: "Auxiliaires", type: "number", step: 1, default: 0 },
@@ -774,6 +777,7 @@
             { id: "grav_jaunisse", label: "Gravité Jaunisse (0-10)", category: "Jaunisse", type: "range", min: 0, max: 10, default: -99 },
             { id: "nb_montee", label: "Nombre de montées", category: "Divers", type: "number", step: 1, default: 0 },
             { id: "nb_mildiou", label: "Nombre de mildiou", category: "Divers", type: "number", step: 1, default: 0 },
+            { id: "nb_rhizopus", label: "Nombre de rhizopus", category: "Divers", type: "number", step: 1, default: 0 },
             { id: "pct_cerco", label: "% Cercosporiose", category: "IPM", type: "number", step: 0.1, default: 0 },
             { id: "pct_oidium", label: "% Oïdium", category: "IPM", type: "number", step: 0.1, default: 0 },
             { id: "pct_rouille", label: "% Rouille", category: "IPM", type: "number", step: 0.1, default: 0 },
@@ -1336,6 +1340,52 @@
                         }
                     }
                 }
+
+                // --- GESTION DES BORDURES AUTOMATIQUES (Parcelles non notées) ---
+                const tName = appState.trialName.toLowerCase();
+                const match = tName.match(/(711|712|713|714|715|716|718|720|721|722|723|724|725|740|741)/);
+                
+                if (match) {
+                    const code = match[1];
+                    const isInnerBorder = ["713", "740", "741"].includes(code); // 2e et avant-dernière
+                    const isOuterBorder = ["711", "712", "714", "715", "716", "718", "720", "721", "722", "723", "724", "725"].includes(code); // 1ère et dernière
+
+                    if (isInnerBorder || isOuterBorder) {
+                        // Grouper les numéros de parcelles physiques par bloc
+                        const plotsByBlock = {};
+                        appState.plots.forEach(p => {
+                            if (!plotsByBlock[p.bloc]) plotsByBlock[p.bloc] = new Set();
+                            plotsByBlock[p.bloc].add(p.plotNum);
+                        });
+
+                        Object.keys(plotsByBlock).forEach(b => {
+                            // Trier mathématiquement pour cibler les extrémités physiques (ex: 101, 102, 103, 104, 105)
+                            const sortedNums = Array.from(plotsByBlock[b]).sort((a, b) => a - b);
+                            const nbPlots = sortedNums.length;
+                            
+                            let targetNums = [];
+                            if (isInnerBorder && nbPlots >= 4) {
+                                targetNums.push(sortedNums[1]); // 2ème
+                                targetNums.push(sortedNums[nbPlots - 2]); // Avant-dernière
+                            } else if (isOuterBorder && nbPlots >= 2) {
+                                targetNums.push(sortedNums[0]); // 1ère
+                                targetNums.push(sortedNums[nbPlots - 1]); // Dernière
+                            }
+
+                            // Appliquer le flag "Bordure" sur toutes les observations de ces parcelles cibles
+                            appState.plots.forEach(p => {
+                                if (p.bloc == b && targetNums.includes(p.plotNum)) {
+                                    p.isNotScored = true;
+                                    p.isCompleted = true; // Auto-validée pour ne pas bloquer la barre de progression ni obliger le technicien à ouvrir la parcelle
+                                    // On vide les valeurs par défaut pour l'export final
+                                    for (let k in p.values) {
+                                        p.values[k] = "";
+                                    }
+                                }
+                            });
+                        });
+                    }
+                }
             }
 
             appState.currentPlotIndex = 0; appState.activeObs = 1;
@@ -1471,7 +1521,7 @@
             const blocksSet = new Set();
             
             appState.plots.forEach(p => {
-                if(!p.isCompleted) return;
+                if(!p.isCompleted || p.isNotScored) return;
                 blocksSet.add(p.bloc);
                 
                 if (!modsMap.has(p.mod)) {
@@ -2422,6 +2472,15 @@
                                 innerStyle = "opacity: 0.6; background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, #f1f5f9 5px, #f1f5f9 10px);";
                                 displayedValue = `<span class="text-[9px] italic">Pas de note</span>`;
                             }
+                        }
+
+                        if (plot.isNotScored) {
+                            bgColor = "bg-slate-200";
+                            numBgColor = "bg-slate-300";
+                            numTextColor = "text-slate-500 font-bold";
+                            textColor = "text-slate-500";
+                            innerStyle = "opacity: 0.8; background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, #cbd5e1 5px, #cbd5e1 10px);";
+                            displayedValue = `<div class="flex flex-col"><span class="text-[8px] opacity-90 leading-none truncate mb-0.5">${varietyDisplay}</span><span class="text-[8px] font-black uppercase">(Bordure)</span></div>`;
                         }
 
                         tableHtml += `
