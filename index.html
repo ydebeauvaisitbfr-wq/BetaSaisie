@@ -2954,6 +2954,42 @@
                 }
             } catch(e) { console.error(e); }
         };
+
+// --- Gestion Anti-Veille (Screen Wake Lock API) ---
+        async function requestWakeLock() {
+            if ('wakeLock' in navigator) {
+                try {
+                    if (!wakeLock) {
+                        wakeLock = await navigator.wakeLock.request('screen');
+                        const badge = document.getElementById('wakelock-badge');
+                        if (badge) badge.classList.remove('hidden');
+
+                        wakeLock.addEventListener('release', () => {
+                            wakeLock = null;
+                            if (badge) badge.classList.add('hidden');
+                        });
+                    }
+                } catch (err) {
+                    console.log('Wake Lock en attente d\'interaction:', err.message);
+                }
+            }
+        }
+
+        function initWakeLock() {
+            requestWakeLock();
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    requestWakeLock();
+                }
+            });
+            ['click', 'touchstart'].forEach(evt => {
+                document.addEventListener(evt, () => {
+                    if (!wakeLock && document.visibilityState === 'visible') {
+                        requestWakeLock();
+                    }
+                }, { passive: true });
+            });
+        }
     </script>
 </body>
 </html>
